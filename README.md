@@ -15,6 +15,7 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 
 | Domain | Sub-Domain | Description | Documentation Link |
 | :--- | :--- | :--- | :--- |
+| **Networking & Protocols** | Storage & Gateways | SMB, NFS, AFP, mDNS/Bonjour, LAN/Tailscale Routing | [networking/NETWORK_FILE_SHARING_EXPLAINER.md](networking/NETWORK_FILE_SHARING_EXPLAINER.md) |
 | **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
 | **Raspberry Pi 5** | Pi-hole (Primary) | Primary DNS ad-blocking, ISP/SLAAC bypass, v6 web admin | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
 | **UGREEN DXP2800** | Plex & *Arr | 8-service media stack, QuickSync HW transcoding, atomic hardlinks | [ugreen_nas/arr_stack/README.md](ugreen_nas/arr_stack/README.md) |
@@ -31,6 +32,8 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 Learning/
 ├── README.md                      # This Global Index
 ├── PROJECTS_ROADMAP.md            # Master Project Roadmap & Execution Queue
+├── networking/                    # Networking & Protocols Domain
+│   └── NETWORK_FILE_SHARING_EXPLAINER.md # Complete SMB/NFS/Gateways guide
 ├── raspberrypi/                   # Pi 5 Domain
 │   ├── README.md                  # General Pi 5 Host & Hardware
 │   ├── SETUP_AND_TUNING_GUIDE.md  # Detailed setup guide
