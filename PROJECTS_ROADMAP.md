@@ -28,6 +28,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **18** | **High-Availability (HA) Dual Pi-hole** | Network / Redundancy | 🟢 Production | Port `53`, `8089` (UGREEN NAS + Gravity-Sync) |
 | **19** | **Vaultwarden Password Manager** | Security / Identity | 🟢 Production | Port `8085`, `3012` (UGREEN NAS) |
 | **20** | **Homepage Unified Dashboard** | Homelab Management | 🟢 Production | Port `3000` (UGREEN NAS) |
+| **21** | **macOS SMB File Sharing** | Storage / Drag-and-Drop | 🟢 Production | Port `445` (`smb://192.168.1.80`) |
 
 ---
 

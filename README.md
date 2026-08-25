@@ -21,6 +21,7 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 | **UGREEN DXP2800** | Pi-hole (Secondary) | High-Availability failover DNS, automated 30-min Gravity-Sync | [ugreen_nas/pihole/README.md](ugreen_nas/pihole/README.md) |
 | **UGREEN DXP2800** | Vaultwarden | Encrypted password manager for Deep & Pranali + shared vault | [ugreen_nas/vaultwarden/README.md](ugreen_nas/vaultwarden/README.md) |
 | **UGREEN DXP2800** | Homepage Dashboard | Unified single-pane-of-glass homelab monitoring & launcher | [ugreen_nas/homepage/README.md](ugreen_nas/homepage/README.md) |
+| **UGREEN DXP2800** | SMB Network Sharing | macOS Finder drag-and-drop, photo ingestion, Google Photos | [ugreen_nas/smb/README.md](ugreen_nas/smb/README.md) |
 
 ---
 
@@ -43,6 +44,8 @@ Learning/
     │   └── README.md              # Failover DNS, Port 53, Gravity-Sync target
     ├── vaultwarden/               # Password Manager Sub-Domain
     │   └── README.md              # Bitwarden backend, WebSockets, Multi-user
-    └── homepage/                  # Central Dashboard Sub-Domain
-        └── README.md              # Widgets for Plex, Arr, qBit, Pi-hole, NAS stats
+    ├── homepage/                  # Central Dashboard Sub-Domain
+    │   └── README.md              # Widgets for Plex, Arr, qBit, Pi-hole, NAS stats
+    └── smb/                       # macOS Finder & File Sharing Sub-Domain
+        └── README.md              # SMB3, macOS vfs_fruit, Finder drag-and-drop
 ```
