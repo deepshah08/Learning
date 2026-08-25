@@ -16,8 +16,11 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 | Domain | Sub-Domain | Description | Documentation Link |
 | :--- | :--- | :--- | :--- |
 | **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
-| **Raspberry Pi 5** | Pi-hole | DNS ad-blocking, ISP/SLAAC bypass, v6 web admin | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
+| **Raspberry Pi 5** | Pi-hole (Primary) | Primary DNS ad-blocking, ISP/SLAAC bypass, v6 web admin | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
 | **UGREEN DXP2800** | Plex & *Arr | 8-service media stack, QuickSync HW transcoding, atomic hardlinks | [ugreen_nas/arr_stack/README.md](ugreen_nas/arr_stack/README.md) |
+| **UGREEN DXP2800** | Pi-hole (Secondary) | High-Availability failover DNS, automated 30-min Gravity-Sync | [ugreen_nas/pihole/README.md](ugreen_nas/pihole/README.md) |
+| **UGREEN DXP2800** | Vaultwarden | Encrypted password manager for Deep & Pranali + shared vault | [ugreen_nas/vaultwarden/README.md](ugreen_nas/vaultwarden/README.md) |
+| **UGREEN DXP2800** | Homepage Dashboard | Unified single-pane-of-glass homelab monitoring & launcher | [ugreen_nas/homepage/README.md](ugreen_nas/homepage/README.md) |
 
 ---
 
@@ -30,18 +33,16 @@ Learning/
 ├── raspberrypi/                   # Pi 5 Domain
 │   ├── README.md                  # General Pi 5 Host & Hardware
 │   ├── SETUP_AND_TUNING_GUIDE.md  # Detailed setup guide
-│   └── pihole/                    # Pi-hole Sub-Domain
-│       └── README.md              # DNS Configs, ISP Bypass, Tailscale
+│   └── pihole/                    # Primary Pi-hole Sub-Domain
+│       └── README.md              # DNS Configs, ISP Bypass, Gravity-Sync sender
 └── ugreen_nas/                    # UGREEN DXP2800 Domain
-    └── arr_stack/                 # Media Automation Sub-Domain
-        ├── README.md              # 8-Service Docker Stack, QuickSync, Hardlinks
-        └── docker-compose.yml     # Complete Docker Compose configuration
+    ├── arr_stack/                 # Media Automation Sub-Domain (8 Services)
+    │   ├── README.md              # QuickSync, Inodes, Custom Language Scoring
+    │   └── docker-compose.yml     # Complete Docker Compose configuration
+    ├── pihole/                    # Secondary HA Pi-hole Sub-Domain
+    │   └── README.md              # Failover DNS, Port 53, Gravity-Sync target
+    ├── vaultwarden/               # Password Manager Sub-Domain
+    │   └── README.md              # Bitwarden backend, WebSockets, Multi-user
+    └── homepage/                  # Central Dashboard Sub-Domain
+        └── README.md              # Widgets for Plex, Arr, qBit, Pi-hole, NAS stats
 ```
-
----
-
-## ✍️ Contribution & Sync Rules for Agents
-
-1. **Read Before Write**: Always check existing domain folders for registered ports, IP addresses, and known quirks.
-2. **Structured Documentation**: Every new topic must include a System Context, Architecture Table, Known Bugs & Fixes, operational runbooks, and copy-paste revert commands.
-3. **Non-Redundancy**: Update existing documents when modifying a subsystem rather than creating folder sprawl.
