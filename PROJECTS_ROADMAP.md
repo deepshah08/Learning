@@ -1,1 +1,49 @@
-IyDwn5SwIE1hc3RlciBQcm9qZWN0IFJvYWRtYXAgJiBFeGVjdXRpb24gUXVldWUKCkEgcGVyc2lzdGVudCwgY3Jvc3Mtc2Vzc2lvbiBTaW5nbGUgU291cmNlIG9mIFRydXRoIChTb1QpIHRyYWNraW5nIGFjdGl2ZSwgY29tcGxldGVkLCBhbmQgdXBjb21pbmcgcHJvamVjdHMgYWNyb3NzIHRoZSBob21lIGxhYiwgYXV0b25vbW91cyBhZ2VudCBzd2FybSwgUmFzcGJlcnJ5IFBpIDUsIFVncmVlbiBOQVMsIGFuZCBsb2NhbCBBSSBwaXBlbGluZXMuCgotLS0KCiMjIPCfjJ8gTWFzdGVyIFN0YXR1cyBPdmVydmlldwoKfCAjIHwgUHJvamVjdCBOYW1lIHwgRG9tYWluIC8gVGFyZ2V0IHwgU3RhdHVzIHwgUHJpbWFyeSBJbnRlcmZhY2UgLyBQb3J0cyB8CnwgOi0tLSB8IDotLS0gfCA6LS0tIHwgOi0tLSB8IDotLS0gfAp8ICoqMDEqKiB8ICoqT2ZmbGluZSBTb2NyYXRpYyBUdXRvcioqIHwgUkFHIC8gRWR1Y2F0aW9uIHwgwq/wn5KRIFN0YWdlZCB8IExvY2FsIFJBRyBQaXBlbGluZSB8CnwgKipfcioqIHwgKipHaXQtQmFja2VkIFNlY29uZCBCcmFpbioqIHwgUEtNIC8gRG9jdW1lbnRhdGlvbiB8IPCfkpEgU3RhZ2VkIHwgR2l0ZWEgKyBPYnNpZGlhbiBXZWJob29rIHwKfCAqKjAzKiogfCAqKldoaXNwZXJYIE1lZXRpbmcgSW5kZXhlcioqIHwgQXVkaW8gLyBTZWFyY2ggfCDwn5KRIFN0YWdlZCB8IExvY2FsIERpYXJpemF0aW9uIFNRTGl0ZSB8CnwgKipfNCoqIHwgKipJbW1pY2ggUGhvdG8gQmFja3VwKiogfCBQaG90b3MgLyBDbG91ZCB8IPCfkpEgU3RhZ2VkIHwgUG9ydCBgODA4NGAgKyBQaXhlbCAxIFN5bmMgfAp8ICoqMDUqKiB8ICoqSmVsbHlmaW4gTWVkaWEgU2VydmVyKiogfCBNZWRpYSBTdHJlYW1pbmcgfCDwn5KRIE9wZXJhdGlvbmFsIHwgUG9ydCBgODA5NmAgfAp8ICoqMDYqKiB8ICoqVm9pY2UgQ2xvbmUgVFRTIFNhbmRib3gqKiB8IEF1ZGlvIC8gTUwgfCDwn5KRIFN0YWdlZCB8IENvcXVpIFhUVFMgdjIgfAp8ICoqMDcqKiB8ICoqQmFja3VwIEVuZ2luZSAoQjIgKyBSZXN0aWMpKiogfCBTdG9yYWdlIC8gRGlzYXN0ZXIgUmVjb3ZlcnkgfCDwn5KRIFN0YWdlZCB8IEJhY2tibGF6ZSBCMiBFbmNyeXB0ZWQgfAp8ICoqMDgqKiB8ICoqVHJpcERyb3AgRHJhZyAmIERyb3AqKiB8IFN0b3JhZ2UgLyBUcmFuc2ZlcnMgfCDwn5KRIE9wZXJhdGlvbmFsIHwgUG9ydCBgODA4OGAgfAp8ICoqMDkqKiB8ICoqU3RpcmxpbmctUERGIFV0aWxpdHkqKiB8IFRvb2xzIC8gUHJvZHVjdGl2aXR5IHwgwq/wn5KRIFF1ZXVlIHwgUG9ydCBgODA4M2AgfAp8ICoqMTAqKiB8ICoqSW50cnVzaW9uIE1vbml0b3IqKiB8IFNlY3VyaXR5IC8gRGVmZW5zZSB8IPCfkpEgU3RhZ2VkIHwgYHVmd2AgTG9nIFRhaWxpbmcgRGFlbW9uIHwKfCAqKjExKiogfCAqKkRlYWQgTWFuJ3MgU3dpdGNoKiogfCBTZWN1cml0eSAvIENyeXB0byB8IPCfkpEgUXVldWUgfCBTaGFtaXIncyBTZWNyZXQgU2hhcmluZyB8CnwgKipfMioqIHwgKipQaS1ob2xlIHY2IEROUyBBZC1CbG9ja2VyKiogfCBOZXR3b3JrIC8gUHJpdmFjeSB8IPCfkpEgUHJvZHVjdGlvbiB8IFBvcnQgYDUzYCwgYDgwYCwgYDQ0M2AgfAp8ICoqMTMqKiB8ICoqbjhuIFdvcmtmbG93IEF1dG9tYXRpb24qKiB8IEF1dG9tYXRpb24gLyBQaXBlbGluZXMgfCDwn5KRIFF1ZXVlIHwgUG9ydCBgNTY3OGAgfAp8ICoqMTQqKiB8ICoqTWFya2V0IFNlbnRpbWVudCBUcmFja2VyKiogfCBGaW5hbmNlIC8gTmV3cyBSQUcgfCDwn5KRIFN0YWdlZCB8IFJTUysgTG9jYWwgT2xsYW1hIHwKfCAqKjE1KiogfCAqKkZpbmFuY2lhbCBQaXBlbGluZSBEYXNoYm9hcmQqKiB8IEZpbmFuY2UgLyBBbmFseXRpY3MgfCDwn5KRIFN0YWdlZCB8IFBERiBQYXJzZXIgKyBQb3N0Z3JFU1FMIHwKfCAqKjE2KiogfCAqKk1vcm5pbmcgQnJpZWZpbmcgR2VuZXJhdG9yKiogfCBQcm9kdWN0aXZpdHkgLyBQb2RjYXN0cyB8IPCfkpEgUXVldWUgfCBXaGlzcGVyIEF1ZGlvIFN1bW1hcmllcyB8CnwgKipfNyoqIHwgKipQbGV4ICsgKkFyciBBdXRvbWF0aW9uIFN0YWNrKiogfCBNZWRpYSBBdXRvbWF0aW9uIHwgwq/wn5KRIFByb2R1Y3Rpb24gfCBQb3J0cyBgMzI0MDBgLCBgOTY5NmAsIGA3ODc4YCwgYDg5ODlgLCBgODA4MGAsIGA2NzY3YCwgYDUwNTVgLCBgODE4MWAgfAp8ICoqMTgqKiB8ICoqSGlnaC1BdmFpbGFiaWxpdHkgKEhBKSBEdWFsIFBpLWhvbGUqKiB8IE5ldHdvcmsgLyBSZWR1bmRhbmN5IHwg8J+GkiAqKlJlYWR5IHRvIEV4ZWN1dGUqKiB8ICoqVWdyZWVuIE5BUyBEWFAgMjgwMCAoRG9ja2VyKSArIFBpIDUgKEdyYXZpdHktU3luYyEqKiB8CgotLS0KCiMjIPCfj6YgTmV3bHkgQWRkZWQ6IFByb2plY3QgMTgg4oCUIEhpZ2gtQXZhaWxhYmlsaXR5IChIQSkgRHVhbCBQaS1ob2xlCgojIyMgT2JqZWN0aXZlOgpFbGltaW5hdGUgdGhlIFNpbmdsZSBQb2ludCBvZiBGYWlsdXJlIChTUE9GKSBmb3Igd2hvbGUtaG9tZSBETlMgYWQtYmxvY2tpbmcgYnkgZGVwbG95aW5nIGEgc3luY2hyb25pemVkIHNlY29uZGFyeSBQaS1ob2xlIGNvbnRhaW5lciBvbiB0aGUgKipVZ3JlZW4gTkFTIERWUDI4MDBgKiBwYWlyZWQgd2l0aCB0aGUgcHJpbWFyeSBQaS1ob2xlIG9uIHRoZSAqKlJhc3BiZXJyeSBQaSA1KiouCgojIyMgS2V5IEFyY2hpdGVjdHVyZSBDb21wb25lbnRzOgoxLiAqKlByaW1hcnkgRE5TKio6IFJhc3BiZXJyeSBQaSA1IChgMTkyLjE2OC4xLjkyYCAvIGAxMDAuNjguMTk2LjE0YCkuCjIuICoqU2Vjb25kYXJ5IEROUyoqOiBVZ3JlZW4gTkFTIERWUDI4MDAgKGAxOTIuMTY4LjEuWGAgdmlhIERvY2tlcikuCjMuICoqR3Jhdml0eS1TeW5jKio6IEF1dG9tYXRlZCBiYWNrZ3JvdW5kIHN5bmMgZGFlbW9uIG1pcnJvcmluZyBibG9ja2xpc3RzLCB3aGl0ZWxpc3RzLCByZWdleCwgYW5kIGxvY2FsIEROUyByZWNvcmRzIGJldHdlZW4gUGkgNSBhbmQgTkFTLgo0LiAqKlplcm8tT3V0YWdlIEd1YXJhbnRlZSoqOiBJZiBlaXRoZXIgZGV2aWNlIHJlYm9vdHMsIHVwZGF0ZXMsIG9yIGxvc2VzIHBvd2VyLCAxMDAlIG9mIEROUyBxdWVyaWVzIHJlc29sdmUgaW5zdGFudGx5IHdpdGggMG1zIGludGVycnVwdGlvbiB0byBob3VzZWhvbGQgdXNlcnMuCgotLS0KCiMjIPCfk6AgR2xvYmFsIEV4ZWN1dGlvbiBQcm90b2NvbCBmb3IgQWdlbnRzCldoZW4gaW5pdGlhdGluZyBhIHNlc3Npb246CjEuIFJlZmVyZW5jZSB0aGlzIGBQUk9KRUNUU19ST0FETUFQLm1kYCB0byBpZGVudGlmeSBkZXBlbmRlbmNpZXMgYW5kIHRhcmdldCBwb3J0cy4KMi4gVXBkYXRlIHByb2plY3Qgc3RhdHVzIChg8J+SkSBTdGFnZWRgIOKGkiBg8J+SkSBQcm9kdWN0aW9uYCkgdXBvbiBjb21wbGV0aW5nIHZlcmlmaWNhdGlvbi4KMy4gU3luY2hyb25pemUgY2hhbmdlcyB0byBgZGVlcHNoYWgwOC9MZWFybmluZ2AgcmVwb3NpdG9yeSB2aWEgdGhlIGBtZC13cml0ZXJgIHNraWxsLgo=
+# 🗺️ Master Project Roadmap & Execution Queue
+
+A persistent, cross-session Single Source of Truth (SoT) tracking active, completed, and upcoming projects across the home lab, autonomous agent swarm, Raspberry Pi 5, Ugreen NAS, and local AI pipelines.
+
+---
+
+## 🌟 Master Status Overview
+
+| # | Project Name | Domain / Target | Status | Primary Interface / Ports |
+| :--- | :--- | :--- | :--- | :--- |
+| **01** | **Offline Socratic Tutor** | RAG / Education | 🟡 Staged | Local RAG Pipeline |
+| **02** | **Git-Backed Second Brain** | PKM / Documentation | 🟡 Staged | Gitea + Obsidian Webhook |
+| **03** | **WhisperX Meeting Indexer** | Audio / Search | 🟡 Staged | Local Diarization SQLite |
+| **04** | **Immich Photo Backup** | Photos / Cloud | 🟡 Staged | Port `8084` + Pixel 1 Sync |
+| **05** | **Jellyfin Media Server** | Media Streaming | 🟢 Operational | Port `8096` |
+| **06** | **Voice Clone TTS Sandbox** | Audio / ML | 🟡 Staged | Coqui XTTS v2 |
+| **07** | **Backup Engine (B2 + Restic)**| Storage / Disaster Recovery | 🟡 Staged | Backblaze B2 Encrypted |
+| **08** | **TripDrop Drag & Drop** | Storage / Transfers | 🟢 Staged | Port `8088` |
+| **09** | **Stirling-PDF Utility** | Tools / Productivity | 🟡 Queue | Port `8083` |
+| **10** | **Intrusion Monitor** | Security / Defense | 🟢 Staged | `ufw` Log Tailing Daemon |
+| **11** | **Dead Man's Switch** | Security / Crypto | 🟡 Queue | Shamir's Secret Sharing |
+| **12** | **Pi-hole v6 DNS Ad-Blocker** | Network / Privacy | 🟢 Production | Port `53`, `80`, `443` |
+| **13** | **n8n Workflow Automation** | Automation / Pipelines | 🟡 Queue | Port `5678` |
+| **14** | **Market Sentiment Tracker** | Finance / News RAG | 🟢 Staged | RSS + Local Ollama |
+| **15** | **Financial Pipeline Dashboard** | Finance / Analytics | 🟢 Staged | PDF Parser + PostgreSQL |
+| **16** | **Morning Briefing Generator** | Productivity / Podcasts | 🟡 Queue | Whisper Audio Summaries |
+| **17** | **Plex + *Arr Automation Stack**| Media Automation (Intel QSV + Hardlinks) | 🟢 Operational (UGREEN NAS) | Ports `32400`, `9696`, `7878`, `8989`, `8080`, `6767`, `5055`, `8181` |
+| **18** | **High-Availability (HA) Dual Pi-hole** | Network / Redundancy | 🆕 **Ready to Execute** | **Ugreen NAS DXP 2800 (Docker) + Pi 5 (Gravity-Sync)** |
+
+---
+
+## 🚀 Newly Added: Project 18 — High-Availability (HA) Dual Pi-hole
+
+### Objective:
+Eliminate the Single Point of Failure (SPOF) for whole-home DNS ad-blocking by deploying a synchronized secondary Pi-hole container on the **Ugreen NAS DXP 2800** paired with the primary Pi-hole on the **Raspberry Pi 5**.
+
+### Key Architecture Components:
+1. **Primary DNS**: Raspberry Pi 5 (`192.168.1.92` / `100.68.196.14`).
+2. **Secondary DNS**: Ugreen NAS DXP 2800 (`192.168.1.80` via Docker).
+3. **Gravity-Sync**: Automated background sync daemon mirroring blocklists, whitelists, regex, and local DNS records between Pi 5 and NAS.
+4. **Zero-Outage Guarantee**: If either device reboots, updates, or loses power, 100% of DNS queries resolve instantly with 0ms interruption to household users.
+
+---
+
+## 🛠️ Global Execution Protocol for Agents
+When initiating a session:
+1. Reference this `PROJECTS_ROADMAP.md` to identify dependencies and target ports.
+2. Update project status (`🟡 Staged` ➔ `🟢 Production`) upon completing verification.
+3. Synchronize changes to `deepshah08/Learning` repository via the `md-writer` skill.

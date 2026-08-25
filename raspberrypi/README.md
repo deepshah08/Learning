@@ -1,1 +1,62 @@
-IyDwn5al77iPIFJhc3BiZXJyeSBQaSA1OiBTeXN0ZW0gJiBIYXJkd2FyZSBTaW5nbGUgU291cmNlIG9mIFRydXRoCgo+ICoqQ29udGV4dCoqOiBIYXJkd2FyZSBwcm9maWxlLCBuZXR3b3JrIG1hbmFnZW1lbnQsIE9TIHN0YWJpbGl0eSB0dW5pbmcsIGtub3duIGhhcmR3YXJlIHF1aXJrcywgYW5kIHJvb3QtY2F1c2Ugc29sdXRpb25zIGZvciB0aGUgUmFzcGJlcnJ5IFBpIDUgc2VydmVyLiAgCj4gKipIb3N0Kio6IGByYXNwYmVycnlwaWAgKGAxOTIuMTY4LjEuOTJgIC8gVGFpbHNjYWxlIGAxMDAuNjguMTk2LjE0YCkgIAo+ICoqSGFyZHdhcmUqKjogUmFzcGJlcnJ5IFBpIDUgTW9kZWwgQiAoQnJvYWRjb20gQkNNMjcxMiwgMTZHQiBSQU0pICAKPiAqKk9TKio6IERlYmlhbiBHTlUvTGludXggMTMgKFRyaXhpZS9Cb29rd29ybSBhYXJjaDY0LCBLZXJuZWwgNi4xOCkgIAo+ICoqU3RhdHVzKio6IFByb2R1Y3Rpb24gKDI0LzcgQWN0aXZlKQoKLS0tCgojIyAxLiBOZXR3b3JrIFByb2ZpbGUgJiBBY2Nlc3MgRW5kcG9pbnRzCgp8IFBhcmFtZXRlciB8IFZhbHVlIHwgRGV0YWlscyB8CnwgOi0tLSB8IDotLS0gfCA6LS0tIHwKfCAqKldpLUZpIFNTSUQqKiB8IGBSaW1qaGltYCB8IFBhc3N3b3JkOiBgUmVzdGxlc3NpbnNlY3RgIHwKfCAqKkxBTiBJUHY0KiogfCBgMTkyLjE2OC4xLjkyYCB8IFN0YXRpYyAvIFJlc2VydmVkIG9uIEhvbWUgU3VibmV0IHwKfCAqKlRhaWxzY2FsZSBJUHY0KiogfCBgMTAwLjY4LjE5Ni4xNGAgfCBOb2RlIE5hbWU6IGBwaTUtbWVkaWEtbmFzYCB8CnwgKipEZWZhdWx0IEdhdGV3YXkqKiB8IGAxOTIuMTY4LjEuMjU0YCB8IEFUJlQgRmliZXIgR2F0ZXdheSBCR1cyMTAvMzIwIHwKfCAqKlNTSCBVc2VyKiogfCBgZGVlcHNoYWgwOGAgfCBQcmltYXJ5IGFkbWluaXN0cmF0b3IgKGBzdWRvYCBlbmFibGVkKSB8CnwgKipSb290IFN0b3JhZ2UqKiB8IDExN0dCIE1pY3JvU0QgfCB+MTZHQiB1c2VkICgxNCUpLCB+OTdHQiBhdmFpbGFibGUgfAp8ICoqU3lzdGVtIFJBTSoqIHwgMTZHQiBMUEREUjRYIHwgfjEuNkdCIHVzZWQgdW5kZXIgZnVsbCA4LWNvbnRhaW5lciBsb2FkIHwKfCAqKkdQVSAvIFZpZGVvIERlY29kZSoqfCBgL2Rldi9kcmkvcmVuZGVyRDEyOGAgfCBCcm9hZGNvbSBWaWRlb0NvcmUgVklJIERSTSB8CgotLS0KCiMjIDIuIFN0YWJpbGl0eSBIYXJkZW5pbmcgJiBTbGVlcCBQcmV2ZW50aW9uIChQZXJtYW5lbnRseSBDb25maWd1cmVkKQoKIyMjIDEuIFdpLUZpIFBvd2VyIE1hbmFnZW1lbnQgKERpc2FibGVkIEdsb2JhbGx5KQotICoqUHJvYmxlbSoqOiBSYXNwYmVycnkgUGkgT1MgZGVmYXVsdHMgdG8gODAyLjExIHBvd2VyIHNhdmluZyAoYHBvd2VyX3NhdmUgPSBvbmApLiBBZnRlciBzZXZlcmFsIGhvdXJzIG9mIGluYWN0aXZpdHksIHRoZSBCcm9hZGNvbSBXaS1GaSBtb2R1bGUgd2VudCB0byBzbGVlcCBhbmQgZHJvcHBlZCBBUlAgcmVzcG9uc2UgcGFja2V0cywgY2F1c2luZyB0aGUgUGkgdG8gYXBwZWFyIG9mZmxpbmUgZGVzcGl0ZSBhIHNvbGlkIGdyZWVuIHBvd2VyIExFRC4KLSAqKlBlcm1hbmVudCBTb2x1dGlvbioqOiBDb25maWd1cmVkIGAvZXRjL05ldHdvcmtNYW5hZ2VyL2NvbmYuZC9kaXNhYmxlLXdpZmktcG93ZXJzYXZlLmNvbmZgOgogIGBgYGluaQogIFtjb25uZWN0aW9uXQogIHdpZmkucG93ZXJzYXZlID0gMgogIGBgYAogICooVmFsdWUgYDJgIGVuZm9yY2VzIGBOTV9TRVRUSU5HX1dJUkVMRVNTX1BPV0VSU0FWRV9ESVNBQkxFYCBhY3Jvc3MgYWxsIFdpLUZpIHByb2ZpbGVzKS4qCi0gKipWZXJpZmllZCB2aWEgQ0xJKio6IGBzdWRvIGl3IGRldiB3bGFuMCBnZXQgcG93ZXJfc2F2ZWAg4p6UIGBQb3dlciBzYXZlOiBvZmZgLgoKIyMjIDIuIEtlcm5lbCBJUCBGb3J3YXJkaW5nIChBY3RpdmUgJiBQZXJzaXN0ZW50KQotICoqUHJvYmxlbSoqOiBEb2NrZXIgY29udGFpbmVycywgU3VibmV0IFJvdXRpbmcgKGAxOTIuMTY4LjEuMC8yNGApLCBhbmQgVGFpbHNjYWxlIEV4aXQgTm9kZSBmdW5jdGlvbnMgcmVxdWlyZSBwYWNrZXQgZm9yd2FyZGluZyBiZXR3ZWVuIG5ldHdvcmsgYWRhcHRlcnMuCi0gKipQZXJtYW5lbnQgU29sdXRpb24qKjogQ29uZmlndXJlZCBgL2V0Yy9zeXNjdGwuZC85OS10YWlsc2NhbGUuY29uZmA6CiAgYGBgaW5pCiAgbmV0LmlwdjQuaXBfZm9yd2FyZCA9IDEKICBuZXQuaXB2Ni5jb25mLmFsbC5mb3J3YXJkaW5nID0gMQogIGBgYAotICoqVmVyaWZpZWQgdmlhIENMSSoqOiBgY2F0IC9wcm9jL3N5cy9uZXQvaXB2NC9pcF9mb3J3YXJkYCDinpQgYDFgLgoKLS0tCgojIyAzLiBQcm92ZW4gQnVnIFJlc29sdXRpb25zICYgRW5naW5lZXJpbmcgTG9nCgojIyMgSW5jaWRlbnQgMDAxOiBXaS1GaSBQYXNzd29yZCBVcGRhdGUgJiBOZXR3b3JrTWFuYWdlciBTdGFsZSBQcm9maWxlCi0gKipXaGF0IEhhcHBlbmVkKio6IFdpLUZpIHBhc3N3b3JkIHdhcyBjaGFuZ2VkIG9uIHRoZSBob21lIHJvdXRlci4gUnVubmluZyBgc3VkbyBubWNsaSBkZXYgd2lmaSBjb25uZWN0ICJSaW1qaGltIiBwYXNzd29yZCAiLi4uImAgdGhyZXcgYSBgcHJvcGVydHkgaXMgbWlzc2luZ2AgZXJyb3IuCi0gKipSb290IENhdXNlKio6IE5ldHdvcmtNYW5hZ2VyIGFscmVhZHkgaGFkIGEgc2F2ZWQgY29ubmVjdGlvbiBwcm9maWxlIG5hbWVkIGAiUmltamhpbSJgIHdpdGggdGhlIG9sZCBjcmVkZW50aWFscywgY2F1c2luZyBjb25mbGljdC4KLSAqKlNvbHV0aW9uKio6IERlbGV0ZSB0aGUgc3RhbGUgcHJvZmlsZSBhbmQgcmVjb25uZWN0OgogIGBgYGJhc2gKICBzdWRvIG5tY2xpIGNvbm5lY3Rpb24gZGVsZXRlICJSaW1qaGltIgogIHN1ZG8gbm1jbGkgZGV2aWNlIHdpZmkgY29ubmVjdCAiUmltamhpbSIgcGFzc3dvcmQgIlJlc3RsZXNzaW5zZWN0IgogIGBgYAoKIyMjIEluY2lkZW50IDAwMjogTWlzc2luZyBWaWRlbyBEZXZpY2VzIGluIERvY2tlciAoYC9kZXYvdmlkZW8xMGApCi0gKipXaGF0IEhhcHBlbmVkKio6IFBsZXggY29udGFpbmVyIGZhaWxlZCBvbiBzdGFydHVwIHdpdGggYGVycm9yIGdhdGhlcmluZyBkZXZpY2UgaW5mb3JtYXRpb246IG5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rvcnk6IC9kZXYvdmlkZW8xMGAuCi0gKipSb290IENhdXNlKio6IFBpIDQgdHV0b3JpYWxzIG1hcCBgL2Rldi92aWRlbzEwLi4xMmAuIFRoZSBSYXNwYmVycnkgUGkgNSBrZXJuZWwgbWFwcyBWNEwyIGRldmljZXMgYXQgYC9kZXYvdmlkZW8xOWDigJNgL2Rldi92aWRlbzM1YCBhbmQgR1BVIERSTSBhdCBgL2Rldi9kcmkvcmVuZGVyRDEyOGAuCi0gKipTb2x1dGlvbioqOiBSZW1vdmVkIGAvZGV2L3ZpZGVvMTAuLjEyYCBmcm9tIGBkb2NrZXItY29tcG9zZS55bWxgIGFuZCBtYXBwZWQgb25seSBgL2Rldi9kcmk6L2Rldi9kcmlgLgoKIyMjIEluY2lkZW50IDAwMzogUmVhZC1Pbmx5IFVTQiBNb3VudCBhdCBgL21udC9tZWRpYS1zdG9yYWdlYAotICoqV2hhdCBIYXBwZW5lZCoqOiBUb3JyZW50IGRvd25sb2FkcyBmYWlsZWQgd2l0aCB3cml0ZS1wZXJtaXNzaW9uIGVycm9ycy4KLSAqKlJvb3QgQ2F1c2UqKjogYC9ldGMvZnN0YWJgIG1vdW50ZWQgYC9tbnQvbWVkaWEtc3RvcmFnZWAgYXMgYHJvLG5vZmFpbGAgKHJlYWQtb25seSBleEZBVCkuCi0gKipTb2x1dGlvbioqOiBQb2ludGVkIGBNRURJQV9QQVRIYCBpbiBgLmVudmAgdG8gYC9ob21lL2RlZXBzaGFoMDgvbWVkaWFgIG9uIHRoZSBpbnRlcm5hbCBmYXN0IFNEIGNhcmQgKHJlYWQtd3JpdGUsIHN1cHBvcnRzIGF0b21pYyBoYXJkbGlua3MpLgoKIyMjIEluY2lkZW50IDAwNDogRGViaWFuIFBFUCA2NjggRXh0ZXJuYWxseSBNYW5hZ2VkIFB5dGhvbgotICoqV2hhdCBIYXBwZW5lZCoqOiBHbG9iYWwgYHBpcCBpbnN0YWxsIHB5dGVzdGAgZmFpbGVkIG9uIERlYmlhbiAxMy4KLSAqKlNvbHV0aW9uKio6IEluc3RhbGwgcGFja2FnZXMgdGhyb3VnaCBzeXN0ZW0gcGFja2FnZSBtYW5hZ2VyOgogIGBgYGJhc2gKICBzdWRvIGFwdC1nZXQgaW5zdGFsbCAteSBweXRob24zLXB5dGVzdCBweXRob24zLXlhbWwgcHl0aG9uMy1yZXF1ZXN0cwogIGBgYAo=
+# 🖥️ Raspberry Pi 5: System & Hardware Single Source of Truth
+
+> **Context**: Hardware profile, network management, OS stability tuning, known hardware quirks, and root-cause solutions for the Raspberry Pi 5 server.  
+> **Host**: `raspberrypi` (`192.168.1.92` / Tailscale `100.68.196.14`)  
+> **Hardware**: Raspberry Pi 5 Model B (Broadcom BCM2712, 16GB RAM)  
+> **OS**: Debian GNU/Linux 13 (Trixie/Bookworm aarch64, Kernel 6.18)  
+> **Status**: Production (24/7 Active)
+
+---
+
+## 1. Network Profile & Access Endpoints
+
+| Parameter | Value | Details |
+| :--- | :--- | :--- |
+| **Wi-Fi SSID** | `Rimjhim` | Password: `Restlessinsect` |
+| **LAN IPv4** | `192.168.1.92` | Static / Reserved on Home Subnet |
+| **Tailscale IPv4** | `100.68.196.14` | Node Name: `pi5-media-nas` |
+| **Default Gateway** | `192.168.1.254` | AT&T Fiber Gateway BGW210/320 |
+| **SSH User** | `deepshah08` | Primary administrator (`sudo` enabled) |
+| **Root Storage** | 117GB MicroSD | ~16GB used (14%), ~97GB available |
+| **System RAM** | 16GB LPDDR4X | Dedicated to core network services (Pi-hole v6 & HA) |
+| **GPU / Video Decode**| `/dev/dri/renderD128` | Broadcom VideoCore VII DRM |
+
+---
+
+## 2. Stability Hardening & Sleep Prevention (Permanently Configured)
+
+### 1. Wi-Fi Power Management (Disabled Globally)
+- **Problem**: Raspberry Pi OS defaults to 802.11 power saving (`power_save = on`). After several hours of inactivity, the Broadcom Wi-Fi module went to sleep and dropped ARP response packets, causing the Pi to appear offline despite a solid green power LED.
+- **Permanent Solution**: Configured `/etc/NetworkManager/conf.d/disable-wifi-powersave.conf`:
+  ```ini
+  [connection]
+  wifi.powersave = 2
+  ```
+  *(Value `2` enforces `NM_SETTING_WIRELESS_POWERSAVE_DISABLE` across all Wi-Fi profiles).*
+- **Verified via CLI**: `sudo iw dev wlan0 get power_save` ➔ `Power save: off`.
+
+### 2. Kernel IP Forwarding (Active & Persistent)
+- **Problem**: Docker containers, Subnet Routing (`192.168.1.0/24`), and Tailscale Exit Node functions require packet forwarding between network adapters.
+- **Permanent Solution**: Configured `/etc/sysctl.d/99-tailscale.conf`:
+  ```ini
+  net.ipv4.ip_forward = 1
+  net.ipv6.conf.all.forwarding = 1
+  ```
+- **Verified via CLI**: `cat /proc/sys/net/ipv4/ip_forward` ➔ `1`.
+
+---
+
+## 3. Proven Bug Resolutions & Engineering Log
+
+### Incident 001: Wi-Fi Password Update & NetworkManager Stale Profile
+- **What Happened**: Wi-Fi password was changed on the home router. Running `sudo nmcli dev wifi connect "Rimjhim" password "..."` threw a `property is missing` error.
+- **Root Cause**: NetworkManager already had a saved connection profile named `"Rimjhim"` with the old credentials, causing conflict.
+- **Solution**: Delete the stale profile and reconnect:
+  ```bash
+  sudo nmcli connection delete "Rimjhim"
+  sudo nmcli device wifi connect "Rimjhim" password "Restlessinsect"
+  ```
+
+### Incident 002: Offloading Media Stack to UGREEN DXP2800
+- **What Happened**: Software transcoding 4K HDR media on ARM saturated the Broadcom BCM2712 CPU at 100%.
+- **Solution**: Promoted Plex and \*Arr stack to UGREEN DXP2800 with Intel QuickSync GPU passthrough. Pi 5 is dedicated to Pi-hole v6 DNS ad-blocking and Gravity-Sync HA.

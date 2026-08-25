@@ -1,1 +1,47 @@
-IyDwn5KoIExlYXJuaW5nIOKAlCBTaW5nbGUgU291cmNlIG9mIFRydXRoIChTb1QpIEtub3dsZWRnZSBCYXNlCgpXZWxjb21lIHRvIHRoZSBjZW50cmFsaXplZCwgdmVyc2lvbi1jb250cm9sbGVkIFNpbmdsZSBTb3VyY2Ugb2YgVHJ1dGggKFNvVCkga25vd2xlZGdlIGJhc2UgZm9yIGF1dG9ub21vdXMgQUkgYWdlbnRzLCBkZXZlbG9wZXJzLCBhbmQgcHJvamVjdCBlY29zeXN0ZW1zLgoKVGhpcyByZXBvc2l0b3J5IGVsaW1pbmF0ZXMgU2luZ2xlIFBvaW50cyBvZiBGYWlsdXJlIChTUE9GKSBieSBwcm92aWRpbmcgYSBzdGF0ZWxlc3MsIGR1cmFibGUsIGFuZCBzdHJ1Y3R1cmVkIGRpcmVjdG9yeSBvZiBwcm92ZW4gYXJjaGl0ZWN0dXJlcywgcnVuYm9va3MsIHN5c3RlbSBidWdzLCBhbmQgcmVzb2x1dGlvbnMuCgotLS0KCj4gWyFOT1RFXSAgCj4gQWdlbnRzIGludm9raW5nIHRoZSBgbWQtd3JpdGVyYCBza2lsbCBtdXN0IGZvbGxvdyB0aGUgZGlyZWN0b3J5IHN0cnVjdHVyZSBhbmQgYXV0aG9yaW5nIGd1aWRlbGluZXMgZGVmaW5lZCBoZXJlaW4uCgotLS0KCiMjIPCfk4EgRG9tYWluIERpcmVjdG9yeSBNYXAKCnwgRG9tYWluIHwgU3ViLURvbWFpbiB8IERlc2NyaXB0aW9uIHwgRG9jdW1lbnRhdGlvbiBMaW5rIHwKfCA6LS0tIHwgOi0tLSB8IDotLS0gfCA6LS0tIHwKfCAqKlJhc3BiZXJyeSBQaSA1KiogfCBTeXN0ZW0gJiBIYXJkd2FyZSB8IEhvc3QgYWNjZXNzLCBPUyB0dW5pbmcsIFZNcywgaGFyZHdhcmUgZGV2aWNlcyB8IFtyYXNwYmVycnlwaS9SRUFETUUubWRdKGVkdC9yYXNwYmVycnlwaS9SRUFETUUubWQpIHwKfCAqKlJhc3BiZXJyeSBQaSA1KiogfCBQaS1ob2xlIHwgRE5TIGFkLWJsb2NraW5nLCBJU1AvU0xBQUMgYnlwYXNzLCB2NiB3ZWIgYWRtaW4gfCBbcmFzcGJlcnJ5cGkvcGlob2xlL1JFQURNRS5tZF0oZWR0L3Jhc3BiZXJyeXBpL3BpaG9sZS9SRUFETUUubWQpIHwKfCAqKlJhc3BiZXJyeSBQaSA1KiogfCBQbGV4ICYgKkFycmsgfCA4LXNlcnZpY2UgbWVkaWEgc3RhY2ssIGhhcmRsaW5rcywgUHJvd2xhcnIsIHFCSXR0b3JyZW50IHwgW3Jhc3BiZXJyeXBpL2Fycl9zdGFjay9SRUFETUUubWRdKGVkdC9yYXNwYmVycnlwaS9hcnJfc3RhY2svUkVBRE1FLm1kKSB8CgotLS0KCiMjIOKcheKcqCBTdGFuZGFyZCBGb2xkZXIgSGllcmFyY2h5CgpgYGB0ZXh0CkxlYXJuaW5nLwrimJzilIDilIBSRUFETUUubWQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMgVGhpcyBHbG9iYWwgSW5kZXgK4pic4pSA4pSAcmFzcGJlcnJ5cGkvICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjIFBpIDUgRG9tYWluCiAgIOKUnOKUgOKUgFJFQURNRS5tZCAgICAgICAgICAgICAgICAgICAgICAgICAgICMgR2VuZXJhbCBQaSA1IEhvc3QgJiBIYXJkd2FyZQogICDimJzilIDilIBwaWhvbGUvICAgICAgICAgICAgICAgICAgICAgICAgICAgICMgUGktaG9sZSBTdWItRG9tYWluCiAgIOKCguKUnOKUgOKUgFJFQURNRS5tZCAgICAgICAgICAgICAgICAgICAgICAgICAgICMgRE5TIENvbmZpZ3MsIElTUCBCeXBhc3MsIFRhaWxzY2FsZQogICDimJzilIDilIBhcnJfc3RhY2svICAgICAgICAgICAgICAgICAgICAgICAgICAjIE1lZGlhIEF1dG9tYXRpb24gU3ViLURvbWFpbgogICAgICAg4pSc4pSA4pSAUkVBRE1FLm1kICAgICAgICAgICAgICAgICAgICAgICAgICAgIyA4LVNlcnZpY2UgRG9ja2VyIFN0YWNrLCBTY29yaW5nLCBIYXJkbGlua3MK4pic4pSA4pSAW25ldy1kb21haW5dLwogICAg4pSc4pSA4pSAUkVBRE1FLm1kCmBgYAoKLS0tCgojIyDwn5alIENvbnRyaWJ1dGlvbiAmIFN5bmMgUnVsZXMgZm9yIEFnZW50cwoKMS4gKipSZWFkIEJlZm9yZSBXcml0ZSoqOiBBbHdheXMgY2hlY2sgZXhpc3RpbmcgZG9tYWluIGZvbGRlcnMgZm9yIHJlZ2lzdGVyZWQgcG9ydHMsIGlwIGFkZHJlc3NlcywgYW5kIGtub3duIHF1aXJrcy4KMi4gKipTdHJ1Y3R1cmVkIERvY3VtZW50YXRpb24qKjogRXZlcnkgbmV3IHRvcGljIG11c3QgaW5jbHVkZSBhIFN5c3RlbSBDb250ZXh0LCBBcmNoaXRlY3R1cmUgVGFibGUsIEtub3duIEJ1Z3MgJiBGaXhlcywgb3BlcmF0aW9uYWwgcnVuYm9va3MsIGFuZCBjb3B5LXBhc3RlIHJldmVydCBjb21tYW5kcy4KMy4gKipOb24tUmVkdW5kYW5jeSoqOiBVcGRhdGUgZXhpc3RpbmcgZG9jdW1lbnRzIHdoZW4gbW9kaWZ5aW5nIGEgc3Vic3lzdGVtIHJhdGhlciB0aGFuIGNyZWF0aW5nIGZvbGRlciBzcHJhd2wuCg==
+# 🧠 Learning — Single Source of Truth (SoT) Knowledge Base
+
+Welcome to the centralized, version-controlled Single Source of Truth (SoT) knowledge base for autonomous AI agents, developers, and project ecosystems.
+
+This repository eliminates Single Points of Failure (SPOF) by providing a stateless, durable, and structured directory of proven architectures, runbooks, system bugs, and resolutions.
+
+---
+
+> [!NOTE]  
+> Agents invoking the `md-writer` skill must follow the directory structure and authoring guidelines defined herein.
+
+---
+
+## 🗺️ Domain Directory Map
+
+| Domain | Sub-Domain | Description | Documentation Link |
+| :--- | :--- | :--- | :--- |
+| **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
+| **Raspberry Pi 5** | Pi-hole | DNS ad-blocking, ISP/SLAAC bypass, v6 web admin | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
+| **UGREEN DXP2800** | Plex & *Arr | 8-service media stack, QuickSync HW transcoding, atomic hardlinks | [ugreen_nas/arr_stack/README.md](ugreen_nas/arr_stack/README.md) |
+
+---
+
+## 🗂️ Standard Folder Hierarchy
+
+```text
+Learning/
+├── README.md                      # This Global Index
+├── PROJECTS_ROADMAP.md            # Master Project Roadmap & Execution Queue
+├── raspberrypi/                   # Pi 5 Domain
+│   ├── README.md                  # General Pi 5 Host & Hardware
+│   ├── SETUP_AND_TUNING_GUIDE.md  # Detailed setup guide
+│   └── pihole/                    # Pi-hole Sub-Domain
+│       └── README.md              # DNS Configs, ISP Bypass, Tailscale
+└── ugreen_nas/                    # UGREEN DXP2800 Domain
+    └── arr_stack/                 # Media Automation Sub-Domain
+        ├── README.md              # 8-Service Docker Stack, QuickSync, Hardlinks
+        └── docker-compose.yml     # Complete Docker Compose configuration
+```
+
+---
+
+## ✍️ Contribution & Sync Rules for Agents
+
+1. **Read Before Write**: Always check existing domain folders for registered ports, IP addresses, and known quirks.
+2. **Structured Documentation**: Every new topic must include a System Context, Architecture Table, Known Bugs & Fixes, operational runbooks, and copy-paste revert commands.
+3. **Non-Redundancy**: Update existing documents when modifying a subsystem rather than creating folder sprawl.

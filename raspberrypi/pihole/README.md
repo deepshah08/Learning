@@ -1,1 +1,112 @@
-IyDwn5Wz77iPIFBpLWhvbGUgdjYgJiBXaG9sZS1Ib21lIE5ldHdvcmsgRE5TOiBTaW5nbGUgU291cmNlIG9mIFRydXRoCgo+ICoqQ29udGV4dCoqOiBQcm9kdWN0aW9uIGRlcGxveW1lbnQgb2Ygd2hvbGUtaG9tZSBuZXR3b3JrIGFkLWJsb2NraW5nIHdpdGggQVQmVCBGaWJlciBHYXRld2F5IHRha2VvdmVyLCBJUHY2IFNMQUFDIGxlYWsgbWl0aWdhdGlvbiwgc3RhdGljIElQIGJpbmRpbmcsIGFuZCBUYWlsc2NhbGUgTWFnaWNETlMgaW50ZWdyYXRpb24uICAKPiAqKkhvc3QqKjogUmFzcGJlcnJ5IFBpIDUgKGAxOTIuMTY4LjEuOTJgIFN0YXRpYyAvIFRhaWxzY2FsZSBgMTAwLjY4LjE5Ni4xNGApICAKPiAqKkdhdGV3YXkqKjogQVQmVCBGaWJlciBCR1cyMTAvMzIwIChgMTkyLjE2OC4xLjI1NGApICAKPiAqKldpLUZpIFNTSUQqKjogYFJpbWpoaW1gIChQYXNzd29yZDogYFJlc3RsZXNzaW5zZWN0YCkgIAo+ICoqU3RhdHVzKio6IPCfn6IgUHJvZHVjdGlvbiAoMTAwJSBXaG9sZS1Ib21lIEFkLUJsb2NraW5nIEFjdGl2ZSkgIAo+ICoqTGFzdCBWZXJpZmllZCoqOiAyMDI2LTA4LTIxIDIwOjM1IFBEVAoKLS0tCgojIyAxLiBFeGVjdXRpdmUgU3VtbWFyeSAmIFZlcmlmaWNhdGlvbgoKV2hvbGUtaG9tZSBuZXR3b3JrIGFkLWJsb2NraW5nIGlzIGZ1bGx5IGFjdGl2ZSBhbmQgdmVyaWZpZWQgbGl2ZSBvbiBjbGllbnQgZGV2aWNlcy4gQWxsIExBTiB0cmFmZmljIGFjcm9zcyBsYXB0b3BzLCBtb2JpbGUgcGhvbmVzIChQaXhlbC9pT1MpLCB0YWJsZXRzLCBhbmQgc21hcnQgVFZzIHJvdXRlcyBETlMgcXVlcmllcyBleGNsdXNpdmVseSB0aHJvdWdoIFBpLWhvbGUuCgojIyMgTGl2ZSBDbGllbnQgVmVyaWZpY2F0aW9uIChtYWNPUyBUZXJtaW5hbCk6CmBgYHRleHQKJCBzY3V0aWwgLS1kbnMgfCBncmVwIC1BIDIgIm5hbWVzZXJ2ZXJbMF0iCiAgbmFtZXNlcnZlclswXSA6IDE5Mi4xNjguMS45MiAgPC0tIPCfjq8gUGktaG9sZSBpcyB0aGUgU29sZSBOYW1lc2VydmVyCgokIGRpZyBnb29nbGVhZHMuZy5kb3VibGVjbGljay5uZXQgK3Nob3J0CjAuMC4wLjAgIDwtLSDinIUgMTAwJSBCbG9ja2VkCgokIGRpZyBzcGVlZHRlc3QubmV0ICtzaG9ydAoxNTEuMTAxLjE5NC4yMTkgIDwtLSDinIUgVmFsaWQgRG9tYWluIFJlc29sdmVkCmBgYAoKLS0tCgojIyAyLiBNYXN0ZXIgVG9nZ2xlICYgQ29uZmlndXJhdGlvbiBDaGVja2xpc3QKCkJlbG93IGlzIHRoZSBjb21wbGV0ZSByZWNvcmQgb2YgZXZlcnkgc2V0dGluZyB0b2dnbGVkIGFjcm9zcyBhbGwgMyBsYXllcnM6CgojIyMgTGF5ZXIgMTogQVQmVCBGaWJlciBHYXRld2F5IChgaHR0cDovLzE5Mi4xNjguMS4yNTRgKQoxLiAqKkhvbWUgTmV0d29yayDinpQgU3VibmV0cyAmIERIQ1AqKjoKICAgLSBgREhDUCBTZXJ2ZXIgRW5hYmxlYDog4p6UICoqYE9mZmAqKiAqKFN0b3BzIEFUJlQgcm91dGVyIGZyb20gaGFuZGluZyBvdXQgaXRzIG93biBESENQL0ROUykqLgogICAtIGBEZXZpY2UgSVB2NCBBZGRyZXNzYDogYDE5Mi4xNjguMS4yNTRgLgogICAtIGBTdWJuZXQgTWFza2A6IGAyNTUuMjU1LjI1NS4wYC4KICAgLSBDbGljayAqKlNhdmUqKi4KMi4gKipIb21lIE5ldHdvcmsg4p6UIElQdjYqKjoKICAgLSBgSVB2NmA6IOKelCAqKmBPZmZgKiogKihDUklUSUNBTDogU2h1dHMgZG93biBJQ01QdjYgU0xBQUMgUm91dGVyIEFkdmVydGlzZW1lbnRzIHRoYXQgYnJvYWRjYXN0IEFUJlQgdW5maWx0ZXJlZCBETlMgMjYwMDoxNzAyOi4uLjo6MSkqLgogICAtIGBESENQdjZgOiBgT2ZmYC4KICAgLSBDbGljayAqKlNhdmUqKi4KCi0tLQoKIyMjIExheWVyIDI6IFBpLWhvbGUgV2ViIEFkbWluIChgaHR0cDovLzE5Mi4xNjguMS45Mi9hZG1pbmApCjEuICoqU2V0dGluZ3Mg4p6UIERIQ1AqKjoKICAgLSBgREhDUCBzZXJ2ZXIgZW5hYmxlZGA6IOKelCAqKmBDaGVja2VkYCoqLgogICAtIGBSYW5nZSBvZiBJUCBhZGRyZXNzZXMgdG8gaGFuZCBvdXRgOgogICAgIC0gYEZyb21gOiAqKmAxOTIuMTY4LjEuNjRgKioKICAgICAtIGBUb2A6ICoqYDE5Mi4xNjguMS4yNTBgKioKICAgLSBgUm91dGVyIChnYXRld2F5KSBJUCBhZGRyZXNzYDogKipgMTkyLjE2OC4xLjI1NGAqKiAqKERpcmVjdHMgaW50ZXJuZXQgdHJhZmZpYyBhdCBmdWxsIGZpYmVyIHNwZWVkKSouCiAgIC0gYE5ldG1hc2tgOiBgMjU1LjI1NS4yNTUuMGAgKG9yIGF1dG9tYXRpYykuCiAgIC0gYEVuYWJsZSBhZGRpdGlvbmFsIElQdjYgc3VwcG9ydCAoU0xBQUMgKyBSQSlgOiDinpQgKipgVW5jaGVja2VkYCoqICooUHJldmVudHMgbm8gYWRkcmVzcyByYW5nZSBhdmFpbGFibGUgZm9yIERIQ1B2NiB3YXJuaW5ncykqLgogICAtIENsaWNrICoqU2F2ZSAmIEFwcGx5KiouCgotLS0KCiMjIyBMYXllciAzOiBSYXNwYmVycnkgUGkgNSBPcGVyYXRpbmcgU3lzdGVtIChUZXJtaW5hbCkKMS4gKipTdGF0aWMgSVAgQmluZGluZyAoU29sdmVkIHRoZSBESENQIENoaWNrZW4tYW5kLUVnZyBUcmFwKSoqOgogICAtIFdoZW4gQVQmVCBESENQIHdhcyBkaXNhYmxlZCwgdGhlIFBpIG5lZWRlZCBhIHN0YXRpYyBJUCBzbyBpdCBuZXZlciByZWxpZWQgb24gYW4gZXh0ZXJuYWwgREhDUCBzZXJ2ZXIgdXBvbiBib290L3JlY29ubmVjdDoKICAgYGBgYmFzaAogICBzdWRvIG5tY2xpIGNvbm5lY3Rpb24gbW9kaWZ5ICJSaW1qaGltIiBpcHY0Lm1ldGhvZCBtYW51YWwgaXB2NC5hZGRyZXNzZXMgMTkyLjE2OC4xLjkyLzI0IGlwdjQuZ2F0ZXdheSAxOTIuMTY4LjEuMjU0IGlwdjQuZG5zICIxMjcuMC4wLjEiCiAgIHN1ZG8gbm1jbGkgY29ubmVjdGlvbiB1cCAiUmltamhpbSIKICAgYGBgCjIuICoqV2ktRmkgU2xlZXAgLyBQb3dlci1TYXZpbmcgRGlzYWJsZWQqKjoKICAgLSBTdG9yZWQgaW4gYC9ldGMvTmV0d29ya01hbmFnZXIvY29uZi5kL2Rpc2FibGUtd2lmaS1wb3dlcnNhdmUuY29uZmA6CiAgIGBgYGluaQogICBbY29ubmVjdGlvbl0KICAgd2lmaS5wb3dlcnNhdmUgPSAyCiAgIGBgYAozLiAqKktlcm5lbCBJUCBQYWNrZXQgRm9yd2FyZGluZyoqOgogICAtIFN0b3JlZCBpbiBgL2V0Yy9zeXNjdGwuZC85OS10YWlsc2NhbGUuY29uZmA6CiAgIGBgYGluaQogICBuZXQuaXB2NC5pcF9mb3J3YXJkID0gMQogICBuZXQuaXB2Ni5jb25mLmFsbC5mb3J3YXJkaW5nID0gMQogICBgYGAKCi0tLQoKIyMgMy4gS2V5IEFyY2hpdGVjdHVyYWwgRGVjaXNpb25zICYgUHJvYmxlbSBSZXNvbHV0aW9ucwoKIyMjIFByb2JsZW0gMTogVGhlIElQdjYgU0xBQUMgLyBSRE5TUyBMZWFrCiogICAqKlN5bXB0b20qKjogQWZ0ZXIgZGlzYWJsaW5nIEFUJlQgREhDUCwgYWRzIHN0aWxsIHBvcHBlZCB1cCBvbiBgc3BlZWR0ZXN0Lm5ldGAuIFJ1bm5pbmcgYHNjdXRpbCAtLWRuc2AgcmV2ZWFsZWQgYG5hbWVzZXJ2ZXJbMF0gOiAyNjAwOjE3MDI6Njk1MTo2MDMwOjoxYC4KKiAgICoqUm9vdCBDYXVzZSoqOiBJbiBJUHY2LCByb3V0ZXJzIGJyb2FkY2FzdCBETlMgdmlhICoqSUNNUHY2IFJvdXRlciBBZHZlcnRpc2VtZW50cyAoUkZDIDgxMDYgUkROU1MpKiogZXZlbiB3aGVuIGBESENQdjZgIGlzIGBPZmZgLiBBcHBsZSBhbmQgQW5kcm9pZCBkZXZpY2VzIHByaW9yaXRpemUgSVB2NiBvdmVyIElQdjQsIGJ5cGFzc2luZyBQaS1ob2xlLgoqICAgKipSZXNvbHV0aW9uKio6IFRvZ2dsZWQgYElQdjY6IE9mZmAgb24gdGhlIEFUJlQgZ2F0ZXdheS4gVGhpcyBzdG9wcGVkIFJETlNTIGJyb2FkY2FzdHMsIGxlYXZpbmcgYDE5Mi4xNjguMS45MmAgKFBpLWhvbGUpIGFzIHRoZSBzb2xlIGFjdGl2ZSBuYW1lc2VydmVyLgoKIyMjIFByb2JsZW0gMjogVGhlICJESENQIENoaWNrZW4tYW5kLUVnZyIgVHJhcAoqICAgKipTeW1wdG9tKio6IFdoZW4gV2ktRmkgcmVzZXQgYWZ0ZXIgc2F2aW5nIEFUJlQgcm91dGVyIHNldHRpbmdzLCB0aGUgUGkgNSBkcm9wcGVkIG9mZiB0aGUgbmV0d29yayBhbmQgY291bGQgbm90IHJlLWFzc29jaWF0ZS4KKiAgICoqUm9vdCBDYXVzZSoqOiBUaGUgUGkgd2FzIGNvbmZpZ3VyZWQgYXMgYSBESENQIGNsaWVudC4gQmVjYXVzZSBBVCZUJ3MgREhDUCBzZXJ2ZXIgd2FzIHR1cm5lZCBvZmYsIHRoZSBQaSBoYWQgbm8gc2VydmVyIHRvIGdpdmUgaXQgYW4gSVAgYWRkcmVzcy4KKiAgICoqUmVzb2x1dGlvbioqOiBDb25maWd1cmVkIGEgcGVyc2lzdGVudCAqKnN0YXRpYyBJUCAoYDE5Mi4xNjguMS45Mi8yNGApKiogb24gYHdsYW4wYCBpbiBOZXR3b3JrTWFuYWdlci4KCiMjIyBQcm9ibGVtIDM6IENsaWVudCBESENQIENhY2hlIExhZwoqICAgKipTeW1wdG9tKio6IENvbm5lY3RlZCBkZXZpY2VzIGhlbGQgb250byB0aGUgb2xkIEFUJlQgcm91dGVyIEROUyBmb3IgdXAgdG8gMjQgaG91cnMuCiogICAqKlJlc29sdXRpb24qKjogVG9nZ2xlZCBXaS1GaSBgT0ZGYCDinpQgYE9OYCBvbiBjbGllbnQgZGV2aWNlcyAob3IgY2xpY2tlZCAiUmVuZXcgREhDUCBMZWFzZSIpIHRvIGluc3RhbnRseSBmZXRjaCBQaS1ob2xlIGNvbmZpZ3VyYXRpb24uCgojIyA0LiBBY3RpdmUgQ3VyYXRlZCBCbG9ja2xpc3RzICgzMDksNDE0IERvbWFpbnMpCgp8IENhdGVnb3J5IHwgU291cmNlIFVSTCB8IFB1cnBvc2UgfAp8IDotLS0gfCA6LS0tIHwgOi0tLSB8CnwgKipHZW5lcmFsIEJhc2VsaW5lKiogfCBgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1N0ZXZlbkJsYWNrL2hvc3RzL21hc3Rlci9ob3N0c2AgfCBVbmlmaWVkIGFkICYgdHJhY2tlciBiYXNlbGluZSAofjkzayBkb21haW5zKSB8CnwgKipTbWFydCBUViBBZHMqKiB8IGBodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vUGVyZmx5c3QvUGlIb2xlQmxvY2tsaXN0L21hc3Rlci9TbWFydFRWLnR4dGAgfCBTYW1zdW5nIC8gTEcgLyBSb2t1IHRlbGVtZXRyeSAmIGhvbWUgc2NyZWVuIGFkcyB8CnwgKipGaXJlVFYgVHJhY2tpbmcqKiB8IGBodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vUGVyZmx5c3QvUGlIb2xlQmxvY2tsaXN0L21hc3Rlci9BbWF6b25GaXJlVFYudHh0YCB8IEFtYXpvbiBGaXJlVFYgdGVsZW1ldHJ5ICYgYWQgbG9nZ2luZyB8CnwgKipNYWx3YXJlIERlZmVuc2UqKiB8IGBodHRwczovL3VybGhhdXMuYWJ1c2UuY2gvZG93bmxvYWRzL2hvc3RmaWxlL2AgfCBMaXZlIG1hbHdhcmUgZGlzdHJpYnV0aW9uIHNpdGVzIChhYnVzZS5jaCkgfAp8ICoqUGhpc2hpbmcgRGVmZW5zZSoqfCBgaHR0cHM6Ly9waGlzaGluZy5hcm15L2Rvd25sb2FkL3BoaXNoaW5nX2FybXlfYmxvY2tsaXN0X2V4dGVuZGVkLnR4dGAgfCBTY2FtICYgZnJhdWR1bGVudCBiYW5raW5nIHBoaXNoaW5nIGRvbWFpbnMgfAp8ICoqQ3VyYXRlZCBNb2JpbGUqKiB8IGBodHRwczovL3NtYWxsLm9pc2QubmxgIHwgT0lTRCBjdXJhdGVkIG1vYmlsZSBhcHAgYWQgJiB0cmFja2VyIGxpc3QgfAoKLSAqKkdyYXZpdHkgQXV0by1VcGRhdGUqKjogUGktaG9sZSBhdXRvbWF0aWNhbGx5IHVwZGF0ZXMgdGhlc2UgNiBsaXN0cyBldmVyeSBTdW5kYXkgYXQgMzowMCBBTS4KLSAqKlRvdGFsIFVuaXF1ZSBCbG9ja2VkIERvbWFpbnMqKjogKiozMDksNDE0KioK
+# 🕳️ Pi-hole v6 & Whole-Home Network DNS: Single Source of Truth
+
+> **Context**: Production deployment of whole-home network ad-blocking with AT&T Fiber Gateway takeover, IPv6 SLAAC leak mitigation, static IP binding, and Tailscale MagicDNS integration.  
+> **Host**: Raspberry Pi 5 (`192.168.1.92` Static / Tailscale `100.68.196.14`)  
+> **Gateway**: AT&T Fiber BGW210/320 (`192.168.1.254`)  
+> **Wi-Fi SSID**: `Rimjhim` (Password: `Restlessinsect`)  
+> **Status**: 🟢 Production (100% Whole-Home Ad-Blocking Active)  
+> **Last Verified**: 2026-08-21 20:35 PDT
+
+---
+
+## 1. Executive Summary & Verification
+
+Whole-home network ad-blocking is fully active and verified live on client devices. All LAN traffic across laptops, mobile phones (Pixel/iOS), tablets, and smart TVs routes DNS queries exclusively through Pi-hole.
+
+### Live Client Verification (macOS Terminal):
+```text
+$ scutil --dns | grep -A 2 "nameserver[0]"
+  nameserver[0] : 192.168.1.92  <-- 🎯 Pi-hole is the Sole Nameserver
+
+$ dig googleads.g.doubleclick.net +short
+0.0.0.0  <-- ✅ 100% Blocked
+
+$ dig speedtest.net +short
+151.101.194.219  <-- ✅ Valid Domain Resolved
+```
+
+---
+
+## 2. Master Toggle & Configuration Checklist
+
+Below is the complete record of every setting toggled across all 3 layers:
+
+### Layer 1: AT&T Fiber Gateway (`http://192.168.1.254`)
+1. **Home Network ➔ Subnets & DHCP**:
+   - `DHCP Server Enable`: ➔ **`Off`** *(Stops AT&T router from handing out its own DHCP/DNS)*.
+   - `Device IPv4 Address`: `192.168.1.254`.
+   - `Subnet Mask`: `255.255.255.0`.
+   - Click **Save**.
+2. **Home Network ➔ IPv6**:
+   - `IPv6`: ➔ **`Off`** *(CRITICAL: Shuts down ICMPv6 SLAAC Router Advertisements that broadcast AT&T unfiltered DNS 2600:1702:...::1)*.
+   - `DHCPv6`: `Off`.
+   - Click **Save**.
+
+---
+
+### Layer 2: Pi-hole Web Admin (`http://192.168.1.92/admin`)
+1. **Settings ➔ DHCP**:
+   - `DHCP server enabled`: ➔ **`Checked`**.
+   - `Range of IP addresses to hand out`:
+     - `From`: **`192.168.1.64`**
+     - `To`: **`192.168.1.250`**
+   - `Router (gateway) IP address`: **`192.168.1.254`** *(Directs internet traffic at full fiber speed)*.
+   - `Netmask`: `255.255.255.0` (or automatic).
+   - `Enable additional IPv6 support (SLAAC + RA)`: ➔ **`Unchecked`** *(Prevents no address range available for DHCPv6 warnings)*.
+   - Click **Save & Apply**.
+
+---
+
+### Layer 3: Raspberry Pi 5 Operating System (Terminal)
+1. **Static IP Binding (Solved the DHCP Chicken-and-Egg Trap)**:
+   - When AT&T DHCP was disabled, the Pi needed a static IP so it never relied on an external DHCP server upon boot/reconnect:
+   ```bash
+   sudo nmcli connection modify "Rimjhim" ipv4.method manual ipv4.addresses 192.168.1.92/24 ipv4.gateway 192.168.1.254 ipv4.dns "127.0.0.1"
+   sudo nmcli connection up "Rimjhim"
+   ```
+2. **Wi-Fi Sleep / Power-Saving Disabled**:
+   - Stored in `/etc/NetworkManager/conf.d/disable-wifi-powersave.conf`:
+   ```ini
+   [connection]
+   wifi.powersave = 2
+   ```
+3. **Kernel IP Packet Forwarding**:
+   - Stored in `/etc/sysctl.d/99-tailscale.conf`:
+   ```ini
+   net.ipv4.ip_forward = 1
+   net.ipv6.conf.all.forwarding = 1
+   ```
+
+---
+
+## 3. Key Architectural Decisions & Problem Resolutions
+
+### Problem 1: The IPv6 SLAAC / RDNSS Leak
+*   **Symptom**: After disabling AT&T DHCP, ads still popped up on `speedtest.net`. Running `scutil --dns` revealed `nameserver[0] : 2600:1702:6951:6030::1`.
+*   **Root Cause**: In IPv6, routers broadcast DNS via **ICMPv6 Router Advertisements (RFC 8106 RDNSS)** even when `DHCPv6` is `Off`. Apple and Android devices prioritize IPv6 over IPv4, bypassing Pi-hole.
+*   **Resolution**: Toggled `IPv6: Off` on the AT&T gateway. This stopped RDNSS broadcasts, leaving `192.168.1.92` (Pi-hole) as the sole active nameserver.
+
+### Problem 2: The "DHCP Chicken-and-Egg" Trap
+*   **Symptom**: When Wi-Fi reset after saving AT&T router settings, the Pi 5 dropped off the network and could not re-associate.
+*   **Root Cause**: The Pi was configured as a DHCP client. Because AT&T's DHCP server was turned off, the Pi had no server to give it an IP address.
+*   **Resolution**: Configured a persistent **static IP (`192.168.1.92/24`)** on `wlan0` in NetworkManager.
+
+### Problem 3: Client DHCP Cache Lag
+*   **Symptom**: Connected devices held onto the old AT&T router DNS for up to 24 hours.
+*   **Resolution**: Toggled Wi-Fi `OFF` ➔ `ON` on client devices (or clicked "Renew DHCP Lease") to instantly fetch Pi-hole configuration.
+
+---
+
+## 4. Active Curated Blocklists (309,414 Domains)
+
+| Category | Source URL | Purpose |
+| :--- | :--- | :--- |
+| **General Baseline** | `https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts` | Unified ad & tracker baseline (~93k domains) |
+| **Smart TV Ads** | `https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt` | Samsung / LG / Roku telemetry & home screen ads |
+| **FireTV Tracking** | `https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt` | Amazon FireTV telemetry & ad logging |
+| **Malware Defense** | `https://urlhaus.abuse.ch/downloads/hostfile/` | Live malware distribution sites (abuse.ch) |
+| **Phishing Defense**| `https://phishing.army/download/phishing_army_blocklist_extended.txt` | Scam & fraudulent banking phishing domains |
+| **Curated Mobile** | `https://small.oisd.nl` | OISD curated mobile app ad & tracker list |
+
+- **Gravity Auto-Update**: Pi-hole automatically updates these 6 lists every Sunday at 3:00 AM.
+- **Total Unique Blocked Domains**: **309,414**

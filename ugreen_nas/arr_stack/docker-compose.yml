@@ -1,0 +1,135 @@
+version: "3.8"
+
+networks:
+  media_net:
+    name: media_net
+    driver: bridge
+
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - VERSION=docker
+      - PLEX_CLAIM=${PLEX_CLAIM}
+    devices:
+      - /dev/dri:/dev/dri  # Intel QuickSync HW Transcoding
+    volumes:
+      - /volume1/docker/arr_stack/plex:/config
+      - /volume1/data/media:/media
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    networks:
+      - media_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    ports:
+      - "8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    volumes:
+      - /volume1/docker/arr_stack/qbittorrent:/config
+      - /volume1/data:/data
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    networks:
+      - media_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    ports:
+      - "9696:9696"
+    volumes:
+      - /volume1/docker/arr_stack/prowlarr:/config
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    networks:
+      - media_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    ports:
+      - "7878:7878"
+    volumes:
+      - /volume1/docker/arr_stack/radarr:/config
+      - /volume1/data:/data
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    networks:
+      - media_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    ports:
+      - "8989:8989"
+    volumes:
+      - /volume1/docker/arr_stack/sonarr:/config
+      - /volume1/data:/data
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    networks:
+      - media_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    ports:
+      - "6767:6767"
+    volumes:
+      - /volume1/docker/arr_stack/bazarr:/config
+      - /volume1/data/media:/media
+    restart: unless-stopped
+
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    networks:
+      - media_net
+    environment:
+      - TZ=America/Los_Angeles
+    ports:
+      - "5055:5055"
+    volumes:
+      - /volume1/docker/arr_stack/overseerr:/app/config
+    restart: unless-stopped
+
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    networks:
+      - media_net
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    ports:
+      - "8181:8181"
+    volumes:
+      - /volume1/docker/arr_stack/tautulli:/config
+    restart: unless-stopped
