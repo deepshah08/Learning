@@ -12,7 +12,7 @@
 | Service | Port | LAN URL | Purpose |
 | :--- | :--- | :--- | :--- |
 | **Plex** | `32400` | [http://192.168.1.80:32400/web](http://192.168.1.80:32400/web) | Hardware-accelerated media streaming (Intel QuickSync `/dev/dri`) |
-| **Prowlarr** | `9696` | [http://192.168.1.80:9696](http://192.168.1.80:9696) | Centralized Indexer Manager (Nyaa, TPB, YTS, LimeTorrents auto-synced) |
+| **Prowlarr** | `9696` | [http://192.168.1.80:9696](http://192.168.1.80:9696) | Centralized Indexer Manager (1337x, Nyaa, TPB, YTS, LimeTorrents auto-synced) |
 | **Radarr** | `7878` | [http://192.168.1.80:7878](http://192.168.1.80:7878) | Movies automation & quality scoring |
 | **Sonarr** | `8989` | [http://192.168.1.80:8989](http://192.168.1.80:8989) | TV Shows automation & season tracking |
 | **qBittorrent**| `8080` | [http://192.168.1.80:8080](http://192.168.1.80:8080) | Torrent client with direct SATA I/O (Default user: `admin`, port `6881`) |
@@ -22,20 +22,22 @@
 
 ---
 
-## 2. Key Architecture & NAS Onboarding Tweaks
+## 2. Key Architecture & Migrated Tokens
 
-### 1. Intel QuickSync Hardware Acceleration
+### 1. Migrated Application Tokens & Integrations
+* **Prowlarr API Key**: `eb674050f3e24beaa54b515dbb7a01ac`
+* **Radarr API Key**: `30ad1ab196a04184b11289e39a695f20`
+* **Sonarr API Key**: `7385f68a846a416d9964d08d1eccda12`
+* **Tautulli MovieDB API Key**: `e9a6655bae34bf694a0f3e33338dc28e`
+* **Overseerr API Key**: `MTc4NzI5MzM4ODAwMTZmODg3ZWJlLTU5NWItNDA5My1hOTczLThmZDAwYjExMmRlMQ==`
+
+### 2. Intel QuickSync Hardware Acceleration
 * **Host Nodes**: `/dev/dri/card0` (video group `44`), `/dev/dri/renderD128` (render group `105`).
 * **Container Group Mapping**: Plex container configured with `group_add: ["105", "44"]` and `devices: - /dev/dri:/dev/dri` so the internal process has full hardware access to Intel QuickSync for 4K HDR tone mapping.
 
-### 2. Zero-Copy Atomic Hardlinks
+### 3. Zero-Copy Atomic Hardlinks
 * **Unified Data Path**: Both downloaders and \*Arr apps share `/volume1/data:/data`.
 * **Inodes Validation**: Verified that completed torrents in `/data/torrents/movies/` link directly to `/data/media/movies/` with **0 MB duplicate disk space** and instant migration.
-
-### 3. Prowlarr Auto-Wiring & API Integration
-* **Radarr Link**: Connected via internal Docker DNS (`http://radarr:7878`) with API key `b48bcff2af27460281ee647b0f19db66`.
-* **Sonarr Link**: Connected via internal Docker DNS (`http://sonarr:8989`) with API key `7879cdd359b545e5af56fd8c9e95904c`.
-* **qBittorrent Integration**: Download client configured to `http://qbittorrent:8080` with category routing (`movies` and `tv`).
 
 ### 4. Language Scoring Custom Formats
 Applied across all Quality Profiles in both Radarr and Sonarr:
@@ -73,15 +75,7 @@ Applied across all Quality Profiles in both Radarr and Sonarr:
 
 ---
 
-## 4. Verification & Diagnostics
-
-```bash
-# Verify container health
-ssh "Deep Shah"@192.168.1.80 "docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'"
-
-# Verify Intel GPU nodes in Plex
-ssh "Deep Shah"@192.168.1.80 "docker exec plex ls -la /dev/dri"
-
-# Verify atomic hardlink functionality
-ssh "Deep Shah"@192.168.1.80 "ls -l -i /volume1/data/torrents/movies/ /volume1/data/media/movies/"
-```
+## 4. Decommissioning & Legacy Status on Pi 5
+* **Raspberry Pi 5 Cleanup**: All 8 media containers and 5.07GB of unused Docker images deleted from `192.168.1.92`.
+* **Reclaimed Pi 5 Storage**: 101GB free space (10% utilization).
+* **Dedicated Role**: Raspberry Pi 5 is 100% dedicated to **Pi-hole v6** whole-home DNS filtering and high availability.
