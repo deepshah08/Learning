@@ -64,6 +64,8 @@
 | **macOS SMB3 Sharing** | `445` | `smb://192.168.1.80` | 🟢 **Production** | High-speed Finder drag-and-drop (`personal_folder`, `data`, `DP`) |
 | **UGREEN Photos AI** | `9999` | Native UGOS App | 🟢 **Production** | Hardware-accelerated AI face/scene recognition & mobile backup |
 | **UGREEN Online Office**| `9999` | Native UGOS App | 🟢 **Production** | Collaborative OnlyOffice editor for Word, Excel, PowerPoint |
+| **Virtual Pixel 1 Digital Twin** | `5555` | `192.168.1.80:5555` | 🟢 **Production** | Headless Android 11 (`redroid`) with Intel GPU + Pixel 1 profile (0-quota Google Photos uploader) |
+| **Photo Media Inotify Scanner** | Daemon | `redroid-photo-scanner` | 🟢 **Production** | Systemd inotify trigger auto-scanning `/volume1/docker/redroid/inbox` into Android gallery |
 
 ---
 

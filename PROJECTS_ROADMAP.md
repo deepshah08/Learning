@@ -29,6 +29,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **19** | **Vaultwarden Password Manager** | Security / Identity | 🟢 Production | Port `8085`, `3012` (UGREEN NAS) | Verified Operational ([Docs](ugreen_nas/vaultwarden/README.md)) |
 | **20** | **Homepage Unified Dashboard** | Homelab Management | 🟢 Production | Port `3000` (UGREEN NAS) | Verified Operational ([Docs](ugreen_nas/homepage/README.md)) |
 | **21** | **macOS SMB File Sharing** | Storage / Transfers | 🟢 Production | Port `445` (`smb://192.168.1.80`) | Verified Operational ([Docs](ugreen_nas/smb/README.md)) |
+| **22** | **Virtual Pixel 1 Digital Twin** | Photos / Cloud Storage | 🟢 Production | Port `5555` (`redroid-pixel1` on UGREEN NAS) | Verified Operational ([Docs](ugreen_nas/redroid/REDROID_PIXEL1_DIGITAL_TWIN.md)) |
 
 ---
 
