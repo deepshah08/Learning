@@ -6,8 +6,8 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 
 ---
 
-> [!NOTE]  
-> Agents invoking the `md-writer` skill must follow the directory structure and authoring guidelines defined herein.
+> [!IMPORTANT]
+> **Universal Agent Operating Protocol**: All agents, CLIs (Codex, Claude Code, Google Cloud Code, Cursor, Antigravity), and automation scripts must adhere to the [**`AGENTS.md`**](AGENTS.md) Anti-Confirmation Bias & Ground-Truth Protocol.
 
 ---
 
@@ -15,6 +15,7 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 
 | Domain | Sub-Domain | Description | Documentation Link |
 | :--- | :--- | :--- | :--- |
+| **Agent Protocols** | Global Directives | Anti-confirmation bias, empirical ground truth, safety | [AGENTS.md](AGENTS.md) |
 | **Networking & Protocols** | Storage & Gateways | SMB, NFS, AFP, mDNS/Bonjour, LAN/Tailscale Routing | [networking/NETWORK_FILE_SHARING_EXPLAINER.md](networking/NETWORK_FILE_SHARING_EXPLAINER.md) |
 | **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
 | **Raspberry Pi 5** | Pi-hole (Primary) | Primary DNS ad-blocking, ISP/SLAAC bypass, v6 web admin | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
@@ -31,6 +32,9 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 ```text
 Learning/
 ├── README.md                      # This Global Index
+├── AGENTS.md                      # Universal Agent Operating Protocol (Codex / Cursor / General)
+├── CLAUDE.md                      # Claude Code CLI Directives
+├── GEMINI.md                      # Google Cloud Code / Gemini CLI Directives
 ├── PROJECTS_ROADMAP.md            # Master Project Roadmap & Execution Queue
 ├── networking/                    # Networking & Protocols Domain
 │   └── NETWORK_FILE_SHARING_EXPLAINER.md # Complete SMB/NFS/Gateways guide
