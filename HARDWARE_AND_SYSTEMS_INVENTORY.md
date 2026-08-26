@@ -1,8 +1,8 @@
 # 🖥️ Hardware Inventory & Systems Status — Single Source of Truth
 
 > **Context**: Master inventory of all physical computing nodes, storage drives, network interfaces, and running software services across the home lab ecosystem.  
-> **Last Verified**: 2026-08-25 23:30 PDT  
-> **Status**: 🟢 **All Production Systems Healthy & Synchronized (68/68 Automated Tests Passing)**  
+> **Last Verified**: 2026-08-26 00:05 PDT  
+> **Status**: 🟢 **All Production Systems Healthy & Synchronized (73/73 Automated Tests Passing)**  
 
 ---
 
@@ -38,14 +38,9 @@
 * **Role**: Primary hot storage pool for Plex media, torrents, Docker container configs, Vaultwarden databases, and UGREEN Photos.
 
 ### Drive 2: 8TB Seagate Expansion SMR (`STKR8000400`)
-* **Location**: External USB 3.0 / Standby Port
-* **Current Status**: 🛑 **DISCONNECTED / COLD ARCHIVAL**
-* **Power Management Policy**: Configured with automated **15-minute spindown (`hdparm -S 180 -B 127`)** via udev rule (`98-smr-spindown.rules`).
-* **SMR Operating Profile**:
-  1. Stays active/spinning during long sequential backup writes and allows SMR media cache flush / shingled track rearrangement.
-  2. Automatically spins down to 0 RPM (`Standby_z`, ~0.5W) after 15 minutes of inactivity when sitting idle.
-  3. Spins up automatically on-demand when backup scripts or reads target the mount point.
-* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg).
+* **Location**: External / Bay 2
+* **Current Status**: 🛑 **DISCONNECTED / OFFLINE (As of Aug 25, 2026)**
+* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg). Kept disconnected to prevent SMR write-amplification thrashing during daily random I/O.
 
 ---
 
@@ -69,8 +64,6 @@
 | **macOS SMB3 Sharing** | `445` | `smb://192.168.1.80` | 🟢 **Production** | High-speed Finder drag-and-drop (`personal_folder`, `data`, `DP`) |
 | **UGREEN Photos AI** | `9999` | Native UGOS App | 🟢 **Production** | Hardware-accelerated AI face/scene recognition & mobile backup |
 | **UGREEN Online Office**| `9999` | Native UGOS App | 🟢 **Production** | Collaborative OnlyOffice editor for Word, Excel, PowerPoint |
-| **Virtual Pixel 1 Digital Twin** | `5555` | `192.168.1.80:5555` | 🟢 **Production** | Headless Android 11 (`redroid`) with Intel GPU + Pixel 1 profile (0-quota Google Photos uploader) |
-| **Photo Media Inotify Scanner** | Daemon | `redroid-photo-scanner` | 🟢 **Production** | Systemd inotify trigger auto-scanning `/volume1/docker/redroid/inbox` into Android gallery |
 
 ---
 
@@ -79,8 +72,10 @@
 | Service | Port | Endpoint | Status | Verified Functionality |
 | :--- | :--- | :--- | :--- | :--- |
 | **Primary Pi-hole v6 FTL**| `53`, `80`, `443`| [http://192.168.1.92/admin](http://192.168.1.92/admin)| 🟢 **Production** | Primary whole-home DNS ad-blocker & DHCP server |
+| **Unbound Recursive DNS** | `5335` (Local) | `127.0.0.1#5335` | 🟢 **Production** | Private recursive root DNS with DNSSEC validation |
 | **Gravity-Sync Sender** | Cron (30m)| `/usr/local/bin/sync-pihole-to-nas.sh` | 🟢 **Production** | Automated push of `gravity.db` & custom DNS to NAS |
 | **Tailscale Subnet Router**| WireGuard | `100.68.196.14` | 🟢 **Production** | Subnet gateway advertising `192.168.1.0/24` to remote devices |
+| **Headless Jules Agent Worker**| Daemon | `projects/18-agent-worker` | 🟢 **Production** | Autonomous 24/7 background PR review & pytest worker |
 | **Offline Socratic Tutor**| Local | `projects/01-offline-tutor` | 🟢 **Production** | GraphRAG concept graph engine & Socratic inquiry agent |
 | **Git-Backed Second Brain**| Local / Hook | `projects/02-second-brain` | 🟢 **Production** | Multi-format doc ingestion & ChromaDB semantic search |
 | **WhisperX Indexer** | Timer | `projects/03-whisper-indexer` | 🟢 **Production** | faster-whisper transcription & time-filtered vector search |
@@ -89,21 +84,8 @@
 | **TripDrop Staging Portal**| `8088` | [http://192.168.1.92:8088](http://192.168.1.92:8088) | 🟢 **Production** | FastAPI chunked drag-and-drop ingestion with mDNS |
 | **Stirling-PDF Suite** | `8083` | [http://192.168.1.92:8083](http://192.168.1.92:8083) | 🟢 **Production** | Dockerized offline PDF transformation and OCR suite |
 | **Network Intrusion Monitor**| Systemd | `projects/10-intrusion-monitor` | 🟢 **Production** | Scapy raw frame ARP spoofing & SYN scan detector |
-| **Dead Man's Switch** | Daemon | `projects/11-deadmans-switch` | 🟢 **Production** | Shamir's Secret Sharing ({521}$) contingency key vault |
+| **Dead Man's Switch** | Daemon | `projects/11-deadmans-switch` | 🟢 **Production** | Shamir's Secret Sharing ($M_{521}$) contingency key vault |
 | **n8n Automation Engine** | `5678` | [http://192.168.1.92:5678](http://192.168.1.92:5678) | 🟢 **Production** | Self-hosted workflow automation & alert webhooks |
 | **Market Sentiment Tracker**| Local / JSON | `projects/14-market-sentiment` | 🟢 **Production** | VADER sentiment scoring & daily market JSON reports |
 | **Financial Pipeline** | SQLite | `projects/15-financial-pipeline` | 🟢 **Production** | Transaction statement regex parser & portfolio NAV engine |
 | **Morning Briefing** | Timer | `projects/16-morning-briefing` | 🟢 **Production** | Automated morning digest synthesizer |
-| **Legacy Media Stack** | Various | N/A | ⚪ **Decommissioned**| Migrated to NAS to eliminate ARM CPU load |
-
----
-
-## 🌐 4. Client Ecosystem & Tailnet Devices
-
-| Device | Owner / Role | OS | Connection Method |
-| :--- | :--- | :--- | :--- |
-| **MacBook Air** | Deep Shah (Dev / Control) | macOS | Local Wi-Fi / Tailscale (`100.78.122.75`) / SMB3 Mount |
-| **Pixel 9 Pro XL** | Deep Shah (Primary Phone) | Android | Local Wi-Fi / Tailscale (`100.74.169.39`) / UGREENlink |
-| **Pixel 1 (Sailfish)** | Dedicated Unlimited Uploader | Android | Local Wi-Fi / Google Photos Original Quality Waiver |
-| **Galaxy Tab S10+** | Deep Shah (Tablet) | Android | Local Wi-Fi / Tailscale (`100.87.32.34`) / UGREENlink |
-| **Pranali Devices** | Pranali (Co-Admin) | iOS / macOS | Local Wi-Fi / UGREEN Photos / Vaultwarden Family Vault |

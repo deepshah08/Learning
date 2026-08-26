@@ -66,7 +66,7 @@
 
 ## 4. Pi 5 Projects Portfolio & Documentation Index
 
-All 16 active Pi 5 projects have been implemented, tested (68/68 passing automated pytest tests), and documented:
+All 18 active Pi 5 projects have been implemented, tested (73/73 passing automated pytest tests), and documented:
 
 | Project | Domain | Key Files / Ports | Documentation |
 | :--- | :--- | :--- | :--- |
@@ -80,9 +80,11 @@ All 16 active Pi 5 projects have been implemented, tested (68/68 passing automat
 | **08. TripDrop Staging Portal** | Transfers | Port `8088` (`server.py`) | [trip_drop/README.md](trip_drop/README.md) |
 | **09. Stirling-PDF Utility** | Productivity | Port `8083` | [stirling_pdf/README.md](stirling_pdf/README.md) |
 | **10. Intrusion Monitor** | Security | `monitor.py` (Scapy) | [intrusion_monitor/README.md](intrusion_monitor/README.md) |
-| **11. Dead Man's Switch** | Cryptography | `daemon.py` ({521}$ Shamir) | [deadmans_switch/README.md](deadmans_switch/README.md) |
+| **11. Dead Man's Switch** | Cryptography | `daemon.py` ($M_{521}$ Shamir) | [deadmans_switch/README.md](deadmans_switch/README.md) |
 | **12. Pi-hole v6 Primary DNS** | Network | Ports `53`, `80`, `443` | [pihole/README.md](pihole/README.md) |
 | **13. n8n Workflow Automation** | Automation | Port `5678` | [n8n/README.md](n8n/README.md) |
 | **14. Market Sentiment Tracker** | Finance / RAG | `sentiment_analyzer.py` | [market_sentiment/README.md](market_sentiment/README.md) |
 | **15. Financial Pipeline** | Analytics | `portfolio_tracker.py` | [financial_pipeline/README.md](financial_pipeline/README.md) |
 | **16. Morning Briefing Generator**| Productivity | `main.py` (Daily Digest) | [morning_briefing/README.md](morning_briefing/README.md) |
+| **18. Headless Jules Review Worker**| CI/CD / Agents | `worker.py` (Nice=15, Quota=50%) | [agent_worker/README.md](agent_worker/README.md) |
+| **Unbound Recursive DNS** | Network / Root DNS | Port `127.0.0.1#5335` | [unbound/README.md](unbound/README.md) |
