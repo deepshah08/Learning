@@ -1,10 +1,11 @@
 # 🖥️ Raspberry Pi 5: System & Hardware Single Source of Truth
 
-> **Context**: Hardware profile, network management, OS stability tuning, known hardware quirks, and root-cause solutions for the Raspberry Pi 5 server.  
+> **Context**: Hardware profile, network management, OS stability tuning, known hardware quirks, and full portfolio of implemented and tested software services on the Raspberry Pi 5 server.  
 > **Host**: `raspberrypi` (`192.168.1.92` / Tailscale `100.68.196.14`)  
 > **Hardware**: Raspberry Pi 5 Model B (Broadcom BCM2712, 16GB RAM)  
 > **OS**: Debian GNU/Linux 13 (Trixie/Bookworm aarch64, Kernel 6.18)  
-> **Status**: Production (24/7 Active)
+> **Status**: 🟢 **Production (24/7 Active & Synchronized)**  
+> **Repository**: [`deepshah08/raspberry-pi-5-ecosystem`](https://github.com/deepshah08/raspberry-pi-5-ecosystem)  
 
 ---
 
@@ -17,8 +18,8 @@
 | **Tailscale IPv4** | `100.68.196.14` | Node Name: `pi5-media-nas` |
 | **Default Gateway** | `192.168.1.254` | AT&T Fiber Gateway BGW210/320 |
 | **SSH User** | `deepshah08` | Primary administrator (`sudo` enabled) |
-| **Root Storage** | 117GB MicroSD | ~16GB used (14%), ~97GB available |
-| **System RAM** | 16GB LPDDR4X | Dedicated to core network services (Pi-hole v6 & HA) |
+| **Root Storage** | 117GB MicroSD | ~11GB used (10%), ~101GB available |
+| **System RAM** | 16GB LPDDR4X | Dedicated to core network, RAG, and automation services |
 | **GPU / Video Decode**| `/dev/dri/renderD128` | Broadcom VideoCore VII DRM |
 
 ---
@@ -59,4 +60,29 @@
 
 ### Incident 002: Offloading Media Stack to UGREEN DXP2800
 - **What Happened**: Software transcoding 4K HDR media on ARM saturated the Broadcom BCM2712 CPU at 100%.
-- **Solution**: Promoted Plex and \*Arr stack to UGREEN DXP2800 with Intel QuickSync GPU passthrough. Pi 5 is dedicated to Pi-hole v6 DNS ad-blocking and Gravity-Sync HA.
+- **Solution**: Promoted Plex and *Arr stack to UGREEN DXP2800 with Intel QuickSync GPU passthrough. Pi 5 is dedicated to Pi-hole v6 DNS ad-blocking, local AI/RAG pipelines, workflow automation, and security monitoring.
+
+---
+
+## 4. Pi 5 Projects Portfolio & Documentation Index
+
+All 16 active Pi 5 projects have been implemented, tested (68/68 passing automated pytest tests), and documented:
+
+| Project | Domain | Key Files / Ports | Documentation |
+| :--- | :--- | :--- | :--- |
+| **01. Offline Socratic Tutor** | Education / RAG | `graph_engine.py`, `agent.py` | [offline_tutor/README.md](offline_tutor/README.md) |
+| **02. Git-Backed Second Brain** | PKM / Search | `ingest.py`, `search.py` | [second_brain/README.md](second_brain/README.md) |
+| **03. WhisperX Meeting Indexer** | Audio / Search | `transcribe.py`, `indexer.py` | [whisper_indexer/README.md](whisper_indexer/README.md) |
+| **04. Immich Photo Staging** | Photos / Cloud | `immich_config.py` | [immich/README.md](immich/README.md) |
+| **05. Jellyfin Media Server** | Media Streaming | Port `8096` | [jellyfin/README.md](jellyfin/README.md) |
+| **06. Voice Clone TTS Sandbox** | Audio / ML | `voice_clone.py` | [voice_clone/README.md](voice_clone/README.md) |
+| **07. Backup Engine & Pixel Guard** | Storage / DR | `pixel1_sync_guard.py` | [backup_engine/README.md](backup_engine/README.md) |
+| **08. TripDrop Staging Portal** | Transfers | Port `8088` (`server.py`) | [trip_drop/README.md](trip_drop/README.md) |
+| **09. Stirling-PDF Utility** | Productivity | Port `8083` | [stirling_pdf/README.md](stirling_pdf/README.md) |
+| **10. Intrusion Monitor** | Security | `monitor.py` (Scapy) | [intrusion_monitor/README.md](intrusion_monitor/README.md) |
+| **11. Dead Man's Switch** | Cryptography | `daemon.py` ({521}$ Shamir) | [deadmans_switch/README.md](deadmans_switch/README.md) |
+| **12. Pi-hole v6 Primary DNS** | Network | Ports `53`, `80`, `443` | [pihole/README.md](pihole/README.md) |
+| **13. n8n Workflow Automation** | Automation | Port `5678` | [n8n/README.md](n8n/README.md) |
+| **14. Market Sentiment Tracker** | Finance / RAG | `sentiment_analyzer.py` | [market_sentiment/README.md](market_sentiment/README.md) |
+| **15. Financial Pipeline** | Analytics | `portfolio_tracker.py` | [financial_pipeline/README.md](financial_pipeline/README.md) |
+| **16. Morning Briefing Generator**| Productivity | `main.py` (Daily Digest) | [morning_briefing/README.md](morning_briefing/README.md) |

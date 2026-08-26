@@ -1,8 +1,8 @@
 # 🖥️ Hardware Inventory & Systems Status — Single Source of Truth
 
 > **Context**: Master inventory of all physical computing nodes, storage drives, network interfaces, and running software services across the home lab ecosystem.  
-> **Last Verified**: 2026-08-25 22:08 PDT  
-> **Status**: 🟢 **All Production Systems Healthy & Synchronized**  
+> **Last Verified**: 2026-08-25 23:30 PDT  
+> **Status**: 🟢 **All Production Systems Healthy & Synchronized (68/68 Automated Tests Passing)**  
 
 ---
 
@@ -72,10 +72,22 @@
 | Service | Port | Endpoint | Status | Verified Functionality |
 | :--- | :--- | :--- | :--- | :--- |
 | **Primary Pi-hole v6 FTL**| `53`, `80`, `443`| [http://192.168.1.92/admin](http://192.168.1.92/admin)| 🟢 **Production** | Primary whole-home DNS ad-blocker & DHCP server |
-| **Gravity-Sync Sender** | Cron (30m)| `/etc/cron.d/sync-pihole-nas` | 🟢 **Production** | Automated push of `gravity.db` & custom DNS to NAS |
+| **Gravity-Sync Sender** | Cron (30m)| `/usr/local/bin/sync-pihole-to-nas.sh` | 🟢 **Production** | Automated push of `gravity.db` & custom DNS to NAS |
 | **Tailscale Subnet Router**| WireGuard | `100.68.196.14` | 🟢 **Production** | Subnet gateway advertising `192.168.1.0/24` to remote devices |
-| **Ollama + ChromaDB** | `11434`, `8000`| Local Pipeline | 🟡 **Staged** | Local AI / RAG pipeline utilizing Pi 5's **16GB RAM** pool |
-| **Legacy Media Stack** | Various | N/A | ⚪ **Decommissioned**| Removed to reclaim 5.07GB storage & eliminate memory pressure |
+| **Offline Socratic Tutor**| Local | `projects/01-offline-tutor` | 🟢 **Production** | GraphRAG concept graph engine & Socratic inquiry agent |
+| **Git-Backed Second Brain**| Local / Hook | `projects/02-second-brain` | 🟢 **Production** | Multi-format doc ingestion & ChromaDB semantic search |
+| **WhisperX Indexer** | Timer | `projects/03-whisper-indexer` | 🟢 **Production** | faster-whisper transcription & time-filtered vector search |
+| **Voice Clone Sandbox** | CLI / Wave | `projects/06-voice-clone` | 🟢 **Production** | Coqui XTTS v2 voice cloning & speech synthesizer |
+| **Backup Engine & Sync Guard**| Cron / ADB | `projects/07-backup-engine` | 🟢 **Production** | Restic B2 backup & Pixel 1 staging verification guard |
+| **TripDrop Staging Portal**| `8088` | [http://192.168.1.92:8088](http://192.168.1.92:8088) | 🟢 **Production** | FastAPI chunked drag-and-drop ingestion with mDNS |
+| **Stirling-PDF Suite** | `8083` | [http://192.168.1.92:8083](http://192.168.1.92:8083) | 🟢 **Production** | Dockerized offline PDF transformation and OCR suite |
+| **Network Intrusion Monitor**| Systemd | `projects/10-intrusion-monitor` | 🟢 **Production** | Scapy raw frame ARP spoofing & SYN scan detector |
+| **Dead Man's Switch** | Daemon | `projects/11-deadmans-switch` | 🟢 **Production** | Shamir's Secret Sharing ({521}$) contingency key vault |
+| **n8n Automation Engine** | `5678` | [http://192.168.1.92:5678](http://192.168.1.92:5678) | 🟢 **Production** | Self-hosted workflow automation & alert webhooks |
+| **Market Sentiment Tracker**| Local / JSON | `projects/14-market-sentiment` | 🟢 **Production** | VADER sentiment scoring & daily market JSON reports |
+| **Financial Pipeline** | SQLite | `projects/15-financial-pipeline` | 🟢 **Production** | Transaction statement regex parser & portfolio NAV engine |
+| **Morning Briefing** | Timer | `projects/16-morning-briefing` | 🟢 **Production** | Automated morning digest synthesizer |
+| **Legacy Media Stack** | Various | N/A | ⚪ **Decommissioned**| Migrated to NAS to eliminate ARM CPU load |
 
 ---
 

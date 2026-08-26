@@ -1,16 +1,17 @@
-# 🕳️ Pi-hole v6 & Whole-Home Network DNS: Single Source of Truth
+# 🕳️ Project 12: Pi-hole v6 FTL Primary DNS & High-Availability (Raspberry Pi 5)
 
 > **Context**: Production deployment of whole-home network ad-blocking with AT&T Fiber Gateway takeover, IPv6 SLAAC leak mitigation, static IP binding, High-Availability Dual-DNS DHCP broadcasting to UGREEN NAS, and Tailscale MagicDNS integration.  
 > **Primary Host**: Raspberry Pi 5 (`192.168.1.92` Static / Tailscale `100.68.196.14`)  
 > **Secondary Host**: UGREEN DXP2800 NAS (`192.168.1.80` Static 2.5GbE)  
 > **Gateway**: AT&T Fiber BGW210/320 (`192.168.1.254`)  
 > **Wi-Fi SSID**: `Rimjhim` (Password: `Restlessinsect`)  
-> **Status**: 🟢 Production (100% High-Availability Ad-Blocking Active)  
-> **Last Verified**: 2026-08-25 23:05 PDT
+> **Status**: 🟢 **Production (100% High-Availability Ad-Blocking Active & Tested)**  
+> **Repository**: [`deepshah08/raspberry-pi-5-ecosystem/projects/12-pihole`](https://github.com/deepshah08/raspberry-pi-5-ecosystem/tree/main/projects/12-pihole)  
+> **Last Verified**: 2026-08-25 23:30 PDT
 
 ---
 
-## 1. Executive Summary & Verification
+## 1. Executive Summary & Live Verification
 
 Whole-home network ad-blocking is fully active and verified live on client devices. All LAN traffic across laptops, mobile phones (Pixel/iOS), tablets, and smart TVs routes DNS queries through our High-Availability Dual-Pi-hole cluster (Primary: Pi 5, Secondary: UGREEN NAS).
 
@@ -118,3 +119,10 @@ Below is the complete record of every setting toggled across all layers:
 - **Gravity Auto-Update**: Pi-hole automatically updates these 6 lists every Sunday at 3:00 AM.
 - **Automated HA Sync**: Pi 5 syncs `gravity.db` and custom DNS records to UGREEN NAS every 30 minutes via `/usr/local/bin/sync-pihole-to-nas.sh`.
 - **Total Unique Blocked Domains**: **309,418**
+
+---
+
+## 5. Verified Functionality & Test Suite
+
+- `projects/12-pihole/tests/test_pihole.py`: Tests DNS socket listener validation on port 53 and gravity database file integrity.
+- **Test Results**: 2/2 passing tests.
