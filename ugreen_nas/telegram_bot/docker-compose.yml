@@ -1,0 +1,20 @@
+services:
+  telegram_media_bot:
+    build: .
+    container_name: telegram_media_bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=America/Los_Angeles
+      - RADARR_URL=http://radarr:7878
+      - SONARR_URL=http://sonarr:8989
+      - PROWLARR_URL=http://prowlarr:9696
+      - PLEX_URL=http://plex:32400
+    networks:
+      - arr_network
+
+networks:
+  arr_network:
+    name: arr_stack_default
+    external: true
