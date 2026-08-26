@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environments & Secrets
+.env
+.env.local
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
