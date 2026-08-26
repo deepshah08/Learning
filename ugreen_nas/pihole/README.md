@@ -1,6 +1,6 @@
 # 🛡️ High-Availability Dual Pi-hole (UGREEN NAS Secondary Node) — Single Source of Truth
 
-> **Context**: High-Availability redundant DNS ad-blocking paired with primary Pi-hole on Raspberry Pi 5.  
+> **Context**: High-Availability redundant DNS ad-blocking paired with primary Pi-hole on Raspberry Pi 5. Broadcasted to all LAN clients via DHCP Option 6.  
 > **Host**: UGREEN DXP2800 (`192.168.1.80`)  
 > **Status**: 🟢 **Production Active** (100% DNS Redundancy Verified)  
 > **Sync Engine**: Gravity-Sync daemon running on Pi 5 (30-minute automated synchronization)
@@ -13,31 +13,32 @@
 | :--- | :--- | :--- |
 | **Primary DNS Node** | `192.168.1.92:53` | Raspberry Pi 5 (Pi-hole v6 FTL) |
 | **Secondary DNS Node** | `192.168.1.80:53` | UGREEN DXP2800 (Docker Pi-hole) |
+| **DHCP Distribution** | `dhcp-option=6,192.168.1.92,192.168.1.80` | Broadcasted automatically by Pi 5 DHCP |
 | **Secondary Web Admin** | [http://192.168.1.80:8089/admin](http://192.168.1.80:8089/admin) | Password: `S#@#j0k3R` |
 | **Upstream DNS** | `1.1.1.1`, `1.0.0.1` | Cloudflare DNS-over-HTTPS fallback |
 | **Sync Interval** | Every 30 minutes | Replicates blocklists, whitelists, regex, custom DNS |
 
 ---
 
-## 2. Zero-Outage Architecture
+## 2. Zero-Outage High-Availability Architecture
 
 ```mermaid
 flowchart TD
     subgraph Household["Household Clients (Laptops, Phones, Smart TVs)"]
-        Client["Client Device"]
+        Client["Client Device\n(Receives Both DNS IPs via DHCP)"]
     end
 
     subgraph Primary["Primary DNS (Raspberry Pi 5)"]
-        Pi5["Pi-hole v6 FTL\n192.168.1.92:53"]
+        Pi5["Pi-hole v6 FTL\n192.168.1.92:53\n(Wi-Fi Interface)"]
     end
 
     subgraph Secondary["Secondary DNS (UGREEN DXP2800)"]
-        NAS["Docker Pi-hole\n192.168.1.80:53"]
+        NAS["Docker Pi-hole\n192.168.1.80:53\n(Wired 2.5GbE LAN)"]
     end
 
     Client -->|Primary Query| Pi5
-    Client -.->|Failover / Backup Query (0ms outage)| NAS
-    Pi5 <==|Automated Gravity-Sync (30m)| NAS
+    Client -.->|Instant Zero-Latency Failover\n(During Pi Wi-Fi Drops / Reboots)| NAS
+    Pi5 <==|Automated Gravity-Sync (Every 30 mins)| NAS
 ```
 
 ---

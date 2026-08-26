@@ -1,22 +1,26 @@
 # 🕳️ Pi-hole v6 & Whole-Home Network DNS: Single Source of Truth
 
-> **Context**: Production deployment of whole-home network ad-blocking with AT&T Fiber Gateway takeover, IPv6 SLAAC leak mitigation, static IP binding, and Tailscale MagicDNS integration.  
-> **Host**: Raspberry Pi 5 (`192.168.1.92` Static / Tailscale `100.68.196.14`)  
+> **Context**: Production deployment of whole-home network ad-blocking with AT&T Fiber Gateway takeover, IPv6 SLAAC leak mitigation, static IP binding, High-Availability Dual-DNS DHCP broadcasting to UGREEN NAS, and Tailscale MagicDNS integration.  
+> **Primary Host**: Raspberry Pi 5 (`192.168.1.92` Static / Tailscale `100.68.196.14`)  
+> **Secondary Host**: UGREEN DXP2800 NAS (`192.168.1.80` Static 2.5GbE)  
 > **Gateway**: AT&T Fiber BGW210/320 (`192.168.1.254`)  
 > **Wi-Fi SSID**: `Rimjhim` (Password: `Restlessinsect`)  
-> **Status**: 🟢 Production (100% Whole-Home Ad-Blocking Active)  
-> **Last Verified**: 2026-08-21 20:35 PDT
+> **Status**: 🟢 Production (100% High-Availability Ad-Blocking Active)  
+> **Last Verified**: 2026-08-25 23:05 PDT
 
 ---
 
 ## 1. Executive Summary & Verification
 
-Whole-home network ad-blocking is fully active and verified live on client devices. All LAN traffic across laptops, mobile phones (Pixel/iOS), tablets, and smart TVs routes DNS queries exclusively through Pi-hole.
+Whole-home network ad-blocking is fully active and verified live on client devices. All LAN traffic across laptops, mobile phones (Pixel/iOS), tablets, and smart TVs routes DNS queries through our High-Availability Dual-Pi-hole cluster (Primary: Pi 5, Secondary: UGREEN NAS).
 
 ### Live Client Verification (macOS Terminal):
 ```text
-$ scutil --dns | grep -A 2 "nameserver[0]"
-  nameserver[0] : 192.168.1.92  <-- 🎯 Pi-hole is the Sole Nameserver
+$ scutil --dns | grep -A 4 "resolver #1"
+resolver #1
+  search domain[0] : lan
+  nameserver[0] : 192.168.1.92  <-- 🎯 Primary: Pi 5
+  nameserver[1] : 192.168.1.80  <-- 🎯 Secondary: UGREEN NAS (2.5GbE)
 
 $ dig googleads.g.doubleclick.net +short
 0.0.0.0  <-- ✅ 100% Blocked
@@ -29,7 +33,7 @@ $ dig speedtest.net +short
 
 ## 2. Master Toggle & Configuration Checklist
 
-Below is the complete record of every setting toggled across all 3 layers:
+Below is the complete record of every setting toggled across all layers:
 
 ### Layer 1: AT&T Fiber Gateway (`http://192.168.1.254`)
 1. **Home Network ➔ Subnets & DHCP**:
@@ -44,22 +48,24 @@ Below is the complete record of every setting toggled across all 3 layers:
 
 ---
 
-### Layer 2: Pi-hole Web Admin (`http://192.168.1.92/admin`)
-1. **Settings ➔ DHCP**:
+### Layer 2: Pi-hole DHCP & High-Availability Dual-DNS
+
+1. **Pi-hole Web Admin (`http://192.168.1.92/admin`)**:
    - `DHCP server enabled`: ➔ **`Checked`**.
-   - `Range of IP addresses to hand out`:
-     - `From`: **`192.168.1.64`**
-     - `To`: **`192.168.1.250`**
-   - `Router (gateway) IP address`: **`192.168.1.254`** *(Directs internet traffic at full fiber speed)*.
-   - `Netmask`: `255.255.255.0` (or automatic).
-   - `Enable additional IPv6 support (SLAAC + RA)`: ➔ **`Unchecked`** *(Prevents no address range available for DHCPv6 warnings)*.
-   - Click **Save & Apply**.
+   - `Range`: `192.168.1.64` to `192.168.1.250`.
+   - `Router (gateway) IP`: `192.168.1.254`.
+   - `Enable additional IPv6 support (SLAAC + RA)`: ➔ **`Unchecked`**.
+2. **DHCP Option 6 Dual-DNS Broadcast (`/etc/dnsmasq.d/02-pihole-dhcp-options.conf`)**:
+   ```ini
+   # Broadcast both Pi 5 and UGREEN NAS as DNS servers to all LAN clients
+   dhcp-option=6,192.168.1.92,192.168.1.80
+   ```
+   *Guarantees zero downtime if one node ever drops Wi-Fi or reboots.*
 
 ---
 
 ### Layer 3: Raspberry Pi 5 Operating System (Terminal)
 1. **Static IP Binding (Solved the DHCP Chicken-and-Egg Trap)**:
-   - When AT&T DHCP was disabled, the Pi needed a static IP so it never relied on an external DHCP server upon boot/reconnect:
    ```bash
    sudo nmcli connection modify "Rimjhim" ipv4.method manual ipv4.addresses 192.168.1.92/24 ipv4.gateway 192.168.1.254 ipv4.dns "127.0.0.1"
    sudo nmcli connection up "Rimjhim"
@@ -91,13 +97,14 @@ Below is the complete record of every setting toggled across all 3 layers:
 *   **Root Cause**: The Pi was configured as a DHCP client. Because AT&T's DHCP server was turned off, the Pi had no server to give it an IP address.
 *   **Resolution**: Configured a persistent **static IP (`192.168.1.92/24`)** on `wlan0` in NetworkManager.
 
-### Problem 3: Client DHCP Cache Lag
-*   **Symptom**: Connected devices held onto the old AT&T router DNS for up to 24 hours.
-*   **Resolution**: Toggled Wi-Fi `OFF` ➔ `ON` on client devices (or clicked "Renew DHCP Lease") to instantly fetch Pi-hole configuration.
+### Problem 3: Wi-Fi AP Deauth (`reason=7`) & Single Point of Failure (SPOF)
+*   **Symptom**: Mac and Smart TV suddenly reported *"Wi-Fi: No Internet Connection..."* while iPhones on cellular still worked.
+*   **Root Cause**: The AT&T router sent an 802.11 deauthentication frame (`reason=7`) during periodic channel calibration. `wpa_supplicant` on the Pi 5 put the AP on a 60-second backoff cooldown before reconnecting. Because DHCP only advertised the Pi 5's IP (`192.168.1.92`), whole-home DNS dropped during the 3-minute re-association window.
+*   **Resolution**: Added `dhcp-option=6,192.168.1.92,192.168.1.80` to Pi-hole's DHCP config. All devices now automatically receive **both DNS servers**. If the Pi 5 ever drops or reboots, devices seamlessly query the hardwired UGREEN NAS with zero downtime.
 
 ---
 
-## 4. Active Curated Blocklists (309,414 Domains)
+## 4. Active Curated Blocklists (309,418 Domains)
 
 | Category | Source URL | Purpose |
 | :--- | :--- | :--- |
@@ -109,4 +116,5 @@ Below is the complete record of every setting toggled across all 3 layers:
 | **Curated Mobile** | `https://small.oisd.nl` | OISD curated mobile app ad & tracker list |
 
 - **Gravity Auto-Update**: Pi-hole automatically updates these 6 lists every Sunday at 3:00 AM.
-- **Total Unique Blocked Domains**: **309,414**
+- **Automated HA Sync**: Pi 5 syncs `gravity.db` and custom DNS records to UGREEN NAS every 30 minutes via `/usr/local/bin/sync-pihole-to-nas.sh`.
+- **Total Unique Blocked Domains**: **309,418**
