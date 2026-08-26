@@ -38,9 +38,14 @@
 * **Role**: Primary hot storage pool for Plex media, torrents, Docker container configs, Vaultwarden databases, and UGREEN Photos.
 
 ### Drive 2: 8TB Seagate Expansion SMR (`STKR8000400`)
-* **Location**: External / Bay 2
-* **Current Status**: 🛑 **DISCONNECTED / OFFLINE (As of Aug 25, 2026)**
-* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg). Kept disconnected to prevent SMR write-amplification thrashing during daily random I/O.
+* **Location**: External USB 3.0 / Standby Port
+* **Current Status**: 🛑 **DISCONNECTED / COLD ARCHIVAL**
+* **Power Management Policy**: Configured with automated **15-minute spindown (`hdparm -S 180 -B 127`)** via udev rule (`98-smr-spindown.rules`).
+* **SMR Operating Profile**:
+  1. Stays active/spinning during long sequential backup writes and allows SMR media cache flush / shingled track rearrangement.
+  2. Automatically spins down to 0 RPM (`Standby_z`, ~0.5W) after 15 minutes of inactivity when sitting idle.
+  3. Spins up automatically on-demand when backup scripts or reads target the mount point.
+* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg).
 
 ---
 
