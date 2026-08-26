@@ -21,7 +21,7 @@ To replicate the physical Google Pixel 1 (`sailfish`) hardware environment headl
 | **RAM Usage** | 3.2 GiB (OS + Arr stack) | **1.18 GiB** (15.76% of 8GB pool) | **9.3 MiB** | **~1.19 GiB** |
 | **GPU Acceleration** | Intel Gen12 UHD 24EU | Hardware Host Passthrough (`/dev/dri/renderD128`) | N/A | Hardware Mesa EGL |
 | **Network I/O** | 2.5 GbE Interface | Direct Bridged Host Network (Port `5555` ADB) | Local IPC | <20 MB (sync bursts) |
-| **Storage Consumption** | 10TB Btrfs Pool | Container Rootfs: **2.4 GB** \| `/data`: Persistent Volume | Memory-mapped | Isolated in `/volume1/docker/redroid/` |
+| **Storage Consumption** | 4TB NVMe SSD Tier (`/volume2`) | Container Rootfs: **2.4 GB** \| `/data`: Persistent Volume | Memory-mapped | Isolated in `/volume2/docker/redroid/` |
 
 ---
 
@@ -65,7 +65,7 @@ ro.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user
 ┌─────────────────────────────────────────────────────────────┐
 │ 🗄️ UGREEN NAS (Intel N100 — 192.168.1.80)                  │
 │                                                             │
-│  /volume1/docker/redroid/inbox/                             │
+│  /volume2/docker/redroid/inbox/ (High-Speed NVMe Tier)      │
 │             │                                               │
 │             │ (Inotify Watcher Trigger — close_write)       │
 │             ▼                                               │
@@ -73,7 +73,7 @@ ro.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user
 │   └── Issues: content call --method scan_volume             │
 │             │                                               │
 │             ▼                                               │
-│  [Docker: redroid-pixel1 Container]                         │
+│  [Docker: redroid-pixel1 Container on /volume2]             │
 │   ├── /sdcard/DCIM/Camera/ (Internal Android Gallery)       │
 │   └── Google Photos App (Authenticated to Staging Account B)│
 └─────────────┬───────────────────────────────────────────────┘
