@@ -24,3 +24,7 @@ This repository serves as the Single Source of Truth (SoT) for infrastructure, h
 
 ### 5. Hardware & Storage Safety
 * Exercise maximum engineering care when touching physical disks (NAS pools, SMR/CMR drives, RAID, Btrfs), network routing, and paid cloud quotas.
+
+### 6. Containerized Isolation & Zero Host Mutation
+* NEVER alter core OS-level or kernel-level settings on bare-metal host nodes (Raspberry Pi 5, UGREEN NAS, Debian hosts) that could destabilize or interfere with existing production services (e.g., DNS, DHCP, Pi-hole v6 FTL, Plex, SMB, system packages, or kernel page sizes).
+* Keep all runtime modifications, custom dependencies, and application packages strictly encapsulated inside Docker containers to minimize blast radius.

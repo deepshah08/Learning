@@ -28,3 +28,8 @@ This document defines the mandatory operating protocol for all AI agents, CLIs (
 ### 5. Hardware, Storage & Quota Safety
 * Exercise maximum engineering care when touching physical disks (NAS pools, SMR/CMR drives, RAID, Btrfs), network routing, and paid cloud quotas.
 * Never make assumptions that could risk data corruption, hardware degradation, or storage limit lockouts.
+
+### 6. Containerized Isolation & Zero Host Mutation
+* **Zero Host OS/Kernel Mutations:** NEVER alter core OS-level or kernel-level settings on bare-metal host nodes (Raspberry Pi 5, UGREEN NAS, Debian hosts) that could destabilize or interfere with existing production services (e.g., DNS, DHCP, Pi-hole v6 FTL, Plex, SMB, system packages, or kernel page sizes).
+* **Strict Container Isolation:** Keep all runtime modifications, custom dependencies, background daemons, and application packages strictly encapsulated inside Docker containers or OCI images to minimize the blast radius.
+* **Preserve Host Stability:** Never modify host `/etc/apt/sources.list`, force-break host package dependencies, or swap host kernel images when a containerized or userland solution exists.
