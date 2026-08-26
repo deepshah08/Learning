@@ -18,7 +18,9 @@
 │ GPU / Transcoding          │ Intel UHD 24EU QuickSync    │ VideoCore VII (Display only)     │
 │ System Memory (RAM)        │ 8 GB DDR5                   │ 16 GB LPDDR4X                    │
 │ Primary Storage            │ 10TB Seagate IronWolf (CMR) │ 128GB MicroSD (101GB Free / 10%) │
+│ High-Speed Solid-State Tier│ 4TB WD_BLACK SN850X (NVMe)  │ N/A                              │
 │ Secondary Storage          │ 8TB Seagate Expansion (SMR) │ N/A                              │
+│ Physical M.2 / RAM Layout  │ M.2 Slots: Inside HDD Trays │ Bottom Hatch: SODIMM RAM Slot    │
 │ SMR Drive Status           │ ⚠️ DISCONNECTED (Cold Standby│ N/A                              │
 │ Network Interface          │ 2.5 Gigabit Ethernet (2.5GbE│ 1GbE / Wi-Fi 5                   │
 │ Local IP Address           │ `192.168.1.80`              │ `192.168.1.92` (Static)          │
@@ -33,14 +35,20 @@
 
 ### Drive 1: 10TB Seagate IronWolf CMR (`ST10000VN000`)
 * **Location**: UGREEN NAS Bay 1 (`/volume1`)
-* **Filesystem**: Btrfs (High-durability with checksumming and snapshot support)
-* **Capacity**: ~9.1 TiB usable (~8.1 TiB free headroom)
-* **Role**: Primary hot storage pool for Plex media, torrents, Docker container configs, Vaultwarden databases, and UGREEN Photos.
+* **Filesystem**: Btrfs
+* **Capacity**: ~9.1 TiB usable
+* **Role**: Bulk cold media tier (Plex Movies, TV Shows, raw photo archives, Time Machine backups). Configured for deep sleep / 0 RPM hibernation.
 
-### Drive 2: 8TB Seagate Expansion SMR (`STKR8000400`)
-* **Location**: External / Bay 2
-* **Current Status**: 🛑 **DISCONNECTED / OFFLINE (As of Aug 25, 2026)**
-* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg). Kept disconnected to prevent SMR write-amplification thrashing during daily random I/O.
+### Drive 2: 4TB WD_BLACK SN850X NVMe PCIe 4.0 SSD (`WDS400T2X0E`)
+* **Location**: Internal M.2 Slot 1 (Inside drive bay chamber behind HDD trays)
+* **Kernel ID**: `/dev/nvme0n1` (3.6 TiB raw)
+* **Role**: High-speed 24/7 Hot Application Tier (`/volume2`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), Redroid Pixel 1 twin, and fast ingest cache.
+
+### Drive 3: 8TB Seagate Expansion SMR (`STKR8000400`)
+* **Location**: External USB 3.0
+* **Current Status**: 🛑 **DISCONNECTED / COLD ARCHIVAL**
+* **Power Management Policy**: Configured with automated **15-minute spindown (`hdparm -S 180 -B 127`)** via udev rule (`98-smr-spindown.rules`).
+* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg).
 
 ---
 
