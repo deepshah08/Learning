@@ -15,6 +15,7 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 
 | Domain | Sub-Domain | Description | Documentation Link |
 | :--- | :--- | :--- | :--- |
+| **System Overview** | Hardware & Status | Complete inventory of physical nodes, drives, and live services | [HARDWARE_AND_SYSTEMS_INVENTORY.md](HARDWARE_AND_SYSTEMS_INVENTORY.md) |
 | **Agent Protocols** | Global Directives | Anti-confirmation bias, empirical ground truth, safety | [AGENTS.md](AGENTS.md) |
 | **Networking & Protocols** | Storage & Gateways | SMB, NFS, AFP, mDNS/Bonjour, LAN/Tailscale Routing | [networking/NETWORK_FILE_SHARING_EXPLAINER.md](networking/NETWORK_FILE_SHARING_EXPLAINER.md) |
 | **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
@@ -31,28 +32,29 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 
 ```text
 Learning/
-├── README.md                      # This Global Index
-├── AGENTS.md                      # Universal Agent Operating Protocol (Codex / Cursor / General)
-├── CLAUDE.md                      # Claude Code CLI Directives
-├── GEMINI.md                      # Google Cloud Code / Gemini CLI Directives
-├── PROJECTS_ROADMAP.md            # Master Project Roadmap & Execution Queue
-├── networking/                    # Networking & Protocols Domain
+├── README.md                          # This Global Index
+├── HARDWARE_AND_SYSTEMS_INVENTORY.md  # Physical Nodes, Drives & Live System Status
+├── AGENTS.md                          # Universal Agent Operating Protocol (Codex / Cursor / General)
+├── CLAUDE.md                          # Claude Code CLI Directives
+├── GEMINI.md                          # Google Cloud Code / Gemini CLI Directives
+├── PROJECTS_ROADMAP.md                # Master Project Roadmap & Execution Queue
+├── networking/                        # Networking & Protocols Domain
 │   └── NETWORK_FILE_SHARING_EXPLAINER.md # Complete SMB/NFS/Gateways guide
-├── raspberrypi/                   # Pi 5 Domain
-│   ├── README.md                  # General Pi 5 Host & Hardware
-│   ├── SETUP_AND_TUNING_GUIDE.md  # Detailed setup guide
-│   └── pihole/                    # Primary Pi-hole Sub-Domain
-│       └── README.md              # DNS Configs, ISP Bypass, Gravity-Sync sender
-└── ugreen_nas/                    # UGREEN DXP2800 Domain
-    ├── arr_stack/                 # Media Automation Sub-Domain (8 Services)
-    │   ├── README.md              # QuickSync, Inodes, Custom Language Scoring
-    │   └── docker-compose.yml     # Complete Docker Compose configuration
-    ├── pihole/                    # Secondary HA Pi-hole Sub-Domain
-    │   └── README.md              # Failover DNS, Port 53, Gravity-Sync target
-    ├── vaultwarden/               # Password Manager Sub-Domain
-    │   └── README.md              # Bitwarden backend, WebSockets, Multi-user
-    ├── homepage/                  # Central Dashboard Sub-Domain
-    │   └── README.md              # Widgets for Plex, Arr, qBit, Pi-hole, NAS stats
-    └── smb/                       # macOS Finder & File Sharing Sub-Domain
-        └── README.md              # SMB3, macOS vfs_fruit, Finder drag-and-drop
+├── raspberrypi/                       # Pi 5 Domain
+│   ├── README.md                      # General Pi 5 Host & Hardware
+│   ├── SETUP_AND_TUNING_GUIDE.md      # Detailed setup guide
+│   └── pihole/                        # Primary Pi-hole Sub-Domain
+│       └── README.md                  # DNS Configs, ISP Bypass, Gravity-Sync sender
+└── ugreen_nas/                        # UGREEN DXP2800 Domain
+    ├── arr_stack/                     # Media Automation Sub-Domain (8 Services)
+    │   ├── README.md                  # QuickSync, Inodes, Custom Language Scoring
+    │   └── docker-compose.yml         # Complete Docker Compose configuration
+    ├── pihole/                        # Secondary HA Pi-hole Sub-Domain
+    │   └── README.md                  # Failover DNS, Port 53, Gravity-Sync target
+    ├── vaultwarden/                   # Password Manager Sub-Domain
+    │   └── README.md                  # Bitwarden backend, WebSockets, Multi-user
+    ├── homepage/                      # Central Dashboard Sub-Domain
+    │   └── README.md                  # Widgets for Plex, Arr, qBit, Pi-hole, NAS stats
+    └── smb/                           # macOS Finder & File Sharing Sub-Domain
+        └── README.md                  # SMB3, macOS vfs_fruit, Finder drag-and-drop
 ```
