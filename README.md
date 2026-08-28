@@ -22,6 +22,7 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 | **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
 | **Raspberry Pi 5** | Pi-hole (Primary) | High-Availability DNS, Unbound+Cloudflare, 24h DHCP, Option 6 Dual-DNS | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
 | **Raspberry Pi 5** | Unbound (Recursive) | 192MB In-Memory Root DNSSEC Resolver, 2-Thread Execution, Zero Rate Limit | [raspberrypi/unbound/README.md](raspberrypi/unbound/README.md) |
+| **UGREEN DXP2800** | Storage Tiering | NVMe Docker Engine (`/volume2`) + CMR Mass Media (`/volume1`) TBW Protection | [ugreen_nas/STORAGE_TIERING_AND_NVME_ARCHITECTURE.md](ugreen_nas/STORAGE_TIERING_AND_NVME_ARCHITECTURE.md) |
 | **UGREEN DXP2800** | Pi-hole (Secondary) | High-Availability failover DNS on 2.5GbE, 1:1 Parity (309k domains) | [ugreen_nas/pihole/README.md](ugreen_nas/pihole/README.md) |
 | **UGREEN DXP2800** | Plex & *Arr | 8-service media stack, QuickSync HW transcoding, atomic hardlinks | [ugreen_nas/arr_stack/README.md](ugreen_nas/arr_stack/README.md) |
 | **UGREEN DXP2800** | AI Telegram Media Bot | Natural language Telegram bot for Plex, Sonarr, Radarr, Prowlarr | [ugreen_nas/telegram_bot/README.md](ugreen_nas/telegram_bot/README.md) |
