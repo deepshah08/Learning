@@ -17,6 +17,9 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 | :--- | :--- | :--- | :--- |
 | **System Overview** | Hardware & Status | Complete inventory of physical nodes, drives, and live services | [HARDWARE_AND_SYSTEMS_INVENTORY.md](HARDWARE_AND_SYSTEMS_INVENTORY.md) |
 | **Agent Protocols** | Global Directives | Anti-confirmation bias, empirical ground truth, safety | [AGENTS.md](AGENTS.md) |
+| **Pipelines & CI/CD** | Multi-Repo Automation | CI/CD testing matrices, anti-flakiness mocking, quality gates | [ci_cd_and_agentic_pipelines/README.md](ci_cd_and_agentic_pipelines/README.md) |
+| **Pipelines & CI/CD** | Jules Multi-Agent | Jules PR reviewer, autonomous test-fix loop, Blueprint `v2.2.0` | [ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md](ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md) |
+| **Pipelines & CI/CD** | Offline PWA Pipeline | Knowledge Center SPA router, 19,000+ precache, GitHub Pages | [ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md](ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md) |
 | **Networking & Protocols** | Storage & Gateways | SMB, NFS, AFP, mDNS/Bonjour, LAN/Tailscale Routing | [networking/NETWORK_FILE_SHARING_EXPLAINER.md](networking/NETWORK_FILE_SHARING_EXPLAINER.md) |
 | **Raspberry Pi 5** | System & Hardware | Host access, OS tuning, VMs, hardware devices | [raspberrypi/README.md](raspberrypi/README.md) |
 | **Raspberry Pi 5** | Pi-hole (Primary) | Primary DNS ad-blocking, ISP/SLAAC bypass, v6 web admin | [raspberrypi/pihole/README.md](raspberrypi/pihole/README.md) |
@@ -39,6 +42,10 @@ Learning/
 ├── CLAUDE.md                          # Claude Code CLI Directives
 ├── GEMINI.md                          # Google Cloud Code / Gemini CLI Directives
 ├── PROJECTS_ROADMAP.md                # Master Project Roadmap & Execution Queue
+├── ci_cd_and_agentic_pipelines/       # CI/CD, Multi-Agent Swarms & Testing Domain
+│   ├── README.md                      # Ecosystem CI/CD Architecture & Anti-Flakiness Testing
+│   ├── JULES_MULTI_AGENT_PIPELINE.md  # Jules Auto-Reviewer & Multi-Agent Loop
+│   └── OFFLINE_KNOWLEDGE_PWA_PIPELINE.md # Offline PWA, Scraper & SPA Hash Routing Fix
 ├── networking/                        # Networking & Protocols Domain
 │   └── NETWORK_FILE_SHARING_EXPLAINER.md # Complete SMB/NFS/Gateways guide
 ├── raspberrypi/                       # Pi 5 Domain

@@ -35,6 +35,9 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **25** | **Virtual Pixel 1 Digital Twin** | Photos / Cloud Storage | 🟢 Production | Port `5555` (`redroid-pixel1` on NVMe `/volume2`) | Verified Operational ([Docs](ugreen_nas/redroid/REDROID_PIXEL1_DIGITAL_TWIN.md)) |
 | **26** | **Asymmetric Tiered Storage & Power Lifecycle** | Storage / Infrastructure | 🟢 Production | Hot NVMe Tier (`/volume2`) + Cold CMR HDD (`/volume1`) | Operational & Benchmarked ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
 | **27** | **Zero-Copy Photo Direct Mount Pipeline** | Storage / Optimization Queue | 📝 Staged / Queue | Read-Only Bind Mount (`/volume1` $\rightarrow$ Redroid) + Inotify Scan | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
+| **28** | **Ecosystem CI/CD & Anti-Flakiness Automation** | CI/CD / Testing | 🟢 Production | Multi-Repo Matrix (Pi 5, PWA, Market, Workflows) | 44/44 Pi 5 + 10/10 Market Tests Passing ([Docs](ci_cd_and_agentic_pipelines/README.md)) |
+| **29** | **Jules Multi-Agent PR Reviewer & Blueprint v2.2.0** | Agent Swarm / CI/CD | 🟢 Production | Autonomous PR Reviewer + Keenable CLI Skills | Blueprint Tagged `v2.2.0` ([Docs](ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md)) |
+| **30** | **Offline Knowledge Center PWA & Scraping Pipeline** | Web App / Knowledge Base | 🟢 Production | 19,086 Precached Offline Articles (GitHub Pages) | Automated CI Deploy ([Docs](ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)) |
 
 ---
 
