@@ -1,68 +1,80 @@
-# 🛡️ High-Availability Dual Pi-hole (UGREEN NAS Secondary Node) — Single Source of Truth
+# 🕳️ Secondary High-Availability Pi-hole on UGREEN DXP2800: Single Source of Truth
 
-> **Context**: High-Availability redundant DNS ad-blocking paired with primary Pi-hole on Raspberry Pi 5. Broadcasted to all LAN clients via DHCP Option 6.  
-> **Host**: UGREEN DXP2800 (`192.168.1.80`)  
-> **Status**: 🟢 **Production Active** (100% DNS Redundancy Verified)  
-> **Sync Engine**: Gravity-Sync daemon running on Pi 5 (30-minute automated synchronization)
-
----
-
-## 1. Network Profile & Endpoints
-
-| Parameter | Value | Details |
-| :--- | :--- | :--- |
-| **Primary DNS Node** | `192.168.1.92:53` | Raspberry Pi 5 (Pi-hole v6 FTL) |
-| **Secondary DNS Node** | `192.168.1.80:53` | UGREEN DXP2800 (Docker Pi-hole) |
-| **DHCP Distribution** | `dhcp-option=6,192.168.1.92,192.168.1.80` | Broadcasted automatically by Pi 5 DHCP |
-| **Secondary Web Admin** | [http://192.168.1.80:8089/admin](http://192.168.1.80:8089/admin) | Password: `S#@#j0k3R` |
-| **Upstream DNS** | `1.1.1.1`, `1.0.0.1` | Cloudflare DNS-over-HTTPS fallback |
-| **Sync Interval** | Every 30 minutes | Replicates blocklists, whitelists, regex, custom DNS |
+> **Context**: Secondary High-Availability DNS sinkhole running in Docker on the UGREEN DXP2800 NAS. Provides 100% failover redundancy for whole-home ad-blocking over a dedicated 2.5GbE hardwired link.  
+> **Host**: UGREEN DXP2800 NAS (`192.168.1.80` Static / 2.5GbE Wired Ethernet)  
+> **Container Name**: `pihole` (Port `53/tcp`, `53/udp`, Web Admin `8089/tcp`)  
+> **Status**: 🟢 **Production Grade (100% 1:1 Parity with Primary Pi-hole)**  
+> **Blocklist Density**: **309,418 domains**  
+> **Upstream DNS**: Cloudflare (`1.1.1.1`, `1.0.0.1`)  
+> **Rate Limit**: 5,000 queries / 60s  
+> **Last Verified**: 2026-08-27 23:14 PDT
 
 ---
 
-## 2. Zero-Outage High-Availability Architecture
+## 1. Architectural Role: The 2.5GbE Hardwired Bedrock
+
+While the primary Raspberry Pi 5 runs on Wi-Fi, the **UGREEN NAS is hardwired via 2.5GbE directly into the router switch**.
 
 ```mermaid
 flowchart TD
-    subgraph Household["Household Clients (Laptops, Phones, Smart TVs)"]
-        Client["Client Device\n(Receives Both DNS IPs via DHCP)"]
+    subgraph LAN["Whole-Home LAN Clients"]
+        Client["Client Device (Mac, Laptops, Pixel 9, TVs)\nDHCP Option 6:\n[192.168.1.92, 192.168.1.80]"]
     end
 
-    subgraph Primary["Primary DNS (Raspberry Pi 5)"]
-        Pi5["Pi-hole v6 FTL\n192.168.1.92:53\n(Wi-Fi Interface)"]
+    subgraph SecondaryNode["UGREEN DXP2800 NAS (192.168.1.80)"]
+        Docker["Docker Engine (restart: unless-stopped)"]
+        PiHole["Pi-hole Container\n(:53 / :8089)"]
+        Gravity["309,418 Blocked Domains\n(/volume1/docker/pihole/etc-pihole/gravity.db)"]
+        CF["Upstream: Cloudflare 1.1.1.1 & 1.0.0.1\nRate Limit: 5000 Q/min"]
+        
+        Docker --> PiHole
+        PiHole --> Gravity
+        PiHole --> CF
     end
 
-    subgraph Secondary["Secondary DNS (UGREEN DXP2800)"]
-        NAS["Docker Pi-hole\n192.168.1.80:53\n(Wired 2.5GbE LAN)"]
-    end
+    Client -->|"Direct Sub-millisecond Fallback"| PiHole
+```
 
-    Client -->|Primary Query| Pi5
-    Client -.->|Instant Zero-Latency Failover\n(During Pi Wi-Fi Drops / Reboots)| NAS
-    Pi5 <==|Automated Gravity-Sync (Every 30 mins)| NAS
+* **DHCP Option 6 Role**: Broadcasted as `nameserver[1] : 192.168.1.80` to all devices on the network.
+* **0% Wi-Fi Risk**: Immune to wireless interference, DFS radar channel switching, or 802.11 deauth frames.
+* **Instant Fallback**: If the Raspberry Pi 5 reboots, updates, or experiences RF noise, clients instantly resolve queries via `192.168.1.80` in `<2ms` with zero downtime.
+
+---
+
+## 2. Configuration Parameters & 1:1 Parity Matrix
+
+```text
+┌────────────────────────────┬─────────────────────────────┬──────────────────────────────────┐
+│ Feature / Configuration    │ Primary: Raspberry Pi 5     │ Secondary: UGREEN DXP2800 NAS    │
+├────────────────────────────┼─────────────────────────────┼──────────────────────────────────┤
+│ IP / Port                  │ `192.168.1.92:53`           │ `192.168.1.80:53`                │
+│ Physical Link              │ 5GHz Wi-Fi (BSSID Locked)   │ 2.5GbE Hardwired Ethernet ⚡     │
+│ Blocklist Density          │ 309,418 Blocked Domains     │ 309,418 Blocked Domains (1:1)    │
+│ Upstream DNS Providers     │ Unbound + Cloudflare Fallback│ Direct Cloudflare (1.1.1.1/1.0.0.1)│
+│ Rate-Limiting Headroom     │ 5,000 queries / 60s         │ 5,000 queries / 60s (1:1)        │
+│ IPv6 SLAAC / DHCPv6 Leaks  │ Disabled (`ipv6 = false`)   │ Disabled (Clean IPv4 Bridge)     │
+│ DHCP Server                │ Active (Option 6 Dual-DNS)  │ Inactive (Prevents DHCP conflict)│
+│ Web Admin Interface        │ `http://192.168.1.92/admin` │ `http://192.168.1.80:8089/admin` │
+│ Recovery Policy            │ systemd (Restart=always 1s) │ Docker (restart: unless-stopped) │
+└────────────────────────────┴─────────────────────────────┴──────────────────────────────────┘
 ```
 
 ---
 
-## 3. Automated Gravity-Sync Mechanism
+## 3. Live Diagnostic & Verification Commands
 
-The Raspberry Pi 5 maintains a cron script at `/usr/local/bin/sync-pihole-to-nas.sh` that securely pushes `gravity.db` to the NAS and reloads lists:
-
-```bash
-#!/bin/bash
-set -e
-# Replicate gravity.db to UGREEN NAS Secondary Pi-hole
-ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -i /home/deepshah08/.ssh/id_ed25519 "Deep Shah"@192.168.1.80 "echo S#@#j0k3R | sudo -S tee /volume1/docker/pihole/etc-pihole/gravity.db > /dev/null" < /etc/pihole/gravity.db
-ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -i /home/deepshah08/.ssh/id_ed25519 "Deep Shah"@192.168.1.80 "docker exec pihole pihole reloadlists"
-```
-
----
-
-## 4. Verification Commands
+To verify the health of the secondary Pi-hole from the local machine:
 
 ```bash
-# Verify DNS query on Secondary node
+# 1. Standard Domain Resolution (<1ms)
 dig @192.168.1.80 google.com +short
+# Output: 142.251.218.206
 
-# Verify Ad-block on Secondary node (returns 0.0.0.0)
+# 2. Ad-Blocking Verification (0.0.0.0)
 dig @192.168.1.80 googleads.g.doubleclick.net +short
+# Output: 0.0.0.0
+
+# 3. Web Admin Dashboard Check
+curl -I http://192.168.1.80:8089/admin/login
+# Output: HTTP/1.1 200 OK
 ```

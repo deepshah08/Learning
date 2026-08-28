@@ -1,35 +1,34 @@
-# Universal Agent Directives & Protocol
+# Universal Agent Directives & Operating Protocol
 
-This document defines the mandatory operating protocol for all AI agents, CLIs (Codex, Claude Code, Google Cloud Code, Antigravity, Cursor), and automation scripts interacting with this repository and connected infrastructure.
+> **Scope**: Authoritative operating instructions for all autonomous AI agents, multi-agent frameworks, and developer CLIs (Antigravity, Codex, Cursor, Claude Code, Gemini Code Assist) operating within this codebase and connected physical infrastructure.
 
 ---
 
-## 🛡️ Pragmatic Anti-Confirmation Bias & Ground-Truth Protocol
+## 🛡️ 1. Pragmatic Anti-Confirmation Bias & Ground-Truth Protocol
 
-### 1. Velocity First, Rigor Where It Matters
-* Differences in technical perspective, implementation style, and design trade-offs are natural and expected.
-* Do not halt development velocity or over-engineer tests for standard decisions. Keep momentum moving forward smoothly.
+- **Velocity First, Rigor Where It Matters:** Differences in perspective and technical trade-offs are natural and expected. Do not halt momentum or over-engineer tests for standard decisions. Keep development moving forward smoothly.
+- **Explicit Objection Trigger:** When the user explicitly objects, states contrary real-world observations, or corrects an assumption, **STOP defending the prior hypothesis**. Do not cherry-pick search results or synthesize references to confirm a belief. Re-evaluate with an open mind and design a fast, minimal verification only if needed.
+- **Low Confidence / High-Impact Check:** When dealing with ambiguous third-party cloud quotas, destructive disk operations, or unverified API side-effects where confidence is low, proactively state the uncertainty and verify before committing to irreversible actions.
+- **Zero Hallucinated URLs:** Never construct, guess, or synthesize URLs, post IDs, or citation paths. Provide only verified links or exact search queries.
+- **Hardware & Storage Safety:** Exercise maximum engineering care when touching physical disks (NAS pools, SMR/CMR drives, RAID, Btrfs), network routing, and paid cloud quotas.
+- **Containerized Isolation & Zero Host Mutation:** NEVER alter core OS-level or kernel-level settings on bare-metal host nodes (Raspberry Pi 5, UGREEN NAS, Debian hosts) that could destabilize or interfere with existing production services (e.g., DNS, DHCP, Pi-hole v6 FTL, Plex, SMB, system packages, or kernel page sizes). Keep all runtime modifications, dependencies, and application packages strictly encapsulated inside Docker containers to minimize blast radius.
 
-### 2. Explicit Objection Trigger
-* When the user explicitly objects, states contrary real-world observations, or corrects an assumption:
-  * **STOP defending the prior hypothesis.**
-  * Do not cherry-pick search results or synthesize references to confirm a belief.
-  * Re-evaluate with an open mind and design a fast, minimal verification only if needed.
+---
 
-### 3. Low Confidence / High-Impact Check
-* When dealing with ambiguous third-party cloud quotas, destructive disk operations, unverified API side-effects, or physical hardware settings where confidence is low:
-  * Proactively state the uncertainty before taking action.
-  * Never present unverified theories as established facts.
+## ⚡ 2. High-Performance OpenSSH Multiplexing & Batch Execution Protocol
 
-### 4. Zero Hallucinated / Unverified URLs
-* Never construct, guess, or synthesize URL slugs, post IDs, or citation paths.
-* Provide only verified, live links retrieved directly from official tools or provide exact search queries.
+- **Zero Fragmented SSH Calls:** Never dispatch fragmented, single-line SSH tool calls in rapid succession. Spawning fresh SSH processes triggers repetitive TCP 3-way handshakes, TLS/KEX cipher renegotiation, and PAM authentication loops (~500ms latency per call).
+- **Leverage OpenSSH `ControlMaster` Multiplexing:** The controller host maintains persistent master Unix sockets in `~/.ssh/controlmasters/` (`ControlMaster auto`, `ControlPersist 1h`). All remote commands must execute over established control sockets for instant `<25ms` response times.
+- **Consolidated Batch Payloads:** Bundle pre-checks, file writes, service restarts, and post-verification probes into single, cohesive multi-statement bash execution blocks.
 
-### 5. Hardware, Storage & Quota Safety
-* Exercise maximum engineering care when touching physical disks (NAS pools, SMR/CMR drives, RAID, Btrfs), network routing, and paid cloud quotas.
-* Never make assumptions that could risk data corruption, hardware degradation, or storage limit lockouts.
+---
 
-### 6. Containerized Isolation & Zero Host Mutation
-* **Zero Host OS/Kernel Mutations:** NEVER alter core OS-level or kernel-level settings on bare-metal host nodes (Raspberry Pi 5, UGREEN NAS, Debian hosts) that could destabilize or interfere with existing production services (e.g., DNS, DHCP, Pi-hole v6 FTL, Plex, SMB, system packages, or kernel page sizes).
-* **Strict Container Isolation:** Keep all runtime modifications, custom dependencies, background daemons, and application packages strictly encapsulated inside Docker containers or OCI images to minimize the blast radius.
-* **Preserve Host Stability:** Never modify host `/etc/apt/sources.list`, force-break host package dependencies, or swap host kernel images when a containerized or userland solution exists.
+## 🗂️ 3. Single Source of Truth (SoT) Documentation Maintenance
+
+- **Continuous Knowledge Base Sync:** All architectural changes, incident post-mortems, and new service deployments must be logged immediately in the version-controlled `Learning/` repository.
+- **Domain Runbooks:** Every deployed homelab service must have an authoritative `README.md` containing:
+  - System architecture diagram (Mermaid)
+  - Configuration parameter matrix
+  - Live CLI health-check and verification commands
+  - Disaster recovery and rollback steps
+- **Zero Hallucinations:** Reference only verified local paths and active network endpoints (`192.168.1.92`, `192.168.1.80`, `192.168.1.254`).
