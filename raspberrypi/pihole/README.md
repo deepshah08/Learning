@@ -6,7 +6,7 @@
 > **Gateway**: AT&T Fiber BGW210/320 (`192.168.1.254`)  
 > **Wi-Fi SSID**: `Rimjhim` (5GHz BSSID: `D8:D8:E5:B3:8D:B0`)  
 > **Status**: 🟢 Production (100% High-Availability Ad-Blocking Active)  
-> **Last Verified**: 2026-08-26 19:01 PDT
+> **Last Verified**: 2026-08-27 22:52 PDT
 
 ---
 
@@ -51,6 +51,13 @@ $ dig speedtest.net +short
 In **Pi-hole v6**, configuration is managed via `pihole.toml`. Both `etc_dnsmasq_d` and `dnsmasq_lines` must be explicitly configured:
 
 ```toml
+[dhcp]
+  active = true
+  start = "192.168.1.64"
+  end = "192.168.1.250"
+  router = "192.168.1.254"
+  ipv6 = false  # CRITICAL: Must be false to eliminate [::] blackhole & Android Private DNS drops
+
 [misc]
   etc_dnsmasq_d = true
   dnsmasq_lines = [
@@ -59,6 +66,7 @@ In **Pi-hole v6**, configuration is managed via `pihole.toml`. Both `etc_dnsmasq
 ```
 
 * **DHCP Option 6**: Injects `192.168.1.92` (Pi 5) and `192.168.1.80` (UGREEN NAS) as dual DNS nameservers into all DHCP leases.
+* **`ipv6 = false`**: Eliminates bogus `[::]` IPv6 DNS broadcasts, resolving Pixel / Android captive portal timeouts and Apple Private Relay hangs.
 
 ---
 
@@ -68,6 +76,7 @@ In **Pi-hole v6**, configuration is managed via `pihole.toml`. Both `etc_dnsmasq
    sudo nmcli connection modify "Rimjhim" ipv4.method manual ipv4.addresses 192.168.1.92/24 ipv4.gateway 192.168.1.254 ipv4.dns "127.0.0.1"
    sudo nmcli connection modify "Rimjhim" 802-11-wireless.bssid "D8:D8:E5:B3:8D:B0"
    sudo nmcli connection modify "Rimjhim" 802-11-wireless.band "a"
+   sudo nmcli connection modify "Rimjhim" ipv6.method "disabled"
    sudo nmcli connection up "Rimjhim"
    ```
 2. **Wi-Fi Power-Saving Disabled**:
@@ -91,10 +100,7 @@ In **Pi-hole v6**, configuration is managed via `pihole.toml`. Both `etc_dnsmasq
 *   **Root Cause**: Pi was a DHCP client with no external DHCP server to assign an IP.
 *   **Resolution**: Configured a persistent **static IP (`192.168.1.92/24`)** on `wlan0`.
 
-### Problem 3: Pi-hole v6 TOML DHCP Omission & 2.4GHz Band Hopping
-*   **Symptom**: Laptops experienced 7-minute Wi-Fi outage during router deauth frames while mobile phones with cellular fallback stayed online.
-*   **Root Cause 1 (Wi-Fi Hopping)**: AT&T router deauthenticated Pi 5 (`reason=7`). Pi 5 attempted to associate with 2.4GHz BSSID (`D8:D8:E5:B3:8D:AF`), was rejected with `ASSOC-REJECT status_code=16`, and entered a retry cooldown.
-*   **Root Cause 2 (Pi-hole v6 Config)**: Pi-hole v6 defaulted `etc_dnsmasq_d = false`, ignoring external `/etc/dnsmasq.d/` configs and failing to broadcast the secondary UGREEN NAS DNS to clients.
-*   **Resolution**:
-    1. Injected `dnsmasq_lines = [ "dhcp-option=6,192.168.1.92,192.168.1.80" ]` and `etc_dnsmasq_d = true` directly into `pihole.toml`.
-    2. Locked Pi 5 to the 5GHz BSSID (`D8:D8:E5:B3:8D:B0`) and `band: a`.
+### Problem 3: The IPv6 `[::]` Blackhole (Pixel 9 Pro XL & Apple Private Relay)
+*   **Symptom**: Pixel 9 Pro XL showed *"Failed to connect / No internet"* while Apple laptops hung on *"Limit IP Address Tracking"* probes.
+*   **Root Cause**: `dhcp.ipv6 = true` was active in `pihole.toml` without a configured IPv6 subnet, causing Pi-hole to advertise `[::]` as the primary IPv6 DNS. Android and Apple devices tried to reach `[::]`, timed out on captive portal checks (`connectivitycheck.gstatic.com`), and dropped off Wi-Fi.
+*   **Resolution**: Set `dhcp.ipv6 = false` in `pihole.toml` and disabled IPv6 on Pi 5 NetworkManager. Clean IPv4 DHCP with Dual-DNS (`192.168.1.92, 192.168.1.80`) is now broadcasted exclusively.
