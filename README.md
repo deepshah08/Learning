@@ -26,6 +26,7 @@ This repository eliminates Single Points of Failure (SPOF) by providing a statel
 | **UGREEN DXP2800** | Pi-hole (Secondary) | High-Availability failover DNS on 2.5GbE, 1:1 Parity (309k domains) | [ugreen_nas/pihole/README.md](ugreen_nas/pihole/README.md) |
 | **UGREEN DXP2800** | Plex & *Arr | 8-service media stack, QuickSync HW transcoding, atomic hardlinks | [ugreen_nas/arr_stack/README.md](ugreen_nas/arr_stack/README.md) |
 | **UGREEN DXP2800** | AI Telegram Media Bot | Natural language Telegram bot for Plex, Sonarr, Radarr, Prowlarr | [ugreen_nas/telegram_bot/README.md](ugreen_nas/telegram_bot/README.md) |
+| **UGREEN DXP2800** | OpenClaw AI Gateway | Multi-channel autonomous AI agent framework & Telegram/Discord gateway | [ugreen_nas/openclaw/README.md](ugreen_nas/openclaw/README.md) |
 | **UGREEN DXP2800** | Vaultwarden | Encrypted password manager for Deep & Pranali + shared vault | [ugreen_nas/vaultwarden/README.md](ugreen_nas/vaultwarden/README.md) |
 | **UGREEN DXP2800** | Homepage Dashboard | Unified single-pane-of-glass homelab monitoring & launcher | [ugreen_nas/homepage/README.md](ugreen_nas/homepage/README.md) |
 | **UGREEN DXP2800** | SMB Network Sharing | macOS Finder drag-and-drop, photo ingestion, Google Photos | [ugreen_nas/smb/README.md](ugreen_nas/smb/README.md) |
