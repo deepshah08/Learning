@@ -28,7 +28,7 @@ flowchart TD
     end
 
     subgraph Memory["3. Nanosecond Execution Layer"]
-        RAM["16 GB DDR5 System RAM\n(SQLite Page Cache & Linux Page Cache)"]
+        RAM["8 GB DDR5 System RAM\n(SQLite Page Cache & Linux Page Cache)"]
     end
 
     RAM <===>|"50,000 MB/s (Nanoseconds)"| NVMe
