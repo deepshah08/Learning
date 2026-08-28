@@ -1,8 +1,8 @@
 # 🖥️ Hardware Inventory & Systems Status — Single Source of Truth
 
 > **Context**: Master inventory of all physical computing nodes, storage drives, network interfaces, and running software services across the home lab ecosystem.  
-> **Last Verified**: 2026-08-26 00:05 PDT  
-> **Status**: 🟢 **All Production Systems Healthy & Synchronized (73/73 Automated Tests Passing)**  
+> **Last Verified**: 2026-08-28 10:05 PDT  
+> **Status**: 🟢 **All Production Systems Healthy & Synchronized (100% High-Availability Architecture)**  
 
 ---
 
@@ -22,10 +22,11 @@
 │ Secondary Storage          │ 8TB Seagate Expansion (SMR) │ N/A                              │
 │ Physical M.2 / RAM Layout  │ M.2 Slots: Inside HDD Trays │ Bottom Hatch: SODIMM RAM Slot    │
 │ SMR Drive Status           │ ⚠️ DISCONNECTED (Cold Standby│ N/A                              │
-│ Network Interface          │ 2.5 Gigabit Ethernet (2.5GbE│ 1GbE / Wi-Fi 5                   │
+│ Network Interface          │ 2.5 Gigabit Ethernet (2.5GbE│ 1GbE / 5GHz Wi-Fi (BSSID Locked) │
 │ Local IP Address           │ `192.168.1.80`              │ `192.168.1.92` (Static)          │
 │ Tailscale Node Name        │ Subnet Routed (`.80`)       │ `pi5-media-nas` (`100.68.196.14`)│
 │ Operating System           │ UGOS Pro (Debian 12 Kernel) │ Raspberry Pi OS (Debian 13)      │
+│ SSH Session Pipeline       │ ControlMaster (<25ms pipe)  │ ControlMaster (<25ms pipe)       │
 └────────────────────────────┴─────────────────────────────┴──────────────────────────────────┘
 ```
 
@@ -35,14 +36,13 @@
 
 ### Drive 1: 10TB Seagate IronWolf CMR (`ST10000VN000`)
 * **Location**: UGREEN NAS Bay 1 (`/volume1`)
-* **Filesystem**: Btrfs
-* **Capacity**: ~9.1 TiB usable
+* **Filesystem**: Btrfs (~9.1 TiB usable, ~8.1 TiB Free)
 * **Role**: Bulk cold media tier (Plex Movies, TV Shows, raw photo archives, Time Machine backups). Configured for deep sleep / 0 RPM hibernation.
 
 ### Drive 2: 4TB WD_BLACK SN850X NVMe PCIe 4.0 SSD (`WDS400T2X0E`)
-* **Location**: Internal M.2 Slot 1 (Inside drive bay chamber behind HDD trays)
-* **Kernel ID**: `/dev/nvme0n1` (3.6 TiB raw)
-* **Role**: High-speed 24/7 Hot Application Tier (`/volume2`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), Redroid Pixel 1 twin, and fast ingest cache.
+* **Location**: Internal M.2 Slot 1 (`/volume2` - 3.7 TiB Free)
+* **Endurance Rating**: **2,400 TBW** (33.2 GB written = 0.0013% used; ~6,575-year lifespan)
+* **Role**: High-speed 24/7 Hot Application Tier (`/volume2/@docker` + `/volume2/docker`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), Redroid Pixel 1 twin, and snapshot archives.
 
 ### Drive 3: 8TB Seagate Expansion SMR (`STKR8000400`)
 * **Location**: External USB 3.0
@@ -79,21 +79,11 @@
 
 | Service | Port | Endpoint | Status | Verified Functionality |
 | :--- | :--- | :--- | :--- | :--- |
-| **Primary Pi-hole v6 FTL**| `53`, `80`, `443`| [http://192.168.1.92/admin](http://192.168.1.92/admin)| 🟢 **Production** | Primary whole-home DNS ad-blocker & DHCP server |
-| **Unbound Recursive DNS** | `5335` (Local) | `127.0.0.1#5335` | 🟢 **Production** | Private recursive root DNS with DNSSEC validation |
-| **Gravity-Sync Sender** | Cron (30m)| `/usr/local/bin/sync-pihole-to-nas.sh` | 🟢 **Production** | Automated push of `gravity.db` & custom DNS to NAS |
+| **Primary Pi-hole v6 FTL**| `53`, `80`, `443`| [http://192.168.1.92/admin](http://192.168.1.92/admin)| 🟢 **Production** | Primary whole-home DNS ad-blocker & 24h DHCP server |
+| **Unbound Recursive DNS** | `5335` (Local) | `127.0.0.1#5335` | 🟢 **Production** | 192MB In-Memory recursive root DNS with DNSSEC validation |
 | **Tailscale Subnet Router**| WireGuard | `100.68.196.14` | 🟢 **Production** | Subnet gateway advertising `192.168.1.0/24` to remote devices |
 | **Headless Jules Agent Worker**| Daemon | `projects/18-agent-worker` | 🟢 **Production** | Autonomous 24/7 background PR review & pytest worker |
-| **Offline Socratic Tutor**| Local | `projects/01-offline-tutor` | 🟢 **Production** | GraphRAG concept graph engine & Socratic inquiry agent |
-| **Git-Backed Second Brain**| Local / Hook | `projects/02-second-brain` | 🟢 **Production** | Multi-format doc ingestion & ChromaDB semantic search |
-| **WhisperX Indexer** | Timer | `projects/03-whisper-indexer` | 🟢 **Production** | faster-whisper transcription & time-filtered vector search |
-| **Voice Clone Sandbox** | CLI / Wave | `projects/06-voice-clone` | 🟢 **Production** | Coqui XTTS v2 voice cloning & speech synthesizer |
-| **Backup Engine & Sync Guard**| Cron / ADB | `projects/07-backup-engine` | 🟢 **Production** | Restic B2 backup & Pixel 1 staging verification guard |
 | **TripDrop Staging Portal**| `8088` | [http://192.168.1.92:8088](http://192.168.1.92:8088) | 🟢 **Production** | FastAPI chunked drag-and-drop ingestion with mDNS |
 | **Stirling-PDF Suite** | `8083` | [http://192.168.1.92:8083](http://192.168.1.92:8083) | 🟢 **Production** | Dockerized offline PDF transformation and OCR suite |
-| **Network Intrusion Monitor**| Systemd | `projects/10-intrusion-monitor` | 🟢 **Production** | Scapy raw frame ARP spoofing & SYN scan detector |
-| **Dead Man's Switch** | Daemon | `projects/11-deadmans-switch` | 🟢 **Production** | Shamir's Secret Sharing ($M_{521}$) contingency key vault |
 | **n8n Automation Engine** | `5678` | [http://192.168.1.92:5678](http://192.168.1.92:5678) | 🟢 **Production** | Self-hosted workflow automation & alert webhooks |
-| **Market Sentiment Tracker**| Local / JSON | `projects/14-market-sentiment` | 🟢 **Production** | VADER sentiment scoring & daily market JSON reports |
-| **Financial Pipeline** | SQLite | `projects/15-financial-pipeline` | 🟢 **Production** | Transaction statement regex parser & portfolio NAV engine |
-| **Morning Briefing** | Timer | `projects/16-morning-briefing` | 🟢 **Production** | Automated morning digest synthesizer |
+| **Dead Man's Switch** | Daemon | `projects/11-deadmans-switch` | 🟢 **Production** | Shamir's Secret Sharing ($M_{521}$) contingency key vault |
