@@ -2,8 +2,9 @@
 
 > **Context**: Unified homelab control center and service status dashboard for Deep and Pranali.  
 > **Host**: UGREEN DXP2800 (`192.168.1.80`)  
-> **Status**: 🟢 **Operational & Production Verified**  
+> **Status**: 🟢 **Operational & Production Verified (HTTP 200 OK)**  
 > **Dashboard URL**: [http://192.168.1.80:3000](http://192.168.1.80:3000)  
+> **Last Verified**: 2026-08-28 15:24 PDT
 
 ---
 
@@ -32,7 +33,7 @@
 
 ---
 
-## 2. Docker Compose Configuration
+## 2. Docker Compose Configuration (NVMe Tiered)
 
 ```yaml
 services:
@@ -43,10 +44,18 @@ services:
       - PUID=1000
       - PGID=10
       - TZ=America/Los_Angeles
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.1.80:3000,192.168.1.80,localhost:3000,localhost,127.0.0.1:3000,127.0.0.1,pi5-media-nas,deepdxp2800,*.local
     ports:
       - "3000:3000"
     volumes:
-      - /volume1/docker/homepage/config:/app/config
+      - /volume2/docker/homepage/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped
 ```
+
+---
+
+## 3. Host Validation Troubleshooting Runbook
+
+In Homepage v0.9+, strict host header validation is enforced to prevent DNS rebinding attacks:
+* If you see `{"error":"Host validation failed. See logs for more details."}`, ensure `HOMEPAGE_ALLOWED_HOSTS` contains the host/port you are accessing (e.g. `192.168.1.80:3000,192.168.1.80`).
