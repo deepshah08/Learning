@@ -2,11 +2,11 @@
 
 > **Context**: Unified homelab control center and service status dashboard for Deep and Pranali.  
 > **Host**: UGREEN DXP2800 (`192.168.1.80`)  
-> **Status**: 🟢 **Operational & Production Verified (HTTP 200 OK)**  
+> **Status**: 🟢 **Operational & Production Verified (HTTP 200 OK / All Widgets Green)**  
 > **Dashboard URL**: [http://192.168.1.80:3000](http://192.168.1.80:3000)  
 > **Theme**: Pure AMOLED / OLED Solid Black (`#000000`)  
 > **Layout**: Vertical Columns (`style: column`)  
-> **Last Verified**: 2026-08-28 17:42 PDT
+> **Last Verified**: 2026-08-28 17:46 PDT
 
 ---
 
@@ -35,30 +35,45 @@
 
 ---
 
-## 2. Configuration (`settings.yaml` & `custom.css`)
+## 2. Docker Compose Configuration (NVMe Tiered with Disk Monitors)
 
-### `/volume2/docker/homepage/config/settings.yaml`:
 ```yaml
-title: Deep & Pranali HomeLab
-theme: dark
-color: slate
-layout:
-  Media:
-    style: column
-  Downloads & Automation:
-    style: column
-  Network & Security:
-    style: column
-  UGREEN Native Storage:
-    style: column
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    environment:
+      - PUID=1000
+      - PGID=10
+      - TZ=America/Los_Angeles
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.1.80:3000,192.168.1.80,localhost:3000,localhost,127.0.0.1:3000,127.0.0.1,pi5-media-nas,deepdxp2800,*.local
+    ports:
+      - "3000:3000"
+    volumes:
+      - /volume2/docker/homepage/config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /volume1:/volume1:ro
+      - /volume2:/volume2:ro
+    restart: unless-stopped
+```
 
-allowHosts:
-  - "192.168.1.80:3000"
-  - "192.168.1.80"
-  - "localhost:3000"
-  - "localhost"
-  - "127.0.0.1:3000"
-  - "127.0.0.1"
+---
+
+## 3. Storage & API Widget Configuration
+
+### `/volume2/docker/homepage/config/widgets.yaml`:
+```yaml
+- logo:
+    type: logo
+- search:
+    provider: google
+    target: _blank
+- resources:
+    cpu: true
+    memory: true
+    disk:
+      - /volume1
+      - /volume2
 ```
 
 ### `/volume2/docker/homepage/config/custom.css` (Pure Solid Black & Clean Locked UI):
@@ -76,17 +91,3 @@ div[id*="footer"] {
   pointer-events: none !important;
 }
 ```
-
----
-
-## 3. Quick-Toggle Layout Runbook (Columns vs. Rows)
-
-* **To switch to Horizontal Rows Layout:**
-  ```bash
-  ssh nas "sed -i 's/style: column/style: row\n    columns: 4/g' /volume2/docker/homepage/config/settings.yaml && docker restart homepage"
-  ```
-
-* **To switch to Vertical Columns Layout:**
-  ```bash
-  ssh nas "sed -i '/columns: 4/d; s/style: row/style: column/g' /volume2/docker/homepage/config/settings.yaml && docker restart homepage"
-  ```
