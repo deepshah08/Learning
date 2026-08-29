@@ -107,15 +107,18 @@ T=24h    Lease Expiry: Client must re-acquire or loses IP
   end = "192.168.1.250"
   router = "192.168.1.254"
   leaseTime = "24h"
-  rapidCommit = true
+  rapidCommit = false
 
 [dns]
   upstreams = ["127.0.0.1#5335", "1.1.1.1", "1.0.0.1"]
+
+[misc]
+  dnsmasq_lines = ["dhcp-option=6,192.168.1.80,192.168.1.92"]
 ```
 
 ### Supplemental dnsmasq config (`/etc/dnsmasq.d/99-dns-redundancy.conf`):
 ```conf
-dhcp-option=6,192.168.1.80,192.168.1.92
+# Query all upstream servers concurrently for instant sub-15ms return
 all-servers
 ```
 
@@ -125,31 +128,39 @@ all-servers
 
 | Device / OS | Threat Vector | Protection Deployed |
 | :--- | :--- | :--- |
-| **Pixel 9 Pro XL (Android 15)** | Opportunistic DoT probe on port 853 | Port 853 TCP RST via iptables prevents DoT hijack to Cloudflare |
-| **iPhones / MacBooks (iOS 18 / macOS 15)** | Private Relay MASQUE tunnel bypasses Pi-hole | `mask-api.icloud.com`, `captive.apple.com` allowlisted |
-| **TCL Smart TV (`192.168.1.233`)** | ACR telemetry block = "No Internet" Wi-Fi drop | 16 vendor domains allowlisted on both Pi-holes |
+| **Pixel 9 Pro XL (Android 15)** | Opportunistic DoT probe on port 853 | Port 853 TCP RST (instant Connection Refused) + Local-only Option 6 prevents DoT hijack |
+| **iPhones / MacBooks (iOS 18 / macOS 15)** | Private Relay MASQUE tunnel bypasses Pi-hole | `mask-api.icloud.com`, `captive.apple.com`, `apple-dns.net` allowlisted |
+| **TCL Smart TV (`192.168.1.233`)** | ACR telemetry block = "No Internet" Wi-Fi drop | 25 vendor/ecosystem domains allowlisted on both Pi-holes |
 | **All Apple devices** | Captive portal false positive | `captive.apple.com` allowlisted |
-| **All Android devices** | Connectivity check failure | `connectivitycheck.gstatic.com` allowlisted |
+| **All Android devices** | Connectivity check failure | `connectivitycheck.gstatic.com`, `connectivitycheck.android.com` allowlisted |
 
-### Allowlisted Domains (Both Pi-holes):
+### Allowlisted Domains (Both Pi-holes — 25 Domains Verified in Sync):
 ```text
+androidtvchannels-pa.googleapis.com
+androidtvwatsonfe-pa.googleapis.com
+apple-dns.net
 captive.apple.com
-mask-api.icloud.com
-gateway.icloud.com
-connectivitycheck.gstatic.com
 clients3.google.com
 clients4.google.com
 connectivitycheck.android.com
-time.android.com
-time.google.com
-time.windows.com
+connectivitycheck.gstatic.com
+firebaselogging-pa.googleapis.com
+gateway.icloud.com
+hwmsg-as6-azure-usa-o.api.leiniao.com
+mask-api.icloud.com
+mask-h2.icloud.com
+mask.icloud.com
+nrdp.prod.ftl.netflix.com
+on-hweudc-o.api.leiniao.com
+on-hwmsg-ds-o.api.leiniao.com
+on-hwuc-conf-o.api.leiniao.com
 pool.ntp.org
 preferences.cid.samba.tv
 samba.tv
+time.android.com
+time.google.com
+time.windows.com
 tmdeviceapina.tclking.com
-on-hweudc-o.api.leiniao.com
-hwmsg-as6-azure-usa-o.api.leiniao.com
-nrdp.prod.ftl.netflix.com
 ```
 
 ---
