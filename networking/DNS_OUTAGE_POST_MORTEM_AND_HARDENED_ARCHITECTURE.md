@@ -18,7 +18,7 @@ A deep forensic investigation involving over **15,000 logged queries**, kernel s
 ```mermaid
 flowchart TD
     subgraph ClientLayer["Client Devices (iPhones, MacBooks, Pixel 9 Pro XL, TV)"]
-        Clients["DHCP Option 6 Broadcast Order:\n[192.168.1.80, 192.168.1.92, 1.1.1.1]"]
+        Clients["DHCP Option 6 Broadcast Order:\n[192.168.1.80, 192.168.1.92]\n(Local-Only — No Public DNS in Client Payload)"]
     end
 
     subgraph PrimaryNode["🏆 Tier 1 Primary DNS: UGREEN DXP2800 NAS (192.168.1.80)"]
@@ -63,9 +63,10 @@ flowchart TD
 * **Why Secondary Didn't Take Over**: Newly connected client devices (iPhones, MacBooks, TV) received leases with **only `192.168.1.92`**. They were physically unaware of the secondary NAS Pi-hole.
 * **Permanent Fix**: Deployed `/etc/dnsmasq.d/99-dns-redundancy.conf` with explicit non-conflicting syntax:
   ```conf
-  # High-Availability Dual Pi-hole + Public Cloudflare Failover
-  dhcp-option=6,192.168.1.92,192.168.1.80,1.1.1.1
+  # High-Availability Dual Pi-hole (Local-Only — No Public DNS Leak)
+  dhcp-option=6,192.168.1.80,192.168.1.92
   ```
+  > **Post-Session Correction (2026-08-29)**: The original fix included `1.1.1.1` as a tertiary client resolver. This was subsequently **removed** after the 10-agent Red-Team exercise concluded that exposing public DNS in DHCP Option 6 causes (a) Android opportunistic DoT hijack to Cloudflare on port 853, and (b) sticky OS resolver fallback trapping devices on public DNS for hours. Cloudflare is now used exclusively as an upstream forwarder *inside* both Pi-holes.
 
 ---
 
@@ -77,7 +78,8 @@ flowchart TD
 * **The Impact**: Mobile apps (Instagram, YouTube, Safari) and OS captive-portal probes have aggressive **1.0 to 1.5 second timeouts**. The app declares "No Internet" before the operating system ever triggers the secondary DNS query.
 * **Permanent Fix**: 
   1. Configured sub-second upstream failovers on Pi 5 (`pihole.toml`) directly to Cloudflare `1.1.1.1` and `1.0.0.1`.
-  2. Injected public `1.1.1.1` as the 3rd resolver in DHCP Option 6.
+  2. Enabled `all-servers` parallel query racing so the fastest upstream (Unbound or Cloudflare) wins instantly, eliminating serial timeout waterfalls at the server layer.
+  > **Post-Session Correction (2026-08-29)**: The original fix also injected `1.1.1.1` into client DHCP Option 6. This was **removed** after Red-Team analysis showed it causes Android DoT hijack and sticky OS resolver bypass. The server-side `all-servers` parallel race now handles upstream failover entirely.
 
 ---
 
@@ -115,33 +117,23 @@ flowchart TD
 
 ## 3. How OS Auto-Recovery & Re-Binding Works
 
-A major architectural concern: **"If devices fall back to Cloudflare (1.1.1.1), how do we ensure they return to Pi-hole ad-blocking when healthy?"**
+> [!WARNING]
+> **Post-Session Correction (2026-08-29)**: The original version of this section claimed devices "snap back" to Pi-hole via "latency attraction" within 30-60 seconds. This was **refuted by the Red-Team adversarial exercise**. The corrected behavior is documented below.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Device as Client (Mac / iPhone / TV)
-    participant Pi as 🟢 Primary Pi-hole (192.168.1.92)
-    participant CF as 🛡️ Cloudflare (1.1.1.1)
+A major architectural concern: **"If devices fall back to a secondary DNS, how do we ensure they return to the primary Pi-hole when healthy?"**
 
-    Note over Device,Pi: Healthy State: 100% Ad-Blocking
-    Device->>Pi: Query google.com
-    Pi-->>Device: 0.9ms Response (Ad-Blocked)
+### Corrected Client OS Resolver Behavior:
 
-    Note over Device,Pi: LAN Network Congestion / Blip
-    Device->>Pi: Query (Socket Delay)
-    Device->>CF: Instant Fallback Query (1.1.1.1)
-    CF-->>Device: 18ms Response (Internet Stays UP)
+1. **Apple macOS / iOS (`mDNSResponder`)**: Uses a **sticky active resolver** model. Once a nameserver is penalized and the device switches to the secondary, `mDNSResponder` does **NOT proactively re-test idle nameservers in the background**. It remains on the secondary until a network interface flap, sleep/wake cycle, or device reboot.
+2. **Android (`netd` / `DnsResolver`)**: Switches to the next nameserver on timeout and stays there as long as it responds successfully. No automatic re-promotion.
+3. **Linux (`systemd-resolved`)**: Remains on the responding secondary server indefinitely.
+4. **Windows (`Dnscache`)**: Dynamically adjusts server ranking but tends to stay on the last successful server.
 
-    Note over Device,Pi: 30-60 Seconds Later (Decay Timer Expires)
-    Device->>Pi: Background Health Probe Query
-    Pi-->>Device: 0.9ms Response (Success!)
-    Note over Device,Pi: Device Re-binds to Pi-hole (Ad-Blocking Active)
-```
+### Why This Is Acceptable in the Hardened Architecture:
 
-1. **30–60 Second Penalty Timer**: Operating systems apply a temporary 30–60s penalty to a non-responsive nameserver before re-probing the primary index.
-2. **Latency Attraction**: Because local Pi-hole responds in **`~0.9 ms`** vs Cloudflare in **`~18 ms`**, the OS resolver algorithm automatically re-promotes the primary local Pi-hole to the top of the active resolution queue.
-3. **Zero Manual Intervention**: Devices snap back to 100% ad-blocking automatically without toggling Wi-Fi.
+Because DHCP Option 6 now contains **only local Pi-hole IPs** (`[192.168.1.80, 192.168.1.92]`), both options are ad-blocking Pi-holes. A device "stuck" on the secondary Pi 5 instead of the primary NAS still gets full ad-blocking and local DNS resolution. There is **no scenario where a client silently leaks to public DNS** — that failure mode was eliminated by removing `1.1.1.1` from the client payload.
+
+Re-binding to the primary NAS happens naturally on the next DHCP lease renewal (T1 = 12 hours), sleep/wake cycle, or Wi-Fi reconnect.
 
 ---
 
@@ -164,8 +156,10 @@ The Secondary Pi-hole on the UGREEN NAS (`192.168.1.80` via 2.5GbE Wired Etherne
 
 When modifying homelab DNS, networking, or media services, ALWAYS verify against this checklist:
 
-- [x] **DHCP Option 6 Verification**: Ensure `/etc/dnsmasq.d/99-dns-redundancy.conf` on Pi 5 contains all 3 tiers (`192.168.1.92,192.168.1.80,1.1.1.1`).
-- [x] **Client Resolver Audit**: Run `scutil --dns` on macOS to confirm client interfaces receive the full multi-tier nameserver list.
+- [x] **DHCP Option 6 Verification**: Ensure `/etc/dnsmasq.d/99-dns-redundancy.conf` on Pi 5 contains **local-only** DNS servers: `dhcp-option=6,192.168.1.80,192.168.1.92`. **Never inject public DNS (`1.1.1.1`) into client DHCP payloads** — this causes Android DoT hijack and sticky OS fallback bypass.
+- [x] **Client Resolver Audit**: Run `scutil --dns` on macOS to confirm client interfaces receive exactly `[192.168.1.80, 192.168.1.92]` — no public resolvers.
 - [x] **qBittorrent Connection Caps**: Never remove `Session\MaxConnections=300` in `qBittorrent.conf`.
 - [x] **Captive Portal Whitelist**: Never wipe Pi-hole allowlists without preserving the 16 Smart TV & captive-portal domains.
 - [x] **Zero Host Mutation on Pi 5**: Ensure Docker containers and host daemons operate within memory limits and never introduce runaway restart loops.
+- [x] **Handoff Document Reference**: For all future DNS/Network sessions, start by reading [`DNS_NETWORK_HANDOFF.md`](DNS_NETWORK_HANDOFF.md) which contains the binding SLA/SLO contracts and incident classification matrix.
+
