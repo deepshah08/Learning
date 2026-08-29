@@ -38,11 +38,78 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **28** | **Ecosystem CI/CD & Anti-Flakiness Automation** | CI/CD / Testing | 🟢 Production | Multi-Repo Matrix (Pi 5, PWA, Market, Workflows) | 44/44 Pi 5 + 10/10 Market Tests Passing ([Docs](ci_cd_and_agentic_pipelines/README.md)) |
 | **29** | **Jules Multi-Agent PR Reviewer & Blueprint v2.2.0** | Agent Swarm / CI/CD | 🟢 Production | Autonomous PR Reviewer + Keenable CLI Skills | Blueprint Tagged `v2.2.0` ([Docs](ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md)) |
 | **30** | **Offline Knowledge Center PWA & Scraping Pipeline** | Web App / Knowledge Base | 🟢 Production | 19,086 Precached Offline Articles (GitHub Pages) | Automated CI Deploy ([Docs](ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)) |
+| **31** | **SLO Watchdog Daemon (`slo-watchdog`)** | Reliability / SRE Automation | 📝 Staged / Queue | Daemon on Pi 5 + NAS polling DNS latency, DHCP health, container states, SMART, NAT counts | Architecture Documented ([Docs](#-project-31-slo-watchdog-daemon-specification)) |
 
 ---
 
 ## 🛠️ Global Execution Protocol for Agents
 When initiating a session:
 1. Reference this `PROJECTS_ROADMAP.md` to identify dependencies, interfaces, and target ports.
-2. Verify system states before altering container bindings or disk mounts.
-3. Synchronize changes to `deepshah08/Learning` repository.
+2. **Reference the domain-specific Handoff & SLA/SLO Contract** before making changes:
+   - Media & *Arr Stack: [`ugreen_nas/MEDIA_STACK_HANDOFF.md`](ugreen_nas/MEDIA_STACK_HANDOFF.md)
+   - DNS & Network: [`networking/DNS_NETWORK_HANDOFF.md`](networking/DNS_NETWORK_HANDOFF.md)
+3. **Any SLO violation is an Incident.** Treat client-side degradation caused by homelab services as immediate-priority work. Refer to the Incident Classification Matrix in the relevant handoff document.
+4. Verify system states before altering container bindings or disk mounts.
+5. Synchronize changes to `deepshah08/Learning` repository.
+
+---
+
+## 🔒 Project #31: SLO Watchdog Daemon Specification
+
+### Overview
+A lightweight monitoring daemon that continuously validates SLO compliance across the Media Stack and DNS/Network Stack, automatically detects violations, triggers self-healing remediation, and invokes AI agents for persistent failures.
+
+### Architecture
+
+```mermaid
+flowchart TD
+    subgraph Probes["Health Probes (Every 60s)"]
+        DNS_Probe["DNS Latency Probe\ndig @192.168.1.80 / @192.168.1.92\nThreshold: <500ms per query"]
+        DHCP_Probe["DHCP Lease Probe\nVerify Option 6 payload integrity\nCheck pool exhaustion"]
+        Container_Probe["Container Health Probe\ncurl service ports\nDocker inspect restart count"]
+        SMART_Probe["Disk SMART Probe\nsmartctl -H /dev/sda /dev/nvme0\nBtrfs scrub status"]
+        NAT_Probe["NAT Table Probe\nconntrack -C / conntrack -L count\nThreshold: <10% utilization"]
+        Config_Probe["Config Drift Probe\nHash qBittorrent.conf baseline\nHash pihole.toml baseline\nHash dnsmasq conf baseline"]
+    end
+
+    subgraph Engine["SLO Enforcement Engine"]
+        Evaluator["Threshold Evaluator\nCompare probe results vs SLO targets"]
+        Classifier["Incident Classifier\nSEV-1 / SEV-2 / SEV-3"]
+    end
+
+    subgraph Response["Automated Response"]
+        AutoHeal["Auto-Heal (SEV-2/3)\ndocker restart / systemctl restart\nVerify recovery within 60s"]
+        AgentInvoke["Agent Invocation (SEV-1/2 persistent)\nSpawn Antigravity agent session\nwith handoff doc context"]
+        BreakGlass["Break-Glass (SEV-1 unresolved >5min)\nExecute Port-Kill rollback\nAlert human via Telegram"]
+        Alert["Human Alert\nTelegram Bot + n8n Webhook\nIncident report with timestamps"]
+    end
+
+    Probes --> Engine
+    Evaluator --> Classifier
+    Classifier -->|"SEV-2/3"| AutoHeal
+    Classifier -->|"SEV-1/2 persistent"| AgentInvoke
+    Classifier -->|"SEV-1 >5min"| BreakGlass
+    AutoHeal & AgentInvoke & BreakGlass --> Alert
+```
+
+### Probe Specifications
+
+| Probe | Target | Frequency | SLO Reference |
+| :--- | :--- | :--- | :--- |
+| **DNS Latency** | `dig +time=1 @192.168.1.80` and `@192.168.1.92` | Every 60s | DNS Handoff §6.1, §6.2 |
+| **DHCP Lease Check** | Parse `/etc/pihole/dhcp.leases`, verify Option 6 via `nmap --script broadcast-dhcp-discover` | Every 5 min | DNS Handoff §6.2 |
+| **Container Health** | `curl -s -o /dev/null -w '%{http_code}' http://localhost:<port>` for all services | Every 60s | Media Handoff §6.1-6.5, DNS Handoff §6.1 |
+| **Disk SMART** | `smartctl -H`, `btrfs scrub status`, NVMe wear level | Every 1 hour | Media Handoff §6.6 |
+| **NAT Table** | `conntrack -C` (count) on router or NAS | Every 60s | Media Handoff §6.3, DNS Handoff §6.5 |
+| **Config Drift** | SHA-256 hash of `qBittorrent.conf`, `pihole.toml`, `99-dns-redundancy.conf` vs stored baseline | Every 15 min | Media Handoff §6.3, DNS Handoff §6.2 |
+| **Blocklist Sync** | Compare `gravity.db` domain count hash between NAS and Pi 5 | Every 1 hour | DNS Handoff §6.2 |
+
+### Deployment Plan
+- **Runtime**: Python 3.11 script running as a systemd timer on Pi 5 (bare-metal).
+- **Dependencies**: `dig`, `curl`, `smartctl`, `conntrack`, `sqlite3`, `ssh` (multiplexed).
+- **Alerting**: n8n webhook at `http://192.168.1.92:5678/webhook/slo-violation` + Telegram Bot API.
+- **Incident Log**: Append-only JSONL at `/home/deep/slo-watchdog/incidents.jsonl`.
+- **Agent Invocation**: Spawns `agy` CLI session with the appropriate handoff document path as context.
+
+### Implementation Status: 📝 Staged / Queued
+This project requires a dedicated implementation session. Start a new conversation with the handoff documents as context.
