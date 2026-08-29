@@ -61,10 +61,19 @@ allowHosts:
   - "127.0.0.1"
 ```
 
-### `/volume2/docker/homepage/config/custom.css` (Pure Solid Black):
+### `/volume2/docker/homepage/config/custom.css` (Pure Solid Black & Clean Locked UI):
 ```css
 body {
   background-color: #000000 !important;
+}
+
+#footer,
+.footer,
+div[id*="footer"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 ```
 
