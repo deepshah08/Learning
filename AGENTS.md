@@ -21,9 +21,16 @@
 - **Leverage OpenSSH `ControlMaster` Multiplexing:** The controller host maintains persistent master Unix sockets in `~/.ssh/controlmasters/` (`ControlMaster auto`, `ControlPersist 1h`). All remote commands must execute over established control sockets for instant `<25ms` response times.
 - **Consolidated Batch Payloads:** Bundle pre-checks, file writes, service restarts, and post-verification probes into single, cohesive multi-statement bash execution blocks.
 
+## 🔍 3. Hardware Specifications Ground-Truth Enforcement
+
+- **Zero Hallucinated Specs:** NEVER guess, assume, or generalize physical hardware specifications (RAM, CPU, storage tiers, networking) from generic retail models or LLM weights.
+- **Mandatory SSOT Inventory Reference:** All hardware facts MUST be cross-referenced directly with `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md` or verified via live host commands (`free -h`, `lscpu`, `lsblk`) before making comparisons or statements.
+  - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** | 10TB Seagate IronWolf CMR HDD (`/volume1`) | 4TB WD_BLACK SN850X NVMe SSD (`/volume2`) | 2.5GbE Wired Ethernet.
+  - **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
+
 ---
 
-## 🗂️ 3. Single Source of Truth (SoT) Documentation Maintenance
+## 🗂️ 4. Single Source of Truth (SoT) Documentation Maintenance
 
 - **Continuous Knowledge Base Sync:** All architectural changes, incident post-mortems, and new service deployments must be logged immediately in the version-controlled `Learning/` repository.
 - **Domain Runbooks:** Every deployed homelab service must have an authoritative `README.md` containing:
