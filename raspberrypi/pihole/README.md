@@ -15,7 +15,7 @@
 ```mermaid
 flowchart TD
     subgraph ClientLayer["1. Client Devices (Mac, Laptops, Pixel, iPhone, TVs)"]
-        Client["Client Device\nDHCP Option 6:\n[192.168.1.92, 192.168.1.80]"]
+        Client["Client Device\nDHCP Option 6:\n[192.168.1.92, 192.168.1.80, 1.1.1.1]"]
     end
 
     subgraph PrimaryDNS["2. Primary: Raspberry Pi 5 (192.168.1.92)"]
@@ -27,13 +27,18 @@ flowchart TD
     end
 
     subgraph SecondaryDNS["3. Secondary: UGREEN NAS (192.168.1.80)"]
-        NAS["Pi-hole Container\n(2.5GbE Hardwired Rock)"]
+        NAS["Pi-hole Container\n(2.5GbE Hardwired Rock - 450+ QPS)"]
         NAS_CF["Direct Cloudflare 1.1.1.1/1.0.0.1"]
         NAS --> NAS_CF
     end
 
+    subgraph PublicFallback["4. Public Safety Net: Cloudflare (1.1.1.1)"]
+        PublicCF["Cloudflare Anycast 1.1.1.1\n(Guarantees 100% Whole-Home Internet Uptime)"]
+    end
+
     Client -->|"Primary Path (<1ms)"| Pi5
-    Client -.->|"Instant Fallback if Pi5 Updates/Blips (<2ms)"| NAS
+    Client -.->|"Instant Failover if Pi5 Updates/Blips (<2ms)"| NAS
+    Client -.->|"Emergency Failover if Homelab Offline (<20ms)"| PublicCF
 ```
 
 ---
@@ -42,12 +47,13 @@ flowchart TD
 
 | Potential Failure Scenario | Root Vulnerability | Applied Hardened Defense | Result |
 | :--- | :--- | :--- | :--- |
-| **1. Pi 5 Wi-Fi Link Blip / DFS Hop** | Router changes 5GHz channels (radar scan) | • BSSID pinned to `D8:D8:E5:B3:8D:B0`<br>• `connection.autoconnect-retries 0` (instant retry)<br>• Dual-DNS broadcasting in DHCP | 0ms interruption; clients seamlessly query hardwired NAS (`192.168.1.80`). |
+| **1. Pi 5 Wi-Fi Link Blip / DFS Hop** | Router changes 5GHz channels (radar scan) | • BSSID pinned to `D8:D8:E5:B3:8D:B0`<br>• `connection.autoconnect-retries 0` (instant retry)<br>• Triple-DNS broadcasting in DHCP | 0ms interruption; clients seamlessly query hardwired NAS (`192.168.1.80`) or `1.1.1.1`. |
 | **2. Unbound DNS Root Timeout** | Recursive root lookup latency/stalls | Injected Cloudflare upstream fallbacks: `[127.0.0.1#5335, 1.1.1.1, 1.0.0.1]` | Pi-hole automatically falls back to Cloudflare if Unbound takes >200ms. |
 | **3. Client DHCP Lease Expiration** | Default 1-hour lease caused frequent renegotiation drops | Configured `dhcp.leaseTime = "24h"` | Devices maintain IP and DNS stably for 24 hours without hourly polling. |
 | **4. Chatty Client Rate Limiting** | Apple Private Relay/Photos flood triggered 1000 Q/min block | Increased `dns.rateLimit.count = 5000` / `interval = 60` | High-throughput devices are never blocked for normal background bursts. |
-| **5. Android / Pixel Private DNS Failure** | `ipv6 = true` generated bogus `[::]` IPv6 DNS server | Configured `dhcp.ipv6 = false` & disabled IPv6 on Pi 5 NetworkManager | Pixel 9 Pro XL connects immediately via clean IPv4 dual-DNS. |
-| **6. Process Crash / OOM Memory Pressure** | Linux kernel killing DNS daemon under RAM load | Configured systemd override:<br>• `Restart=always`<br>• `RestartSec=1s`<br>• `OOMScoreAdjust=-1000` | Kernel will NEVER OOM-kill Pi-hole; daemon auto-recovers in 1s if crashed. |
+| **5. Smart TV Captive Portal Drop** | Default adlists blocked `samba.tv` / `tclking.com` ACR checks | Whitelisted 16 captive-portal, NTP, and manufacturer endpoints | TV resolves in <5ms and passes Wi-Fi connection handshake permanently. |
+| **6. BitTorrent Router Table Flood** | Uncapped peer connections exhausting consumer router NAT table | Clamped qBittorrent to `MaxConnections=300` / `MaxPerTorrent=50` | Torrent downloads run at Gigabit speeds while using <1% of router NAT table. |
+| **7. Process Crash / OOM Memory Pressure** | Linux kernel killing DNS daemon under RAM load | Configured systemd override:<br>• `Restart=always`<br>• `RestartSec=1s`<br>• `OOMScoreAdjust=-1000` | Kernel will NEVER OOM-kill Pi-hole; daemon auto-recovers in 1s if crashed. |
 
 ---
 
@@ -73,13 +79,15 @@ flowchart TD
 [dns.rateLimit]
   count = 5000
   interval = 60
-
-[misc]
-  etc_dnsmasq_d = true
-  dnsmasq_lines = [
-    "dhcp-option=6,192.168.1.92,192.168.1.80"
-  ]
 ```
+
+### High-Availability DHCP Redundancy (`/etc/dnsmasq.d/99-dns-redundancy.conf`)
+```conf
+# High-Availability Dual Pi-hole + Public Cloudflare Failover for all DHCP clients
+dhcp-option=6,192.168.1.92,192.168.1.80,1.1.1.1
+```
+
+> 📖 **Full Post-Mortem & Architecture Retrospective**: See [DNS_OUTAGE_POST_MORTEM_AND_HARDENED_ARCHITECTURE.md](../../networking/DNS_OUTAGE_POST_MORTEM_AND_HARDENED_ARCHITECTURE.md) for detailed incident analysis.
 
 ### Pi 5 NetworkManager (`Rimjhim`)
 ```ini

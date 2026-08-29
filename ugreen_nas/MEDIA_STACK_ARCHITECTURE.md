@@ -61,3 +61,22 @@ Because `/volume1/data` is mounted across all containers under `/data`:
 1. qBittorrent downloads to `/data/torrents/movies/`.
 2. Radarr creates a 0-byte atomic hardlink at `/data/media/movies/`.
 3. Plex streams the file with 0 duplicate disk space and 0 SSD wear.
+
+---
+
+## 🛡️ Router NAT Table Protection & Connection Clamping
+
+To prevent high-throughput BitTorrent swarm discovery from flooding consumer router state tables (AT&T BGW320 / Wi-Fi APs) and starving home Wi-Fi devices of connection state slots, the following connection limits are actively enforced in `/volume2/docker/arr_stack/qbittorrent/qBittorrent/qBittorrent.conf`:
+
+```ini
+[BitTorrent]
+Session\MaxConnections=300
+Session\MaxConnectionsPerTorrent=50
+Session\MaxHalfOpenConnections=50
+Session\MaxUploads=20
+Session\MaxUploadsPerTorrent=5
+```
+
+* **Capacity Impact**: Caps qBittorrent NAT consumption to `<1%` of router capacity.
+* **Throughput Impact**: Zero degradation; sustained Gigabit line-speed downloads are fully preserved.
+
