@@ -75,8 +75,13 @@ Session\MaxConnectionsPerTorrent=50
 Session\MaxHalfOpenConnections=50
 Session\MaxUploads=20
 Session\MaxUploadsPerTorrent=5
+Session\GlobalMaxRatioEnabled=true
+Session\GlobalMaxRatio=1.0
+Session\GlobalMaxRatioAction=0
 ```
 
 * **Capacity Impact**: Caps qBittorrent NAT consumption to `<1%` of router capacity.
 * **Throughput Impact**: Zero degradation; sustained Gigabit line-speed downloads are fully preserved.
+* **Seeding Policy**: Strictly capped to a **1:1 (Ratio = 1.0)** parity limit with automatic pausing (`Action=0`), preventing endless upstream bandwidth consumption and unnecessary mechanical HDD read churn.
+
 
