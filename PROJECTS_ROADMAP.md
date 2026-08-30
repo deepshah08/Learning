@@ -7,7 +7,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 ## 🌟 Master Status Overview
 
 | # | Project Name | Domain / Target | Status | Primary Interface / Ports | Test Suite & Docs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **01** | **Offline Socratic Tutor** | RAG / Education | 🟢 Production | Local RAG Pipeline (Ollama + NetworkX) | 4/4 Tests Passing ([Docs](raspberrypi/offline_tutor/README.md)) |
 | **02** | **Git-Backed Second Brain** | PKM / Documentation | 🟢 Production | Gitea + Obsidian Webhook + ChromaDB | 3/3 Tests Passing ([Docs](raspberrypi/second_brain/README.md)) |
 | **03** | **WhisperX Meeting Indexer** | Audio / Search | 🟢 Production | faster-whisper + Time-Window Vector Search | 5/5 Tests Passing ([Docs](raspberrypi/whisper_indexer/README.md)) |
@@ -34,13 +34,19 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **24** | **AI Telegram Media Bot** | Media Automation / AI | 🟢 Operational | Telegram Bot Interface + Arr Stack Bridge | Unit Tests Passing ([Docs](ugreen_nas/telegram_bot/README.md)) |
 | **25** | **Virtual Pixel 1 Digital Twin** | Photos / Cloud Storage | 🟢 Production | Port `5555` (`redroid-pixel1` on NVMe `/volume2`) | Verified Operational ([Docs](ugreen_nas/redroid/REDROID_PIXEL1_DIGITAL_TWIN.md)) |
 | **26** | **Asymmetric Tiered Storage & Power Lifecycle** | Storage / Infrastructure | 🟢 Production | Hot NVMe Tier (`/volume2`) + Cold CMR HDD (`/volume1`) | Operational & Benchmarked ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
-| **27** | **Zero-Copy Photo Direct Mount Pipeline** | Storage / Optimization Queue | 📝 Staged / Queue | Read-Only Bind Mount (`/volume1` $\rightarrow$ Redroid) + Inotify Scan | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
+| **27** | **Zero-Copy Photo Direct Mount Pipeline** | Storage / Optimization Queue | 📝 Staged / Queue | Read-Only Bind Mount (`/volume1` $ightarrow$ Redroid) + Inotify Scan | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
 | **28** | **Ecosystem CI/CD & Anti-Flakiness Automation** | CI/CD / Testing | 🟢 Production | Multi-Repo Matrix (Pi 5, PWA, Market, Workflows) | 44/44 Pi 5 + 10/10 Market Tests Passing ([Docs](ci_cd_and_agentic_pipelines/README.md)) |
 | **29** | **Jules Multi-Agent PR Reviewer & Blueprint v2.2.0** | Agent Swarm / CI/CD | 🟢 Production | Autonomous PR Reviewer + Keenable CLI Skills | Blueprint Tagged `v2.2.0` ([Docs](ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md)) |
 | **30** | **Offline Knowledge Center PWA & Scraping Pipeline** | Web App / Knowledge Base | 🟢 Production | 19,086 Precached Offline Articles (GitHub Pages) | Automated CI Deploy ([Docs](ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)) |
 | **31** | **SLO Watchdog Daemon (`slo-watchdog`)** | Reliability / SRE Automation | 📝 Staged / Queue | Daemon on Pi 5 + NAS polling DNS latency, DHCP health, container states, SMART, NAT counts | Architecture Documented ([Docs](#-project-31-slo-watchdog-daemon-specification)) |
 | **32** | **Pi 5 (16GB RAM) $\leftrightarrow$ NAS Asymmetric AI & Compute Cohesion** | Distributed Systems / AI | 📝 Staged / Queue | Pi 5 16GB RAM Local LLM Hub (Ollama) + NAS Storage/Transcode Muscle | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
 | **33** | **High-Speed 2.5GbE Mac NVMe Scratch Disk (`/volume2/scratch`)** | Storage / Workflow Speed | 📝 Staged / Queue | SMB3 2.5GbE Direct NVMe Mount for 4K Video Editing & Code Compilation | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
+| **34** | **SearXNG Private Meta-Search Gateway** | Privacy / Local AI Search | 📝 Staged / Queue | Port `8080` (Pi 5 Docker Meta-Search Engine & Local API) | Unmetered RAG Search API for Local LLMs |
+| **35** | **Document-to-Voice Audiobook Pipeline** | Audio / Knowledge Synthesis | 📝 Staged / Queue | Port `13378` (Audiobookshelf + VoiceClone + SecondBrain) | Autonomous PDF/EPUB to Cloned Narration |
+| **36** | **Uptime Kuma Homelab Watchdog & Unified Sentry** | Observability / Reliability | 📝 Staged / Queue | Port `3001` (Docker Sentry on Pi 5 / NAS + Telegram Alerts) | Real-time Ping & SLA Alerts for 30+ Endpoints |
+| **37** | **Zero-Touch SD Card Camera Ingest Box** | Storage / Ingestion Automation | 📝 Staged / Queue | `udev` + `rsync` Daemon on Pi 5 with Status LED Alerts | Automatic RAW Ingestion to NAS Staging Pool |
+| **38** | **Nomad Web IDE / Code-Server over Tailscale** | Development / Remote Coding | 📝 Staged / Queue | Port `8443` (Pi 5 Browser VS Code for iPad / Tablet) | Full ARM64 Dev Stack over Encrypted Mesh |
+| **39** | **Stirling-PDF Automated OCR Receipt Watcher** | Financial Automation / SQLite | 📝 Staged / Queue | Inotify Watchdog on SMB `receipts/` $ightarrow$ Tesseract OCR $ightarrow$ SQLite | Auto-Index Scanned Receipts & Invoices |
 
 ---
 
@@ -66,24 +72,47 @@ A lightweight monitoring daemon that continuously validates SLO compliance acros
 ```mermaid
 flowchart TD
     subgraph Probes["Health Probes (Every 60s)"]
-        DNS_Probe["DNS Latency Probe\ndig @192.168.1.80 / @192.168.1.92\nThreshold: <500ms per query"]
-        DHCP_Probe["DHCP Lease Probe\nVerify Option 6 payload integrity\nCheck pool exhaustion"]
-        Container_Probe["Container Health Probe\ncurl service ports\nDocker inspect restart count"]
-        SMART_Probe["Disk SMART Probe\nsmartctl -H /dev/sda /dev/nvme0\nBtrfs scrub status"]
-        NAT_Probe["NAT Table Probe\nconntrack -C / conntrack -L count\nThreshold: <10% utilization"]
-        Config_Probe["Config Drift Probe\nHash qBittorrent.conf baseline\nHash pihole.toml baseline\nHash dnsmasq conf baseline"]
+        DNS_Probe["DNS Latency Probe
+dig @192.168.1.80 / @192.168.1.92
+Threshold: <500ms per query"]
+        DHCP_Probe["DHCP Lease Probe
+Verify Option 6 payload integrity
+Check pool exhaustion"]
+        Container_Probe["Container Health Probe
+curl service ports
+Docker inspect restart count"]
+        SMART_Probe["Disk SMART Probe
+smartctl -H /dev/sda /dev/nvme0
+Btrfs scrub status"]
+        NAT_Probe["NAT Table Probe
+conntrack -C / conntrack -L count
+Threshold: <10% utilization"]
+        Config_Probe["Config Drift Probe
+Hash qBittorrent.conf baseline
+Hash pihole.toml baseline
+Hash dnsmasq conf baseline"]
     end
 
     subgraph Engine["SLO Enforcement Engine"]
-        Evaluator["Threshold Evaluator\nCompare probe results vs SLO targets"]
-        Classifier["Incident Classifier\nSEV-1 / SEV-2 / SEV-3"]
+        Evaluator["Threshold Evaluator
+Compare probe results vs SLO targets"]
+        Classifier["Incident Classifier
+SEV-1 / SEV-2 / SEV-3"]
     end
 
     subgraph Response["Automated Response"]
-        AutoHeal["Auto-Heal (SEV-2/3)\ndocker restart / systemctl restart\nVerify recovery within 60s"]
-        AgentInvoke["Agent Invocation (SEV-1/2 persistent)\nSpawn Antigravity agent session\nwith handoff doc context"]
-        BreakGlass["Break-Glass (SEV-1 unresolved >5min)\nExecute Port-Kill rollback\nAlert human via Telegram"]
-        Alert["Human Alert\nTelegram Bot + n8n Webhook\nIncident report with timestamps"]
+        AutoHeal["Auto-Heal (SEV-2/3)
+docker restart / systemctl restart
+Verify recovery within 60s"]
+        AgentInvoke["Agent Invocation (SEV-1/2 persistent)
+Spawn Antigravity agent session
+with handoff doc context"]
+        BreakGlass["Break-Glass (SEV-1 unresolved >5min)
+Execute Port-Kill rollback
+Alert human via Telegram"]
+        Alert["Human Alert
+Telegram Bot + n8n Webhook
+Incident report with timestamps"]
     end
 
     Probes --> Engine
@@ -113,5 +142,31 @@ flowchart TD
 - **Incident Log**: Append-only JSONL at `/home/deep/slo-watchdog/incidents.jsonl`.
 - **Agent Invocation**: Spawns `agy` CLI session with the appropriate handoff document path as context.
 
-### Implementation Status: 📝 Staged / Queued
-This project requires a dedicated implementation session. Start a new conversation with the handoff documents as context.
+---
+
+## 🔮 Projects 34-39: Next-Horizon Geeky Powerhouse Modules
+
+### Project #34: SearXNG Private Meta-Search Gateway
+- **Node**: Raspberry Pi 5 (`192.168.1.92`) | Port `8080` (Docker)
+- **Role**: Privacy-first meta-search engine aggregating Google, Bing, DuckDuckGo, Reddit, GitHub, and arXiv.
+- **Integration**: Local JSON API endpoint for Offline Socratic Tutor, Market Sentiment, and Second Brain agents without rate limits or API fees.
+
+### Project #35: Document-to-Voice Audiobook Narration Pipeline
+- **Node**: UGREEN NAS (`192.168.1.80`) | Port `13378` (Audiobookshelf)
+- **Role**: Ingests whitepapers/PDFs from Second Brain $ightarrow$ synthesizes narration via Project 06 (Voice Clone XTTS v2) $ightarrow$ streams to mobile devices.
+
+### Project #36: Uptime Kuma Homelab Watchdog & Unified Sentry
+- **Node**: Raspberry Pi 5 / UGREEN NAS | Port `3001` (Docker)
+- **Role**: Continuous latency and HTTP status monitoring for all 30+ services across NAS and Pi with automated Telegram and n8n alert webhooks.
+
+### Project #37: Zero-Touch SD Card Camera Ingest Box
+- **Node**: Raspberry Pi 5 (`192.168.1.92`) | `udev` + `rsync`
+- **Role**: Autonomous camera SD card detector that auto-syncs RAW photos into NAS `/volume1/personal_folder/photos_staging` with status LED / audio cues.
+
+### Project #38: Nomad Web IDE / Code-Server over Tailscale
+- **Node**: Raspberry Pi 5 (`192.168.1.92`) | Port `8443` (Docker)
+- **Role**: Self-hosted VS Code in the browser for Galaxy Tab S10+ / iPad over Tailscale with full Python, Docker, and terminal toolchains.
+
+### Project #39: Stirling-PDF Automated OCR Receipt Watcher
+- **Node**: Raspberry Pi 5 (`192.168.1.92`) | Inotify Watchdog
+- **Role**: Monitors SMB folder for scanned receipts $ightarrow$ runs Tesseract OCR $ightarrow$ extracts merchant/amount into Project 15 Financial SQLite database.
