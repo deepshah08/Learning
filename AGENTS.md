@@ -27,8 +27,16 @@
 
 - **Zero Hallucinated Specs:** NEVER guess, assume, or generalize physical hardware specifications (RAM, CPU, storage tiers, networking) from generic retail models or LLM weights.
 - **Mandatory SSOT Inventory Reference:** All hardware facts MUST be cross-referenced directly with `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md` or verified via live host commands (`free -h`, `lscpu`, `lsblk`) before making comparisons or statements.
-  - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** | 10TB Seagate IronWolf CMR HDD (`/volume1`) | 4TB WD_BLACK SN850X NVMe SSD (`/volume2`) | 2.5GbE Wired Ethernet.
+  - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** (Accessible via bottom hatch) | **4TB WD_BLACK SN850X NVMe SSD** (`/volume2`, internal M.2 slots inside HDD tray bays) | **10TB Seagate IronWolf CMR HDD** (`/volume1`, Bay 1) | **8TB Seagate Expansion SMR** (Cold USB 3.0 backup with 15-min udev spindown) | 2.5GbE Wired Ethernet.
   - **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
+
+---
+
+## 🗄️ 3.1. Storage Tiering & Zero-Copy Containerization Directive
+
+- **Zero-Copy Over Inter-Volume Duplication:** NEVER propose or script background copying/mirroring of bulk data across storage volumes (e.g. `/volume1` to `/volume2`) when exposing host files to containers. Always employ direct, read-only bind mounts (`-v /volume1/path:/target:ro`) to eliminate duplicate I/O and preserve NVMe write endurance (TBW).
+- **Asymmetric Tiering Principle:** Keep random-access metadata, SQLite databases, container runtimes, and lightweight thumbnails on the NVMe SSD tier (`/volume2`) to maximize wear-free solid-state reads, while keeping cold bulk media on the mechanical HDD tier (`/volume1`) configured for 0 RPM deep sleep hibernation.
+- **Physical M.2 Installation Safety:** M.2 NVMe PCIe drives must NEVER be hot-plugged while host power is energized. Always execute a graceful shutdown prior to physical insertion.
 
 ---
 
