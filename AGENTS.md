@@ -27,16 +27,8 @@
 
 - **Zero Hallucinated Specs:** NEVER guess, assume, or generalize physical hardware specifications (RAM, CPU, storage tiers, networking) from generic retail models or LLM weights.
 - **Mandatory SSOT Inventory Reference:** All hardware facts MUST be cross-referenced directly with `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md` or verified via live host commands (`free -h`, `lscpu`, `lsblk`) before making comparisons or statements.
-  - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** (Accessible via bottom hatch) | **4TB WD_BLACK SN850X NVMe SSD** (`/volume2`, internal M.2 slots inside HDD tray bays) | **10TB Seagate IronWolf CMR HDD** (`/volume1`, Bay 1) | **8TB Seagate Expansion SMR** (Cold USB 3.0 backup with 15-min udev spindown) | 2.5GbE Wired Ethernet.
+  - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** | 10TB Seagate IronWolf CMR HDD (`/volume1`) | 4TB WD_BLACK SN850X NVMe SSD (`/volume2`) | 2.5GbE Wired Ethernet.
   - **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
-
----
-
-## 🗄️ 3.1. Storage Tiering & Zero-Copy Containerization Directive
-
-- **Zero-Copy Over Inter-Volume Duplication:** NEVER propose or script background copying/mirroring of bulk data across storage volumes (e.g. `/volume1` to `/volume2`) when exposing host files to containers. Always employ direct, read-only bind mounts (`-v /volume1/path:/target:ro`) to eliminate duplicate I/O and preserve NVMe write endurance (TBW).
-- **Asymmetric Tiering Principle:** Keep random-access metadata, SQLite databases, container runtimes, and lightweight thumbnails on the NVMe SSD tier (`/volume2`) to maximize wear-free solid-state reads, while keeping cold bulk media on the mechanical HDD tier (`/volume1`) configured for 0 RPM deep sleep hibernation.
-- **Physical M.2 Installation Safety:** M.2 NVMe PCIe drives must NEVER be hot-plugged while host power is energized. Always execute a graceful shutdown prior to physical insertion.
 
 ---
 
@@ -44,8 +36,10 @@
 
 - **Core Network Protection:** Whole-home DNS and DHCP (Pi-hole v6 FTL) must be safeguarded at all times.
   - `pihole-FTL` runs with high process priority (`Nice=-10`, `OOMScoreAdjust=-1000`).
-  - High-Availability DNS failover is broadcast to all clients via `dhcp-option=6,192.168.1.92,192.168.1.80`.
+  - High-Availability local-only DNS failover is broadcast to all clients via `dhcp-option=6,192.168.1.80,192.168.1.92`. **NEVER inject public DNS (`1.1.1.1`) into client Option 6** to prevent Android DoT hijacking (port 853) and sticky OS resolver ad-block bypass.
   - Unbound root recursive DNS is bound strictly to `127.0.0.1:5335` (loopback only).
+  - UGOS Pro Docker Pi-hole must use bridge mode (`192.168.1.80:53:53`), never `network_mode: host` (conflicts with UGOS host `dnsmasq` PID 1119).
+- **BitTorrent State & Conntrack Safety:** In `libtorrent`/`qBittorrent`, always enforce TCP-only transport (`Session\BittorrentProtocol=1`) to eliminate connectionless uTP UDP NAT state explosions in router tables. Enforce strict 1:1 seed ratio (`GlobalMaxRatio=1.0`) with auto-pause (`GlobalMaxRatioAction=0`).
 - **AI & Worker Sandboxing:** Any local AI, transcription (Whisper), speech synthesis (XTTS v2), or background review worker daemon must be throttled with strict limits (`Nice=15`, `CPUQuota=50%`, `MemoryMax=1G`). Never run continuous un-throttled CPU-bound loops on the Pi 5.
 - **Monorepo Namespace Cleanliness:** In repositories where multiple subdirectories are in `pythonpath` (`pytest.ini`), avoid generic names like `config.py` in subproject roots (use project-specific prefixes like `worker_config.py` or `immich_config.py`) to prevent module cache poisoning in `sys.modules`.
 
