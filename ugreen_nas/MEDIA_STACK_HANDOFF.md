@@ -25,24 +25,12 @@
 
 ## 🏗️ 1. Physical Hardware & Storage Tiering
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                          STORAGE TIERING ARCHITECTURE                          │
-├──────────────────────┬──────────────────────────┬──────────────────────────────┤
-│ Storage Tier         │ Physical Hardware         │ Role & Filesystem            │
-├──────────────────────┼──────────────────────────┼──────────────────────────────┤
-│ Tier 1: Hot App      │ 4TB WD_BLACK SN850X NVMe │ /volume2/@docker             │
-│                      │ PCIe 4.0 (7,300 MB/s)    │ Docker Engine, SQLite DBs,   │
-│                      │ 2,400 TBW Endurance      │ Incomplete Torrents          │
-├──────────────────────┼──────────────────────────┼──────────────────────────────┤
-│ Tier 2: Cold Media   │ 10TB Seagate IronWolf    │ /volume1/data/media/         │
-│                      │ CMR, SATA 6Gb/s, Btrfs   │ Movies, TV, Deep Storage     │
-│                      │ Spindown / Hibernate      │ 0-Byte Atomic Hardlinks      │
-├──────────────────────┼──────────────────────────┼──────────────────────────────┤
-│ Tier 3: Archival     │ 8TB Seagate Expansion SMR│ External USB 3.0             │
-│                      │ Disconnected / Cold       │ Encrypted Backups            │
-└──────────────────────┴──────────────────────────┴──────────────────────────────┘
-```
+| Storage Tier | Physical Hardware | Role & Filesystem |
+| :--- | :--- | :--- |
+| **Tier 1: Hot App** | 4TB WD_BLACK SN850X NVMe PCIe 4.0 (7,300 MB/s, 2,400 TBW) | `/volume2/@docker` — Docker Engine, SQLite DBs, Incomplete Torrents |
+| **Tier 2: Cold Media** | 10TB Seagate IronWolf CMR SATA 6Gb/s (Btrfs, Spindown) | `/volume1/data/media/` — Movies, TV, Deep Storage (0-Byte Atomic Hardlinks) |
+| **Tier 3: Archival** | 8TB Seagate Expansion SMR (External USB 3.0, Cold) | Disconnected / Cold Encrypted Backups |
+
 
 ---
 
@@ -185,22 +173,12 @@ Session\TempPath=/data/torrents/incomplete
 
 ## 🚨 7. Incident Classification & Escalation Matrix
 
-```text
-┌──────────┬────────────────────────┬──────────────────────────┬──────────────────────┐
-│ Severity │ Definition             │ Response Time            │ Remediation Target   │
-├──────────┼────────────────────────┼──────────────────────────┼──────────────────────┤
-│ SEV-1    │ Data loss, disk failure │ Immediate (auto-alert)   │ <15 minutes          │
-│          │ network-wide collateral│                          │                      │
-├──────────┼────────────────────────┼──────────────────────────┼──────────────────────┤
-│ SEV-2    │ Service down >5 min,   │ <5 minutes (auto-detect) │ <30 minutes          │
-│          │ config drift, hardlink │                          │                      │
-│          │ failure, transcode fail│                          │                      │
-├──────────┼────────────────────────┼──────────────────────────┼──────────────────────┤
-│ SEV-3    │ Degraded performance,  │ <15 minutes              │ <2 hours             │
-│          │ subtitle miss, slow    │                          │                      │
-│          │ import, indexer flap   │                          │                      │
-└──────────┴────────────────────────┴──────────────────────────┴──────────────────────┘
-```
+| Severity | Definition | Response Time | Remediation Target |
+| :--- | :--- | :--- | :--- |
+| **SEV-1** | Data loss, disk failure, network-wide collateral damage | Immediate (auto-alert) | <15 minutes |
+| **SEV-2** | Service down >5 min, config drift, hardlink failure, transcode fail | <5 minutes (auto-detect) | <30 minutes |
+| **SEV-3** | Degraded performance, subtitle miss, slow import, indexer flap | <15 minutes | <2 hours |
+
 
 ### Escalation Protocol:
 1. **Auto-Detection**: `slo-watchdog` daemon polls service health endpoints, container states, disk SMART, and NAT table counts.
@@ -252,3 +230,6 @@ ssh nas "sudo smartctl -H /dev/sda && sudo smartctl -H /dev/nvme0"
 | **Atomic Hardlinks (not copies)** | Zero additional disk space, zero SSD wear, zero copy latency. Plex reads the same inode as qBittorrent's torrent file. Deletion in Radarr/Sonarr only removes one link; the torrent seed copy persists until ratio auto-pause. | 2026-08-28 |
 | **NVMe for Docker + Incomplete, HDD for Media** | Hot tier (NVMe) absorbs high-IOPS random writes from Docker, SQLite WAL, and incomplete torrent chunks. Cold tier (CMR HDD) stores finalized sequential-read media files for Plex streaming with minimal actuator wear. | 2026-08-28 |
 | **Intel QuickSync `/dev/dri/renderD128`** | Hardware 4K HDR transcoding offloads CPU entirely. N100 iGPU handles AV1/HEVC/H.264 encode/decode with <5% CPU overhead vs 100% CPU software transcode. | 2026-08-28 |
+| **Hybrid Co-existence: Native Apps + Docker** | Retain native UGOS Pro apps (UG Photos + AI recognition, UG Sync for Pixel 9 Pro XL, UG Office, UG Theater fallback) alongside Docker stack. Validated total host RAM usage at ~3.3GB / 7.5GB with 4.2GB headroom. | 2026-08-29 |
+| **Runtime Enforcement: TCP-Only Transport** | Validated and locked `bittorrent_protocol: 1` via qBittorrent Web API to guarantee zero UDP/uTP socket lingering in router `conntrack` tables. | 2026-08-29 |
+| **Bazarr Uptime Remediation** | Resolved stale exited state on Bazarr container back to active HTTP 200 health, verifying dual EN+HI subtitle automation pipeline. | 2026-08-29 |
