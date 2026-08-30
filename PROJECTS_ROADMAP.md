@@ -39,6 +39,8 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **29** | **Jules Multi-Agent PR Reviewer & Blueprint v2.2.0** | Agent Swarm / CI/CD | 🟢 Production | Autonomous PR Reviewer + Keenable CLI Skills | Blueprint Tagged `v2.2.0` ([Docs](ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md)) |
 | **30** | **Offline Knowledge Center PWA & Scraping Pipeline** | Web App / Knowledge Base | 🟢 Production | 19,086 Precached Offline Articles (GitHub Pages) | Automated CI Deploy ([Docs](ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)) |
 | **31** | **SLO Watchdog Daemon (`slo-watchdog`)** | Reliability / SRE Automation | 📝 Staged / Queue | Daemon on Pi 5 + NAS polling DNS latency, DHCP health, container states, SMART, NAT counts | Architecture Documented ([Docs](#-project-31-slo-watchdog-daemon-specification)) |
+| **32** | **Pi 5 (16GB RAM) $\leftrightarrow$ NAS Asymmetric AI & Compute Cohesion** | Distributed Systems / AI | 📝 Staged / Queue | Pi 5 16GB RAM Local LLM Hub (Ollama) + NAS Storage/Transcode Muscle | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
+| **33** | **High-Speed 2.5GbE Mac NVMe Scratch Disk (`/volume2/scratch`)** | Storage / Workflow Speed | 📝 Staged / Queue | SMB3 2.5GbE Direct NVMe Mount for 4K Video Editing & Code Compilation | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
 
 ---
 
