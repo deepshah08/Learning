@@ -21,6 +21,8 @@
 - **Leverage OpenSSH `ControlMaster` Multiplexing:** The controller host maintains persistent master Unix sockets in `~/.ssh/controlmasters/` (`ControlMaster auto`, `ControlPersist 1h`). All remote commands must execute over established control sockets for instant `<25ms` response times.
 - **Consolidated Batch Payloads:** Bundle pre-checks, file writes, service restarts, and post-verification probes into single, cohesive multi-statement bash execution blocks.
 
+---
+
 ## 🔍 3. Hardware Specifications Ground-Truth Enforcement
 
 - **Zero Hallucinated Specs:** NEVER guess, assume, or generalize physical hardware specifications (RAM, CPU, storage tiers, networking) from generic retail models or LLM weights.
@@ -30,7 +32,18 @@
 
 ---
 
-## 🗂️ 4. Single Source of Truth (SoT) Documentation Maintenance
+## 🔒 4. Workload Resource Isolation & Network Blast-Radius Protection
+
+- **Core Network Protection:** Whole-home DNS and DHCP (Pi-hole v6 FTL) must be safeguarded at all times.
+  - `pihole-FTL` runs with high process priority (`Nice=-10`, `OOMScoreAdjust=-1000`).
+  - High-Availability DNS failover is broadcast to all clients via `dhcp-option=6,192.168.1.92,192.168.1.80`.
+  - Unbound root recursive DNS is bound strictly to `127.0.0.1:5335` (loopback only).
+- **AI & Worker Sandboxing:** Any local AI, transcription (Whisper), speech synthesis (XTTS v2), or background review worker daemon must be throttled with strict limits (`Nice=15`, `CPUQuota=50%`, `MemoryMax=1G`). Never run continuous un-throttled CPU-bound loops on the Pi 5.
+- **Monorepo Namespace Cleanliness:** In repositories where multiple subdirectories are in `pythonpath` (`pytest.ini`), avoid generic names like `config.py` in subproject roots (use project-specific prefixes like `worker_config.py` or `immich_config.py`) to prevent module cache poisoning in `sys.modules`.
+
+---
+
+## 🗂️ 5. Single Source of Truth (SoT) Documentation Maintenance
 
 - **Continuous Knowledge Base Sync:** All architectural changes, incident post-mortems, and new service deployments must be logged immediately in the version-controlled `Learning/` repository.
 - **Domain Runbooks:** Every deployed homelab service must have an authoritative `README.md` containing:
