@@ -88,26 +88,31 @@ edns-buffer-size: 1232
 
 ---
 
-## 🔗 3. DHCP Architecture & Lease Lifecycle
+## 🔗 3. Dual Split-Scope DHCP Architecture & Lease Lifecycle
 
 ### Current Topology:
-- **DHCP Server**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`network_mode: host`, `port=0`).
-- **Physical Link**: 2.5GbE Hardwired Copper (Zero Wi-Fi station isolation, zero broadcast drops).
-- **DHCP Pool**: `192.168.1.64` – `192.168.1.250` (187 addresses).
+- **Primary DHCP Server**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`network_mode: host`, `port=0`).
+  - **Primary Pool**: `192.168.1.64` – `192.168.1.189` (126 addresses).
+  - **Physical Link**: 2.5GbE Hardwired Copper (Zero Wi-Fi station isolation, zero broadcast drops).
+  - **Mode**: Authoritative (`dhcp-authoritative`).
+- **Secondary Standby DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal Pi-hole v6 FTL.
+  - **Secondary Pool**: `192.168.1.190` – `192.168.1.250` (61 non-overlapping addresses).
+  - **Mode**: Non-Authoritative Standby (0 IP conflict, automatically steps in if NAS is offline).
 - **Lease Duration**: 24 hours.
-- **Option 6 (DNS)**: `[192.168.1.80, 192.168.1.92]` — Local-only, zero public DNS leak.
+- **Option 6 (DNS)**: `[192.168.1.80, 192.168.1.92]` on BOTH nodes (Local-only, zero public DNS leak).
 - **Gateway Router (Option 3)**: `192.168.1.254`.
-- **AT&T Router DHCP**: **Disabled.** AT&T BGW320 firmware locks DNS to `192.168.1.254`, bypassing Pi-hole entirely. DHCP is hosted on NAS.
+- **AT&T Router DHCP**: **Disabled.** AT&T BGW320 firmware locks DNS to `192.168.1.254`, bypassing Pi-hole entirely.
 
-### Lease Lifecycle:
+### Lease Lifecycle & Failover Dynamics:
 ```text
-T=0h     DHCPDISCOVER (Broadcast) -> DHCPOFFER -> DHCPREQUEST -> DHCPACK (New lease)
-T=12h    T1 Renewal: Client unicasts DHCPREQUEST to NAS (silent, no disruption)
-T=21h    T2 Rebind: Client broadcasts DHCPREQUEST (fallback if T1 failed)
-T=24h    Lease Expiry: Client must re-acquire or loses IP
+T=0h (Normal)   Client broadcasts DHCPDISCOVER -> NAS answers in <1ms (Primary Pool 64-189) -> Client ACK
+T=0h (Failover) If NAS is down -> Pi 5 answers (Secondary Pool 190-250) -> Client ACK (Zero conflict)
+T=12h           T1 Renewal: Client unicasts DHCPREQUEST to active lease server (silent, no disruption)
+T=21h           T2 Rebind: Client broadcasts DHCPREQUEST (fallback if T1 server unavailable)
+T=24h           Lease Expiry: Client re-acquires from whichever server is online
 ```
 
-### Critical Configuration (`/volume2/docker/dhcp_server/dnsmasq.conf` on NAS):
+### Critical Configuration 1 (`/volume2/docker/dhcp_server/dnsmasq.conf` on NAS Primary):
 ```conf
 # DHCP-only Mode: Port 0 completely disables DNS server (zero host port 53 conflict)
 port=0
@@ -116,18 +121,35 @@ port=0
 interface=eth0
 bind-interfaces
 
-# DHCP Authoritative Server Configuration
+# DHCP Authoritative Primary Server Configuration
 dhcp-authoritative
-dhcp-range=192.168.1.64,192.168.1.250,255.255.255.0,24h
+dhcp-range=192.168.1.64,192.168.1.189,255.255.255.0,24h
 dhcp-option=option:router,192.168.1.254
 dhcp-option=6,192.168.1.80,192.168.1.92
 dhcp-leasefile=/data/dhcp.leases
 
-# Static IP Reservations
+# Static IP Reservations (Shared with Secondary)
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
 dhcp-host=88:a2:9e:a6:ab:c6,192.168.1.92,raspberrypi
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
 dhcp-host=96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
+```
+
+### Critical Configuration 2 (`/etc/pihole/pihole.toml` on Pi 5 Secondary):
+```toml
+[dhcp]
+  active = true
+  start = "192.168.1.190"
+  end = "192.168.1.250"
+  router = "192.168.1.254"
+  leaseTime = "24h"
+  rapidCommit = false
+
+[dns]
+  upstreams = ["127.0.0.1#5335", "1.1.1.1", "1.0.0.1"]
+
+[misc]
+  dnsmasq_lines = ["dhcp-option=6,192.168.1.80,192.168.1.92"]
 ```
 
 ---
