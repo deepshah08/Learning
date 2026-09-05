@@ -52,11 +52,15 @@ flowchart TD
     Plex -->|"10. Direct Play"| Clients["TCL TV / iPhone / Mac"]
 ```
 
-### Hardlink Mechanics:
+### Hardlink & Instant Sync Mechanics:
 1. qBittorrent downloads to `/data/torrents/movies/` (NVMe for incomplete, SATA for complete).
 2. Radarr/Sonarr creates a **0-byte atomic hardlink** at `/data/media/movies/` or `/data/media/tv/`.
-3. Plex streams the file with **zero duplicate disk space** and **zero additional SSD wear**.
-4. Original torrent file remains seeded until Ratio = 1.0, then auto-pauses.
+3. **Triple-Redundancy Instant Sync**:
+   - **Tier 1 (Instant Push Webhook)**: Radarr and Sonarr immediately call Plex's internal API (`http://192.168.1.80:32400`) on Download/Import/Upgrade to refresh only the exact media folder (<2s latency).
+   - **Tier 2 (Inotify Auto-Scanner)**: Plex server has `FSEventLibraryUpdatesEnabled=1` and `FSEventLibraryPartialScanEnabled=1` enabled to detect filesystem folder changes.
+   - **Tier 3 (Periodic Sweep Fallback)**: Plex runs a scheduled partial sweep every 15 minutes (`ScheduledLibraryUpdateInterval=900`) as a safety net.
+4. Plex streams the file with **zero duplicate disk space** and **zero additional SSD wear**.
+5. Original torrent file remains seeded until Ratio = 1.0, then auto-pauses.
 
 ---
 
