@@ -44,12 +44,16 @@
 * **Endurance Rating**: **2,400 TBW** (33.2 GB written = 0.0013% used; ~6,575-year lifespan)
 * **Role**: High-speed 24/7 Hot Application Tier (`/volume2/@docker` + `/volume2/docker`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), Redroid Pixel 1 twin, and snapshot archives.
 
-### Drive 3: 8TB Seagate Expansion SMR (`STKR8000400`)
+### Drive 3: 8TB Seagate Expansion SMR (`STKR8000400` / `ST8000DM004`)
 * **Location**: Connected to Raspberry Pi 5 USB 3.0 port (`/dev/sda2`)
 * **Filesystem**: exFAT (7.3 TiB usable, 6.3 TiB Free, 14% used)
-* **Mount Point**: `/mnt/media-storage`
-* **Mount Configuration**: `UUID=011D-8336 /mnt/media-storage exfat ro,nofail,noatime,uid=1000,gid=1000 0 0` in `/etc/fstab`
-* **Current Status**: 🟢 **ACTIVE / MOUNTED READ-ONLY**
+* **Mount Point (Pi 5)**: `/mnt/media-storage`
+* **Mount Configuration (Pi 5)**: `UUID=6217-BF12 /mnt/media-storage exfat rw,nofail,noatime,uid=1000,gid=1000,errors=remount-ro 0 0` in `/etc/fstab`
+* **Spindown Policy**: 🟢 **15-Minute Standby Spindown** enforced by `/etc/udev/rules.d/69-smr-spindown.rules` (`hdparm -S 180`). Drive rests at 0 RPM (<0.5W, ~26°C–28°C) during idle periods to prevent bearing thermal breakdown.
+* **Network Export (Pi 5)**: Containerized Samba (SMB3) service (`crazymax/samba`, Zero Host Mutation) binding to `192.168.1.116:445` and `192.168.1.92:445`. Restricted to LAN subnet and NAS IP.
+* **NAS Client Mount**: 🟢 **ACTIVE / MOUNTED** at `/mnt/smr-archive` via `/sbin/mount.cifs` and symlinked at `/volume1/data/smr-archive`.
+* **NAS Persistent Automation**: Managed via systemd service `pi5-smr-mount.service` with root credentials file `/etc/samba/pi5-smr.cred`.
+* **Archival Synchronization**: Automated via `/volume2/docker/backups/sync_to_smr_archive.sh` with `--bwlimit=60000` (60MB/s) sequential I/O throttling to protect SMR write performance.
 * **Decoupling Benefit**: Offloads all SMR drive latency, write cliffs, and USB polling from the UGREEN NAS, allowing the NAS to operate purely with NVMe + CMR SATA while the 16GB RAM Pi 5 handles cold media ingestion, secondary backups, and offline RAG pipelines.
 
 ---
