@@ -237,3 +237,6 @@ ssh nas "sudo smartctl -H /dev/sda && sudo smartctl -H /dev/nvme0"
 | **Hybrid Co-existence: Native Apps + Docker** | Retain native UGOS Pro apps (UG Photos + AI recognition, UG Sync for Pixel 9 Pro XL, UG Office, UG Theater fallback) alongside Docker stack. Validated total host RAM usage at ~3.3GB / 7.5GB with 4.2GB headroom. | 2026-08-29 |
 | **Runtime Enforcement: TCP-Only Transport** | Validated and locked `bittorrent_protocol: 1` via qBittorrent Web API to guarantee zero UDP/uTP socket lingering in router `conntrack` tables. | 2026-08-29 |
 | **Bazarr Uptime Remediation** | Resolved stale exited state on Bazarr container back to active HTTP 200 health, verifying dual EN+HI subtitle automation pipeline. | 2026-08-29 |
+| **Disable Plex Commercial / Ad Analysis** | Set `GenerateAdMarkerBehavior="never"` in Plex preferences. Eliminates heavy CPU FFmpeg decode passes on newly downloaded media, reducing peak CPU spikes by ~80% and keeping NAS fans silent. | 2026-09-06 |
+| **Shift Maintenance Window to 1:00-4:00 PM** | Moved scheduled tasks from early morning/night to midday (13:00-16:00) when ambient noise is naturally higher and zero household members are sleeping or streaming. | 2026-09-06 |
+
