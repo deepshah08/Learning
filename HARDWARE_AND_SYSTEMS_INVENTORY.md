@@ -12,18 +12,18 @@
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                   PHYSICAL HARDWARE NODES                                   │
 ├────────────────────────────┬─────────────────────────────┬──────────────────────────────────┤
-│ Specification              │ Node 1: UGREEN DXP2800 NAS  │ Node 2: Raspberry Pi 5 (16GB)   │
+│ Specification              │ Node 1: UGREEN DXP2800 NAS  │ Node 2: Raspberry Pi 5 (16GB)    │
 ├────────────────────────────┼─────────────────────────────┼──────────────────────────────────┤
 │ Processor (CPU)            │ Intel N100 (4C/4T, ≤3.4GHz) │ Broadcom BCM2712 (4C @ 2.4GHz)   │
 │ GPU / Transcoding          │ Intel UHD 24EU QuickSync    │ VideoCore VII (Display only)     │
 │ System Memory (RAM)        │ 8 GB DDR5                   │ 16 GB LPDDR4X                    │
 │ Primary Storage            │ 10TB Seagate IronWolf (CMR) │ 128GB MicroSD (101GB Free / 10%) │
 │ High-Speed Solid-State Tier│ 4TB WD_BLACK SN850X (NVMe)  │ N/A                              │
-│ Secondary Storage          │ 8TB Seagate Expansion (SMR) │ N/A                              │
+│ Attached Secondary Storage │ N/A (Decoupled to Pi 5)     │ 8TB Seagate Expansion (SMR)      │
 │ Physical M.2 / RAM Layout  │ M.2 Slots: Inside HDD Trays │ Bottom Hatch: SODIMM RAM Slot    │
-│ SMR Drive Status           │ ⚠️ DISCONNECTED (Cold Standby│ N/A                              │
-│ Network Interface          │ 2.5 Gigabit Ethernet (2.5GbE│ 1GbE / 5GHz Wi-Fi (BSSID Locked) │
-│ Local IP Address           │ `192.168.1.80`              │ `192.168.1.92` (Static)          │
+│ SMR Drive Status           │ N/A (Decoupled to Pi 5)     │ 🟢 MOUNTED (`/mnt/media-storage`) │
+│ Network Interface          │ 2.5 Gigabit Ethernet (2.5GbE│ 1GbE (`eth0` default) + Wi-Fi 5  │
+│ Local IP Address           │ `192.168.1.80`              │ `192.168.1.116` (eth0) / `.92`   │
 │ Tailscale Node Name        │ Subnet Routed (`.80`)       │ `pi5-media-nas` (`100.68.196.14`)│
 │ Operating System           │ UGOS Pro (Debian 12 Kernel) │ Raspberry Pi OS (Debian 13)      │
 │ SSH Session Pipeline       │ ControlMaster (<25ms pipe)  │ ControlMaster (<25ms pipe)       │
@@ -37,7 +37,7 @@
 ### Drive 1: 10TB Seagate IronWolf CMR (`ST10000VN000`)
 * **Location**: UGREEN NAS Bay 1 (`/volume1`)
 * **Filesystem**: Btrfs (~9.1 TiB usable, ~8.1 TiB Free)
-* **Role**: Bulk cold media tier (Plex Movies, TV Shows, raw photo archives, Time Machine backups). Configured for deep sleep / 0 RPM hibernation.
+* **Role**: Bulk cold media tier (Plex Movies, TV Shows, raw photo archives, Time Machine backups). Configured for deep sleep / 0 RPM hibernation without USB polling interference.
 
 ### Drive 2: 4TB WD_BLACK SN850X NVMe PCIe 4.0 SSD (`WDS400T2X0E`)
 * **Location**: Internal M.2 Slot 1 (`/volume2` - 3.7 TiB Free)
@@ -45,10 +45,12 @@
 * **Role**: High-speed 24/7 Hot Application Tier (`/volume2/@docker` + `/volume2/docker`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), Redroid Pixel 1 twin, and snapshot archives.
 
 ### Drive 3: 8TB Seagate Expansion SMR (`STKR8000400`)
-* **Location**: External USB 3.0
-* **Current Status**: 🛑 **DISCONNECTED / COLD ARCHIVAL**
-* **Power Management Policy**: Configured with automated **15-minute spindown (`hdparm -S 180 -B 127`)** via udev rule (`98-smr-spindown.rules`).
-* **Role**: Dedicated cold repository for scheduled weekly/monthly encrypted backups (Restic / Borg).
+* **Location**: Connected to Raspberry Pi 5 USB 3.0 port (`/dev/sda2`)
+* **Filesystem**: exFAT (7.3 TiB usable, 6.3 TiB Free, 14% used)
+* **Mount Point**: `/mnt/media-storage`
+* **Mount Configuration**: `UUID=011D-8336 /mnt/media-storage exfat ro,nofail,noatime,uid=1000,gid=1000 0 0` in `/etc/fstab`
+* **Current Status**: 🟢 **ACTIVE / MOUNTED READ-ONLY**
+* **Decoupling Benefit**: Offloads all SMR drive latency, write cliffs, and USB polling from the UGREEN NAS, allowing the NAS to operate purely with NVMe + CMR SATA while the 16GB RAM Pi 5 handles cold media ingestion, secondary backups, and offline RAG pipelines.
 
 ---
 
@@ -88,3 +90,33 @@
 | **Stirling-PDF Suite** | `8083` | [http://192.168.1.92:8083](http://192.168.1.92:8083) | 🟢 **Production** | Dockerized offline PDF transformation and OCR suite |
 | **n8n Automation Engine** | `5678` | [http://192.168.1.92:5678](http://192.168.1.92:5678) | 🟢 **Production** | Self-hosted workflow automation & alert webhooks |
 | **Dead Man's Switch** | Daemon | `projects/11-deadmans-switch` | 🟢 **Production** | Shamir's Secret Sharing ($M_{521}$) contingency key vault |
+| **Cold SMR Media Archive** | Filesystem | `/mnt/media-storage` | 🟢 **Production** | 8TB Seagate Expansion SMR mounted read-only (`ro,nofail,noatime`) |
+
+---
+
+## ⚖️ 4. Decoupled Architecture & Independent Scaling
+
+```text
+┌───────────────────────────────────────────────────────────────────────────────────────────┐
+│                           INDEPENDENT ASYMMETRIC SCALING MODEL                            │
+├─────────────────────────────────────────────┬─────────────────────────────────────────────┤
+│ Node 1: UGREEN DXP2800 NAS (192.168.1.80)   │ Node 2: Raspberry Pi 5 16GB (192.168.1.116) │
+├─────────────────────────────────────────────┼─────────────────────────────────────────────┤
+│ • Pure Internal Storage Tiering:            │ • Wired Gigabit Ethernet (1GbE eth0):       │
+│   - NVMe (/volume2): Docker, SQLite, OS     │   - Default gateway (metric 100)            │
+│   - CMR SATA (/volume1): Mass Media (0 RPM) │   - Sub-1ms latency, zero Wi-Fi jitter      │
+│ • Zero USB polling / USB bus wakeups        │ • Attached 8TB SMR Cold Archive (/dev/sda2):│
+│ • Intel QuickSync Hardware Transcoding      │   - Mounted ro at /mnt/media-storage        │
+│ • Dedicated 2.5GbE LAN pipe                 │ • 16GB RAM for heavy AI / background workers│
+│ • High-Availability Primary DHCP & DNS      │ • Secondary High-Availability DNS + Unbound │
+└─────────────────────────────────────────────┴─────────────────────────────────────────────┘
+```
+
+### Key Scaling Principles:
+1. **Actuator & Spindown Isolation**: The UGREEN NAS is completely freed from external USB disk controllers. The 10TB Seagate IronWolf CMR drive stays in 0 RPM deep hibernation undisturbed by external backup polling.
+2. **SMR Write-Cliff & Latency Shielding**: SMR drives suffer from shingled track rewrite latency and write-cliffs. By isolating the SMR drive to the Raspberry Pi 5, the NAS storage pool and Docker container I/O remain 100% unaffected.
+3. **Gigabit Ethernet Priority**: The Pi 5 now routes all default traffic through physical Gigabit Ethernet (`eth0`, `metric 100`), with Wi-Fi 5 (`wlan0`, `metric 600`) as a warm failover. DNS resolution and multi-agent workers experience rock-solid wired performance.
+4. **Compute Specialization**:
+   - **Pi 5 (16GB RAM)**: Local LLM caching, background batch processing, offline audio transcription, document indexing.
+   - **NAS (Intel N100 + QuickSync)**: Low-latency NVMe transactions, 4K QuickSync hardware media streaming, and native file sharing.
+
