@@ -1,10 +1,10 @@
-# 🌐 Whole-Home 2.5GbE Hardwired DHCP Server & SRE Watchdog
+# 🌐 Whole-Home Secondary Standby DHCP Server & SRE Watchdog
 
-> **Context**: High-performance, low-latency, authoritative whole-home DHCP server running in a containerized environment on the UGREEN DXP2800 NAS, coupled with the Project #31 automated SLO Watchdog Daemon.  
+> **Context**: High-performance, low-latency, containerized Secondary Standby DHCP server running on the UGREEN DXP2800 NAS, coupled with the Project #31 automated SLO Watchdog Daemon.  
 > **Host**: UGREEN DXP2800 NAS (`192.168.1.80` Static | 2.5GbE Hardwired Copper)  
-> **Role**: Primary Authoritative DHCP Server + Real-Time SRE Watchdog Sentry  
-> **Status**: 🟢 **Production Verified**  
-> **Last Verified**: 2026-09-01  
+> **Role**: Secondary Standby DHCP Server + Real-Time SRE Watchdog Sentry  
+> **Status**: 🟢 **Production Verified (Standby Fallback)**  
+> **Last Verified**: 2026-09-07  
 
 ---
 
@@ -12,8 +12,8 @@
 
 | Service | Container Name | Network Mode | Ports Bound | Role / Scope |
 | :--- | :--- | :--- | :--- | :--- |
-| **Primary DHCP** | `nas_dhcp_server` | `host` | `67/udp` | Primary Split-Scope Pool (`192.168.1.64` – `192.168.1.189`) |
-| **SLO Watchdog** | `nas_slo_watchdog` | `host` | None (Outbound Sockets) | Continuous 60s probe of Primary/Secondary DNS & failover logging |
+| **Standby DHCP** | `nas_dhcp_server` | `host` | `67/udp` | Standby Split-Scope Pool (`192.168.1.190` – `192.168.1.250`) |
+| **SLO Watchdog** | `nas_slo_watchdog` | `host` | None (Outbound Sockets) | Continuous 60s probe of Primary (Pi 5) & Secondary (NAS) DNS |
 
 ---
 
@@ -28,18 +28,17 @@ port=0
 interface=eth0
 bind-interfaces
 
-# DHCP Authoritative Primary Server Configuration
-dhcp-authoritative
-dhcp-range=192.168.1.64,192.168.1.189,255.255.255.0,24h
+# Standby Non-Authoritative Configuration (Pi 5 Primary wins first)
+dhcp-range=192.168.1.190,192.168.1.250,255.255.255.0,24h
 dhcp-option=option:router,192.168.1.254
-dhcp-option=6,192.168.1.80,192.168.1.92
+dhcp-option=6,192.168.1.92,192.168.1.80
 dhcp-leasefile=/data/dhcp.leases
 
-# Static IP Reservations (Shared with Secondary Node)
+# Static IP Reservations (Shared with Primary Node)
+dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
-dhcp-host=88:a2:9e:a6:ab:c6,192.168.1.92,raspberrypi
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-dhcp-host=96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
+dhcp-host=9e:aa:45:8a:28:fd,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
 ```
 
 ### Path: `/volume2/docker/dhcp_server/docker-compose.yml`

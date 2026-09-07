@@ -1,12 +1,12 @@
 # 🌐 Whole-Home DNS & Network Architecture — Handoff & SLA/SLO Contract
 
 > **Domain**: Core Network Infrastructure, High-Availability DNS, DHCP Routing & Sub-500ms Latency Waterfall  
-> **Primary Node (DNS + Hardwired DHCP)**: UGREEN DXP2800 NAS (`192.168.1.80` | Intel N100, 8GB DDR5, 2.5GbE Hardwired Copper)  
-> **Secondary Node (DNS + Unbound)**: Raspberry Pi 5 (`192.168.1.92` | Broadcom BCM2712, 16GB LPDDR4X, Bare-Metal FTL + Unbound)  
+> **Primary Node (DNS + Gigabit Wired DHCP)**: Raspberry Pi 5 (`192.168.1.92` | Broadcom BCM2712, 16GB LPDDR4X, 1GbE Full Duplex `eth0`, Bare-Metal FTL + Unbound)  
+> **Secondary Standby Node (DNS + Standby DHCP)**: UGREEN DXP2800 NAS (`192.168.1.80` | Intel N100, 8GB DDR5, 2.5GbE Hardwired Copper)  
 > **Tertiary Safety Net**: Cloudflare Anycast (`1.1.1.1` / `1.0.0.1`)  
 > **Gateway Router**: AT&T Fiber Gateway BGW320 (`192.168.1.254`)  
-> **Status**: 🟢 **Production Verified**  
-> **Last Verified**: 2026-08-31  
+> **Status**: 🟢 **Production Verified (Dedicated Appliance Model)**  
+> **Last Verified**: 2026-09-07  
 > **SLO Enforcement**: Strict — Any violation is a **SEV-1 or SEV-2 Incident**. Network availability is the single highest priority.
 
 ---
@@ -15,7 +15,7 @@
 
 1. [Master Production Architecture](#-1-master-production-architecture)
 2. [The Sub-500ms Latency Waterfall](#-2-the-sub-500ms-latency-waterfall-engine)
-3. [DHCP Architecture & Lease Lifecycle](#-3-dhcp-architecture--lease-lifecycle)
+3. [DHCP Architecture & Lease Lifecycle](#-3-dual-split-scope-dhcp-architecture--lease-lifecycle)
 4. [Heterogeneous Client OS Protections](#-4-heterogeneous-client-os-protections)
 5. [Service Level Agreement (SLA)](#-5-service-level-agreement-sla)
 6. [Service Level Objectives (SLO) per Service](#-6-service-level-objectives-slo-per-service)
@@ -31,36 +31,41 @@
 ```mermaid
 flowchart TD
     subgraph Clients["Client Fleet (Phones, TVs, Laptops, IoT)"]
-        DHCP["DHCP Option 6:\n192.168.1.80, 192.168.1.92\nGateway: 192.168.1.254 | Lease: 24h"]
+        DHCP["DHCP Option 6:\n192.168.1.92, 192.168.1.80\nGateway: 192.168.1.254 | Lease: 24h"]
     end
 
-    subgraph Tier1["Tier 1: UGREEN NAS 192.168.1.80 (2.5GbE Hardwired Copper)"]
-        DHCP_SVR["nas_dhcp_server Container\nport=0 (DHCP only, 0 conflict)\nWire-speed broadcast reception"]
-        NAS["Pi-hole Container\n8GB DDR5 | Sub-1ms cached"]
-        CF1["Cloudflare 1.1.1.1"]
-        NAS -->|"Upstream"| CF1
-    end
-
-    subgraph Tier2["Tier 2 Secondary DNS: Pi 5 192.168.1.92"]
-        Pi5["Pi-hole v6 FTL Bare-Metal"]
+    subgraph Tier1["Tier 1 Primary: Raspberry Pi 5 192.168.1.92 (Gigabit Full Duplex eth0)"]
+        Pi5_DHCP["pihole-FTL DHCP Server\nAuthoritative | Pool: 192.168.1.64 - 189\nWire-speed <0.5ms response"]
+        Pi5_DNS["Pi-hole v6 FTL Bare-Metal\n16GB RAM Cache | Sub-1ms cached"]
         Race["all-servers Parallel Race"]
         Unbound["Unbound :5335\n192MB Cache\nserve-expired: 200ms"]
-        CF2["Cloudflare 1.1.1.1"]
-        Pi5 --> Race
-        Race --> Unbound & CF2
+        CF1["Cloudflare 1.1.1.1"]
+        Pi5_DNS --> Race
+        Race --> Unbound & CF1
     end
 
-    Clients -->|"DHCP Broadcast (Layer 2)"| DHCP_SVR
-    Clients -->|"Primary DNS (2.5GbE Copper)"| NAS
+    subgraph Tier2["Tier 2 Secondary Standby: UGREEN NAS 192.168.1.80 (2.5GbE Copper)"]
+        NAS_DHCP["nas_dhcp_server Container\nport=0 (DHCP only, 0 conflict)\nStandby Pool: 192.168.1.190 - 250"]
+        NAS_DNS["Pi-hole Container\n8GB DDR5 | Sub-1ms cached"]
+        CF2["Cloudflare 1.1.1.1"]
+        NAS_DNS --> CF2
+    end
+
+    Clients -->|"DHCP Broadcast (Layer 2)"| Pi5_DHCP
+    Clients -.->|"Fallback DHCP if Pi 5 Down"| NAS_DHCP
+    Clients -->|"Primary DNS (Gigabit Wire Speed)"| Pi5_DNS
     Clients -.->|"Secondary DNS Fallback"| Tier2
 ```
 
 ### Node Roles:
-- **NAS (`192.168.1.80`)**:
-  - **Whole-Home DHCP Server**: Runs `nas_dhcp_server` container in `network_mode: host` (`port=0` DHCP-only mode). Connected via 2.5GbE hardwired copper to receive 100% of Wi-Fi & Ethernet Layer 2 broadcasts without Wi-Fi dropouts.
-  - **Primary DNS Resolver**: Runs Pi-hole in Docker bridge mode (`-p 53:53`). Delivers sub-1ms cached responses.
 - **Pi 5 (`192.168.1.92`)**:
-  - **Secondary DNS Resolver**: Runs bare-metal Pi-hole v6 FTL with Unbound recursive root DNS (`:5335`).
+  - **Primary Authoritative DHCP Server**: Runs bare-metal `pihole-FTL` on Gigabit Ethernet (`eth0`). Manages Primary Pool (`192.168.1.64` – `192.168.1.189`).
+  - **Primary DNS Resolver**: Runs bare-metal Pi-hole v6 FTL with 16GB RAM cache and Unbound recursive root DNS (`:5335`).
+  - **Power & WLAN Policy**: Sleep targets masked (`no auto sleep`), WLAN power save disabled (`powersave=2`, metric 600 standby on `192.168.1.93`).
+- **NAS (`192.168.1.80`)**:
+  - **Secondary Standby DHCP Server**: Runs `nas_dhcp_server` container in `network_mode: host` (`port=0` DHCP-only mode). Manages Standby Pool (`192.168.1.190` – `192.168.1.250`).
+  - **Secondary DNS Resolver**: Runs Pi-hole in Docker bridge mode (`-p 53:53`). Delivers sub-1ms cached fallback responses.
+  - **Decoupled Acoustic Benefit**: NAS 10TB Seagate IronWolf HDD stays parked in Standby (0 RPM); fan runs whisper-quiet.
 - **Cloudflare (`1.1.1.1`)**: Upstream forwarder inside both Pi-holes. Never exposed directly to client devices via DHCP Option 6.
 
 ---
@@ -91,56 +96,33 @@ edns-buffer-size: 1232
 ## 🔗 3. Dual Split-Scope DHCP Architecture & Lease Lifecycle
 
 ### Current Topology:
-- **Primary DHCP Server**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`network_mode: host`, `port=0`).
+- **Primary DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal `pihole-FTL` on Gigabit Ethernet (`eth0`).
   - **Primary Pool**: `192.168.1.64` – `192.168.1.189` (126 addresses).
-  - **Physical Link**: 2.5GbE Hardwired Copper (Zero Wi-Fi station isolation, zero broadcast drops).
+  - **Physical Link**: Gigabit Full Duplex Wired Ethernet (Zero Wi-Fi station isolation, zero broadcast drops).
   - **Mode**: Authoritative (`dhcp-authoritative`).
-- **Secondary Standby DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal Pi-hole v6 FTL.
-  - **Secondary Pool**: `192.168.1.190` – `192.168.1.250` (61 non-overlapping addresses).
-  - **Mode**: Non-Authoritative Standby (0 IP conflict, automatically steps in if NAS is offline).
+- **Secondary Standby DHCP Server**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`network_mode: host`, `port=0`).
+  - **Secondary Standby Pool**: `192.168.1.190` – `192.168.1.250` (61 non-overlapping addresses).
+  - **Mode**: Non-Authoritative Standby (0 IP conflict, automatically steps in if Pi 5 is offline).
 - **Lease Duration**: 24 hours.
-- **Option 6 (DNS)**: `[192.168.1.80, 192.168.1.92]` on BOTH nodes (Local-only, zero public DNS leak).
+- **Option 6 (DNS)**: `[192.168.1.92, 192.168.1.80]` on BOTH nodes (Local-only, zero public DNS leak).
 - **Gateway Router (Option 3)**: `192.168.1.254`.
 - **AT&T Router DHCP**: **Disabled.** AT&T BGW320 firmware locks DNS to `192.168.1.254`, bypassing Pi-hole entirely.
 
 ### Lease Lifecycle & Failover Dynamics:
 ```text
-T=0h (Normal)   Client broadcasts DHCPDISCOVER -> NAS answers in <1ms (Primary Pool 64-189) -> Client ACK
-T=0h (Failover) If NAS is down -> Pi 5 answers (Secondary Pool 190-250) -> Client ACK (Zero conflict)
+T=0h (Normal)   Client broadcasts DHCPDISCOVER -> Pi 5 answers in <0.5ms (Primary Pool 64-189) -> Client ACK
+T=0h (Failover) If Pi 5 is down -> NAS answers (Secondary Pool 190-250) -> Client ACK (Zero conflict)
 T=12h           T1 Renewal: Client unicasts DHCPREQUEST to active lease server (silent, no disruption)
 T=21h           T2 Rebind: Client broadcasts DHCPREQUEST (fallback if T1 server unavailable)
 T=24h           Lease Expiry: Client re-acquires from whichever server is online
 ```
 
-### Critical Configuration 1 (`/volume2/docker/dhcp_server/dnsmasq.conf` on NAS Primary):
-```conf
-# DHCP-only Mode: Port 0 completely disables DNS server (zero host port 53 conflict)
-port=0
-
-# Bind to physical 2.5GbE hardwired interface
-interface=eth0
-bind-interfaces
-
-# DHCP Authoritative Primary Server Configuration
-dhcp-authoritative
-dhcp-range=192.168.1.64,192.168.1.189,255.255.255.0,24h
-dhcp-option=option:router,192.168.1.254
-dhcp-option=6,192.168.1.80,192.168.1.92
-dhcp-leasefile=/data/dhcp.leases
-
-# Static IP Reservations (Shared with Secondary)
-dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
-dhcp-host=88:a2:9e:a6:ab:c6,192.168.1.92,raspberrypi
-dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-dhcp-host=96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
-```
-
-### Critical Configuration 2 (`/etc/pihole/pihole.toml` on Pi 5 Secondary):
+### Critical Configuration 1 (`/etc/pihole/pihole.toml` on Pi 5 Primary):
 ```toml
 [dhcp]
   active = true
-  start = "192.168.1.190"
-  end = "192.168.1.250"
+  start = "192.168.1.64"
+  end = "192.168.1.189"
   router = "192.168.1.254"
   leaseTime = "24h"
   rapidCommit = false
@@ -149,7 +131,29 @@ dhcp-host=96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
   upstreams = ["127.0.0.1#5335", "1.1.1.1", "1.0.0.1"]
 
 [misc]
-  dnsmasq_lines = ["dhcp-option=6,192.168.1.80,192.168.1.92"]
+  dnsmasq_lines = ["dhcp-option=6,192.168.1.92,192.168.1.80"]
+```
+
+### Critical Configuration 2 (`/volume2/docker/dhcp_server/dnsmasq.conf` on NAS Secondary Standby):
+```conf
+# DHCP-only Mode: Port 0 completely disables DNS server (zero host port 53 conflict)
+port=0
+
+# Bind to physical 2.5GbE hardwired interface
+interface=eth0
+bind-interfaces
+
+# Standby Non-Authoritative Configuration
+dhcp-range=192.168.1.190,192.168.1.250,255.255.255.0,24h
+dhcp-option=option:router,192.168.1.254
+dhcp-option=6,192.168.1.92,192.168.1.80
+dhcp-leasefile=/data/dhcp.leases
+
+# Static IP Reservations (Shared)
+dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
+dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
+dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
+dhcp-host=9e:aa:45:8a:28:fd,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
 ```
 
 ---
