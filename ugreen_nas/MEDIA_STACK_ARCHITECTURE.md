@@ -12,7 +12,7 @@
 | Service | Port | Internal Docker URL | Auth / API Key | Storage Path |
 |---|---|---|---|---|
 | **Plex Media Server** | `32400` | `http://192.168.1.80:32400` | `26cEskkHTxWVGTJA8paY` | `/data/media` |
-| **Overseerr** | `5055` | `http://overseerr:5055` | `MTc4NzI5MzM4OD...` | SQLite on NVMe |
+| **Seerr** | `5055` | `http://seerr:5055` | `MTc4NzI5MzM4OD...` | SQLite on NVMe (v3.4.1) |
 | **Radarr (Movies)** | `7878` | `http://radarr:7878` | `30ad1ab196a04184b11289e39a695f20` | `/data/media/movies` |
 | **Sonarr (TV Shows)** | `8989` | `http://sonarr:8989` | `7385f68a846a416d9964d08d1eccda12` | `/data/media/tv` |
 | **Prowlarr (Indexers)** | `9696` | `http://prowlarr:9696` | `eb674050f3e24beaa54b515dbb7a01ac` | `deepshah08` / `Deepshah123$` |

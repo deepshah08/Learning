@@ -33,7 +33,7 @@ The UGREEN DXP2800 NAS runs a **hybrid architecture** combining native UGOS Pro 
 | • UG Photos (Pixel 9 Pro XL & Pranali) | • *Arr Automation (Sonarr/Radarr/Prowl) |
 | • AI Console (Facial & Scene Vectors) | • qBittorrent (TCP-Only, Ratio 1.0) |
 | • UG Sync & Backup (Mobile ingestion) | • Bazarr (EN + HI Subtitle automation) |
-| • UG Office (In-browser Doc Viewer) | • Overseerr (Netflix-style Requests) |
+| • UG Office (In-browser Doc Viewer) | • Seerr (Netflix-style Requests) |
 | • UG Vault (Encrypted File Safe) | • Vaultwarden (Passkeys / TOTP / Auth) |
 | • UG Theater (Native Video Playback) | • Pi-hole v6 (Local Ad-blocking DNS) |
 | • NetDisk (Cloud Drive Sync) | • Tautulli (Stream Analytics & Logs) |
@@ -68,7 +68,7 @@ All native packages reside under `/volume1/@appstore/` with dedicated PostgreSQL
 
 | Dimension | UG Native (Theater + Downloads) | Automated Stack (Plex + *Arr) |
 | :--- | :--- | :--- |
-| **Ingestion Trigger** | Manual magnet/torrent pasting | Automated via Overseerr request |
+| **Ingestion Trigger** | Manual magnet/torrent pasting | Automated via Seerr request |
 | **Indexer Querying** | None (Must search manually) | Prowlarr multi-indexer aggregator |
 | **Release Quality Filter** | None (Manual selection) | Radarr/Sonarr Quality Profiles |
 | **Download Engine** | Aria2 (`download_serv`) | qBittorrent (TCP-only, hardened) |

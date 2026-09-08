@@ -17,7 +17,7 @@
 | **Sonarr** | `8989` | [http://192.168.1.80:8989](http://192.168.1.80:8989) | TV Shows automation & season tracking |
 | **qBittorrent**| `8080` | [http://192.168.1.80:8080](http://192.168.1.80:8080) | Torrent client with direct SATA I/O (Default user: `admin`, port `6881`) |
 | **Bazarr** | `6767` | [http://192.168.1.80:6767](http://192.168.1.80:6767) | Subtitle auto-sync and management |
-| **Overseerr** | `5055` | [http://192.168.1.80:5055](http://192.168.1.80:5055) | Media discovery & request portal |
+| **Seerr** | `5055` | [http://192.168.1.80:5055](http://192.168.1.80:5055) | Media discovery & request portal (Overseerr successor v3.4.1) |
 | **Tautulli** | `8181` | [http://192.168.1.80:8181](http://192.168.1.80:8181) | Plex stream analytics, monitoring, & QuickSync HW transcode verification |
 
 ---
@@ -29,7 +29,7 @@
 * **Radarr API Key**: `30ad1ab196a04184b11289e39a695f20`
 * **Sonarr API Key**: `7385f68a846a416d9964d08d1eccda12`
 * **Tautulli MovieDB API Key**: `e9a6655bae34bf694a0f3e33338dc28e`
-* **Overseerr API Key**: `MTc4NzI5MzM4ODAwMTZmODg3ZWJlLTU5NWItNDA5My1hOTczLThmZDAwYjExMmRlMQ==`
+* **Seerr API Key**: `MTc4NzI5MzM4ODAwMTZmODg3ZWJlLTU5NWItNDA5My1hOTczLThmZDAwYjExMmRlMQ==`
 
 ### 2. Intel QuickSync Hardware Acceleration
 * **Host Nodes**: `/dev/dri/card0` (video group `44`), `/dev/dri/renderD128` (render group `105`).

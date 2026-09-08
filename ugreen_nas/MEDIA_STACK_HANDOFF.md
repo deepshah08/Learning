@@ -38,8 +38,8 @@
 
 ```mermaid
 flowchart TD
-    User["User via Overseerr :5055"] -->|"1. Request Movie/Show"| Overseerr
-    Overseerr -->|"2. API Push"| Router{"Movie or TV?"}
+    User["User via Seerr :5055"] -->|"1. Request Movie/Show"| Seerr
+    Seerr -->|"2. API Push"| Router{"Movie or TV?"}
     Router -->|"Movie"| Radarr["Radarr :7878\nHindi +500, Dual Audio +400"]
     Router -->|"TV"| Sonarr["Sonarr :8989\nRelease Profiles"]
     Radarr & Sonarr -->|"3. Indexer Query"| Prowlarr["Prowlarr :9696\n1337x, Nyaa, TPB, YTS, EZTV"]
@@ -101,7 +101,7 @@ Session\TempPath=/data/torrents/incomplete
 | **Sonarr** | `8989` | `http://192.168.1.80:8989` | 🟢 TV Automation |
 | **qBittorrent** | `8080` | `http://192.168.1.80:8080` | 🟢 P2P Port 6881 |
 | **Bazarr** | `6767` | `http://192.168.1.80:6767` | 🟢 Subtitle Sync |
-| **Overseerr** | `5055` | `http://192.168.1.80:5055` | 🟢 Request Portal |
+| **Seerr** | `5055` | `http://192.168.1.80:5055` | 🟢 Request Portal (v3.4.1) |
 | **Tautulli** | `8181` | `http://192.168.1.80:8181` | 🟢 Stream Telemetry |
 
 ---
@@ -239,4 +239,5 @@ ssh nas "sudo smartctl -H /dev/sda && sudo smartctl -H /dev/nvme0"
 | **Bazarr Uptime Remediation** | Resolved stale exited state on Bazarr container back to active HTTP 200 health, verifying dual EN+HI subtitle automation pipeline. | 2026-08-29 |
 | **Disable Plex Commercial / Ad Analysis** | Set `GenerateAdMarkerBehavior="never"` in Plex preferences. Eliminates heavy CPU FFmpeg decode passes on newly downloaded media, reducing peak CPU spikes by ~80% and keeping NAS fans silent. | 2026-09-06 |
 | **Shift Maintenance Window to 1:00-4:00 PM** | Moved scheduled tasks from early morning/night to midday (13:00-16:00) when ambient noise is naturally higher and zero household members are sleeping or streaming. | 2026-09-06 |
+| **Overseerr to Seerr Migration** | Migrated request portal from deprecated `sctx/overseerr` to unified active successor `ghcr.io/seerr-team/seerr:latest` (v3.4.1). Added `init: true`, automated DB migration preserved 100% of request history, users, and Plex/Arr links. | 2026-09-08 |
 
