@@ -1,0 +1,57 @@
+services:
+  calibre-web-automated:
+    image: crocodilestick/calibre-web-automated:latest
+    container_name: calibre-web-automated
+    environment:
+      - PUID=1000
+      - PGID=10
+      - TZ=America/Los_Angeles
+      - CWA_PORT_OVERRIDE=8083
+    volumes:
+      - /volume2/docker/book_stack/calibre-web-automated/config:/config
+      - /volume1/data/books/ingest:/cwa-book-ingest
+      - /volume1/data/books/library:/calibre-library
+    ports:
+      - "8083:8083"
+    networks:
+      - media_net
+    restart: unless-stopped
+
+  shelfmark:
+    image: ghcr.io/calibrain/shelfmark:latest
+    container_name: shelfmark
+    environment:
+      - PUID=1000
+      - PGID=10
+      - TZ=America/Los_Angeles
+      - FLASK_PORT=8084
+      - INGEST_DIR=/books
+      - CALIBRE_WEB_URL=http://192.168.1.80:8083
+      # Metadata Providers
+      - OPENLIBRARY_ENABLED=true
+      # Prowlarr Integration
+      - PROWLARR_ENABLED=true
+      - PROWLARR_URL=http://prowlarr:9696
+      - PROWLARR_API_KEY=eb674050f3e24beaa54b515dbb7a01ac
+      # qBittorrent Integration
+      - PROWLARR_TORRENT_CLIENT=qbittorrent
+      - QBITTORRENT_URL=http://qbittorrent:8080
+      - QBITTORRENT_USERNAME=admin
+      # Direct Download & Mirrors
+      - DIRECT_DOWNLOAD_ENABLED=true
+      - AA_BASE_URL=auto
+      - AA_MIRROR_URLS=https://annas-archive.gl,https://annas-archive.org,https://annas-archive.se
+      - LIBGEN_MIRROR_URLS=https://libgen.is,https://libgen.rs,https://libgen.li
+    volumes:
+      - /volume2/docker/book_stack/shelfmark/config:/config
+      - /volume1/data/books/ingest:/books
+      - /volume1/data:/data
+    ports:
+      - "8084:8084"
+    networks:
+      - media_net
+    restart: unless-stopped
+
+networks:
+  media_net:
+    external: true
