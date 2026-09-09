@@ -71,14 +71,18 @@ flowchart TD
 
 ### Static IP Reservations (`/etc/dnsmasq.d/99-static-reservations.conf`)
 ```conf
-# Primary Authoritative DHCP Server
-dhcp-authoritative
+# Do not provide DHCP over wlan0 (Pi 5 serves DHCP exclusively over wired 1GbE eth0)
+no-dhcp-interface=wlan0
+
+# Non-authoritative Coexistence: In a dual split-scope DHCP network (Pi 5 + NAS), do NOT send DHCPNAK
+# to clients requesting leases from the secondary server (NAS).
+# dhcp-authoritative removed
 
 # Shared Static Reservations with NAS Secondary
 dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-dhcp-host=9e:aa:45:8a:28:fd,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
+dhcp-host=a8:6b:ad:8e:60:f7,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
 ```
 
 ### Wi-Fi ARP Keep-Alive Sentry (`/etc/systemd/system/wifi-keepalive.service`)

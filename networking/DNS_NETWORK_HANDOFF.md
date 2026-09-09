@@ -99,7 +99,8 @@ edns-buffer-size: 1232
 - **Primary DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal `pihole-FTL` on Gigabit Ethernet (`eth0`).
   - **Primary Pool**: `192.168.1.64` – `192.168.1.189` (126 addresses).
   - **Physical Link**: Gigabit Full Duplex Wired Ethernet (Zero Wi-Fi station isolation, zero broadcast drops).
-  - **Mode**: Authoritative (`dhcp-authoritative`).
+  - **Interface Policy**: DHCP served strictly on `eth0` (`no-dhcp-interface=wlan0`).
+  - **Mode**: Non-Authoritative Coexistence (Prevents NAKing secondary leases).
 - **Secondary Standby DHCP Server**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`network_mode: host`, `port=0`).
   - **Secondary Standby Pool**: `192.168.1.190` – `192.168.1.250` (61 non-overlapping addresses).
   - **Mode**: Non-Authoritative Standby (0 IP conflict, automatically steps in if Pi 5 is offline).
@@ -153,7 +154,7 @@ dhcp-leasefile=/data/dhcp.leases
 dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-dhcp-host=9e:aa:45:8a:28:fd,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
+dhcp-host=a8:6b:ad:8e:60:f7,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
 ```
 
 ---
