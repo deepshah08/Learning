@@ -39,11 +39,18 @@
 * **Unified Data Path**: Both downloaders and \*Arr apps share `/volume1/data:/data`.
 * **Inodes Validation**: Verified that completed torrents in `/data/torrents/movies/` link directly to `/data/media/movies/` with **0 MB duplicate disk space** and instant migration.
 
-### 4. Language Scoring Custom Formats
+### 4. Language Scoring Custom Formats & Subtitle Pipeline
 Applied across all Quality Profiles in both Radarr and Sonarr:
 * **Hindi Audio**: `+500` (regex: `(?i)\b(hindi)\b`)
-* **Dual Audio**: `+400` (regex: `(?i)(Dual.Audio|DualAudio|\[Dual\])`)
+* **Hindi Dual Audio**: `+400` (regex: `(?i)(?=.*\b(hindi)\b)(?=.*\b(dual.audio|dualaudio|dual)\b)`) — *Strictly requires "Hindi" alongside "Dual Audio" to prevent foreign dubs from matching.*
 * **Hindi Dubbed**: `+300` (regex: `(?i)(Hindi.Dubbed|HindiDubbed)`)
+* **Foreign Dubs / Unwanted**: `-10,000` (regex: `(?i)\b(dublado|legenda|legendado|castellano|latino|french|vff|vfq|german|deutsch|italian|ita|russian|rus|audio.latino)\b`) — *Heavy penalty to automatically reject non-English/non-Hindi dubs.*
+
+### 5. Bazarr Subtitle Automation
+* **Language Profile**: English (`en`) enabled as primary language profile across all series and movies.
+* **SignalR Integration**: Real-time event hooks connected to Sonarr (`http://sonarr:8989`) and Radarr (`http://radarr:7878`).
+* **Providers Configured**: Zero-auth providers active (`subf2m`, `tvsubtitles`, `yifysubtitles`, `supersubtitles`).
+
 
 ---
 
