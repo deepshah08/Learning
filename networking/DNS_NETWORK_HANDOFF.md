@@ -351,3 +351,16 @@ The following risks were identified by a 10-agent adversarial convergence-refuta
 | **NAS SQLite WAL Corruption** | 🟡 MEDIUM | ✅ MITIGATED | Future: set NAS Pi-hole to `dbstorage = ":memory:"` for stateless secondary operation. |
 | **`all-servers` 3x Query Volume** | 🟢 LOW | ✅ ACCEPTED | Triples upstream queries but residential scale (<1000 QPS) is well within Cloudflare rate limits. Privacy trade-off acknowledged. |
 | **Router FIFO Bufferbloat** | 🟡 MEDIUM | ✅ MITIGATED | qBittorrent TCP-only mode + connection caps prevent buffer saturation. No SQM/CAKE available on BGW320. |
+
+---
+
+## 🛠️ 11. Automated Client Diagnostic Tool & RF Runbook
+
+For rapid troubleshooting of client Wi-Fi stalls, DTIM sleep, dual DHCP conflicts, and hardware RF attenuation:
+- **Diagnostic CLI Tool**: [`networking/tools/diagnose_client.sh`](tools/diagnose_client.sh)
+- **Authoritative Runbook**: [`networking/CLIENT_DIAGNOSTICS_AND_RF_TROUBLESHOOTING_RUNBOOK.md`](CLIENT_DIAGNOSTICS_AND_RF_TROUBLESHOOTING_RUNBOOK.md)
+
+Run from controller workstation:
+```bash
+./networking/tools/diagnose_client.sh <CLIENT_IP>
+```
