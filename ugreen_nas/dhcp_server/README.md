@@ -34,11 +34,12 @@ dhcp-option=option:router,192.168.1.254
 dhcp-option=6,192.168.1.92,192.168.1.80
 dhcp-leasefile=/data/dhcp.leases
 
-# Static IP Reservations (Shared with Primary Node)
+# Static IP Reservations (Infrastructure & Standby Pool)
 dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-dhcp-host=a8:6b:ad:8e:60:f7,96:16:6d:8e:4e:c2,192.168.1.98,Pixel9ProXL
+# Note: Client static reservations (e.g. Pixel 192.168.1.98) reside strictly on Primary Pi 5
+# to prevent duplicate DHCPOFFERs and cross-server DHCPNAK collisions.
 ```
 
 ### Path: `/volume2/docker/dhcp_server/docker-compose.yml`
