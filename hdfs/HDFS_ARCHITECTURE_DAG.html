@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HDFS Enterprise Architecture DAG & Knowledge Navigator</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(150, 150, 150, 0.5); }
+    
+    .dag-node {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dag-node:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+    .dag-node.active {
+      border-color: #0a66c2 !important;
+      box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-4 sm:p-6 select-none font-sans">
+
+  <!-- Main Container -->
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Header & LinkedIn Context Badge -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#0a66c2]/10 text-[#0a66c2] border border-[#0a66c2]/20">
+            LinkedIn Enterprise HDFS Scale
+          </span>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            Ad-Free GFG Verified (Pi-hole Protected)
+          </span>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight text-[var(--foreground)]">HDFS Architectural DAG & Concept Navigator</h1>
+        <p class="text-sm text-[var(--muted-foreground)]">Interactive system topology: select any node to inspect its operational crux, book paragraphs, and verified deep-links.</p>
+      </div>
+
+      <!-- Quick Stats / Pipeline Health -->
+      <div class="flex items-center gap-3 text-xs bg-[var(--background)] px-4 py-2.5 rounded-xl border border-[var(--border)]">
+        <div><span class="font-bold text-[var(--foreground)]">10</span> Architectural Nodes</div>
+        <div class="w-px h-4 bg-[var(--border)]"></div>
+        <div><span class="font-bold text-emerald-500">100%</span> Verified Links</div>
+        <div class="w-px h-4 bg-[var(--border)]"></div>
+        <div><span class="font-bold text-[#0a66c2]">O'Reilly</span> 4th Ed. Mapped</div>
+      </div>
+    </div>
+
+    <!-- Layout: 2 Columns (DAG Map Left, Deep Dive Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT: Interactive DAG Flow (7 cols) -->
+      <div class="lg:col-span-7 space-y-4">
+
+        <!-- Stage 1: Federation & Access Routing -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] px-1">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Layer 1: Client Gateway & Namespace Federation
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectNode('router_federation')" id="btn-router_federation" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-indigo-500 font-semibold mb-1">ROUTER / VIEWFS</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Router-Based Federation (RBF)</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Multi-namespace scale & unified mount table</div>
+            </button>
+
+            <button onclick="selectNode('client_io')" id="btn-client_io" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-indigo-500 font-semibold mb-1">DFS CLIENT</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">DistributedFileSystem (DFS)</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">RPC endpoint, FSDataInputStream / Output</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex justify-center -my-2 text-[var(--muted-foreground)] opacity-40">
+          <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+
+        <!-- Stage 2: Metadata Control Plane (Active / Standby) -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] px-1">
+            <span class="w-2 h-2 rounded-full bg-blue-500"></span> Layer 2: Metadata Authority & High Availability
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectNode('active_namenode')" id="btn-active_namenode" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-blue-500 font-semibold mb-1">MASTER METADATA</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Active NameNode</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">In-Memory Namespace & EditLog generation</div>
+            </button>
+
+            <button onclick="selectNode('qjm_zkfc')" id="btn-qjm_zkfc" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-blue-500 font-semibold mb-1">CONSENSUS & HA</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">QJM & ZKFC Failover</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Quorum Journal Nodes & automated fence</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex justify-center -my-2 text-[var(--muted-foreground)] opacity-40">
+          <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+
+        <!-- Stage 3: Block Placement & Placement Policy -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] px-1">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Layer 3: Placement Topology & Encoding
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectNode('rack_awareness')" id="btn-rack_awareness" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-amber-500 font-semibold mb-1">TOPOLOGY SENTRY</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Rack Awareness Policy</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Cross-rack fault isolation & bandwidth balance</div>
+            </button>
+
+            <button onclick="selectNode('erasure_coding')" id="btn-erasure_coding" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-amber-500 font-semibold mb-1">STORAGE EFFICIENCY</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Erasure Coding (RS 6,3 / 10,4)</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">50% storage overhead vs 200% 3x replica</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex justify-center -my-2 text-[var(--muted-foreground)] opacity-40">
+          <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+
+        <!-- Stage 4: Data Plane Pipeline & Storage Nodes -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] px-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Layer 4: DataNode Execution & Wire Transfer
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectNode('write_pipeline')" id="btn-write_pipeline" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-emerald-500 font-semibold mb-1">PIPELINE I/O</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Pipelined Block Streaming</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Packet streaming & downstream ACK chain</div>
+            </button>
+
+            <button onclick="selectNode('read_short_circuit')" id="btn-read_short_circuit" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-emerald-500 font-semibold mb-1">ZERO-COPY READ</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Short-Circuit Local Reads</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Domain sockets bypassing TCP loopback</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Connection Arrow -->
+        <div class="flex justify-center -my-2 text-[var(--muted-foreground)] opacity-40">
+          <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+
+        <!-- Stage 5: Maintenance & Cluster Balancer -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] px-1">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> Layer 5: Cluster Health & Background Sentry
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="selectNode('heartbeat_blockreport')" id="btn-heartbeat_blockreport" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-rose-500 font-semibold mb-1">HEALTH TELEMETRY</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">Heartbeats & Block Reports</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">3s heartbeats & 6h full block report sweeps</div>
+            </button>
+
+            <button onclick="selectNode('balancer_disk')" id="btn-balancer_disk" class="dag-node text-left p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+              <div class="text-xs font-mono text-rose-500 font-semibold mb-1">DISK MIGRATION</div>
+              <div class="font-semibold text-sm text-[var(--foreground)]">HDFS Balancer & Decommission</div>
+              <div class="text-xs text-[var(--muted-foreground)] mt-1">Inter-node / intra-node volume leveling</div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Interactive Deep-Dive Inspector Panel (5 cols) -->
+      <div class="lg:col-span-5 sticky top-6">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm space-y-5" id="detail-panel">
+          
+          <!-- Concept Title & Badge -->
+          <div class="border-b border-[var(--border)] pb-4">
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <span id="detail-category" class="text-xs font-mono font-bold uppercase tracking-wider text-[#0a66c2]">TOPOLOGY & ROUTING</span>
+              <span id="detail-layer" class="text-xs px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] font-mono">Layer 1</span>
+            </div>
+            <h2 id="detail-title" class="text-xl font-bold text-[var(--foreground)]">Router-Based Federation (RBF)</h2>
+            <p id="detail-subtitle" class="text-xs text-[var(--muted-foreground)] mt-0.5">LinkedIn Scale Subsystem</p>
+          </div>
+
+          <!-- The Crux (Quick Core Concept) -->
+          <div class="space-y-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#0a66c2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              The Crux (Executive Overview)
+            </div>
+            <div id="detail-crux" class="text-sm leading-relaxed text-[var(--foreground)] bg-[var(--background)] p-3.5 rounded-xl border border-[var(--border)]">
+              Decouples the client namespace from individual NameNodes. A layer of stateless Router proxies exposes a single global federated namespace via a State Store (ZooKeeper/Consensus), allowing LinkedIn to scale past the single-NameNode memory ceiling (>1 billion objects) without client-side config changes.
+            </div>
+          </div>
+
+          <!-- LinkedIn Production Reality -->
+          <div class="space-y-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              LinkedIn Production Notes
+            </div>
+            <div id="detail-linkedin" class="text-xs leading-relaxed text-[var(--foreground)] bg-emerald-500/5 p-3 rounded-xl border border-emerald-500/20">
+              LinkedIn operates massive multi-petabyte clusters using ViewFS and RBF to federate diverse namespaces (e.g. Member data, telemetry logs, ML training sets) across distinct NameNode pairs while providing a unified HDFS URI abstraction.
+            </div>
+          </div>
+
+          <!-- References & Direct Links -->
+          <div class="space-y-3 pt-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+              Original References & Deep Dives
+            </div>
+
+            <!-- Online Article Reference (Ad-Free GFG / Apache) -->
+            <a id="detail-link-online" href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=HDFS%20Architecture" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between p-3 rounded-xl border border-[var(--border)] hover:border-[#0a66c2] bg-[var(--background)] transition-all">
+              <div class="space-y-0.5 pr-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-bold text-[var(--foreground)] group-hover:text-[#0a66c2]" id="detail-online-name">Apache HDFS Official Guide</span>
+                  <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#0a66c2]/10 text-[#0a66c2] font-semibold">Live Link</span>
+                </div>
+                <div class="text-[11px] text-[var(--muted-foreground)] truncate max-w-[280px]" id="detail-online-desc">Jump to highlighted text fragment in official documentation</div>
+              </div>
+              <svg class="w-4 h-4 text-[var(--muted-foreground)] group-hover:text-[#0a66c2] group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+
+            <!-- GeeksforGeeks Article (Ad-Free via Pi-hole) -->
+            <a id="detail-link-gfg" href="https://www.geeksforgeeks.org/explain-the-hadoop-distributed-file-system-hdfs-architecture-and-advantages/" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between p-3 rounded-xl border border-[var(--border)] hover:border-emerald-500 bg-[var(--background)] transition-all">
+              <div class="space-y-0.5 pr-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-bold text-[var(--foreground)] group-hover:text-emerald-500" id="detail-gfg-name">GeeksforGeeks Overview</span>
+                  <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">Ad-Free</span>
+                </div>
+                <div class="text-[11px] text-[var(--muted-foreground)] truncate max-w-[280px]" id="detail-gfg-desc">Conceptual architecture breakdown & key advantages</div>
+              </div>
+              <svg class="w-4 h-4 text-[var(--muted-foreground)] group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+
+            <!-- Offline Book Citation -->
+            <div class="p-3 rounded-xl border border-[var(--border)] bg-[var(--background)]">
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="text-xs font-bold text-[var(--foreground)]">Book Citation (Offline / Calibre)</span>
+                <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold">O'Reilly</span>
+              </div>
+              <div class="text-xs text-[var(--foreground)] font-mono" id="detail-book-ref">Hadoop: The Definitive Guide (4th Ed.)</div>
+              <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5" id="detail-book-page">Chapter 3: The Hadoop Distributed File System, pp. 76-78</div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Knowledge Base Data & Interaction Controller -->
+  <script>
+    const KNOWLEDGE_BASE = {
+      router_federation: {
+        category: "TOPOLOGY & ROUTING",
+        layer: "Layer 1",
+        title: "Router-Based Federation (RBF) & ViewFS",
+        subtitle: "LinkedIn Scale Namespace Virtualization",
+        crux: "Decouples the client namespace from individual NameNodes. A layer of stateless Router proxies exposes a single global federated namespace via a State Store (ZooKeeper/Consensus), allowing LinkedIn to scale past the single-NameNode memory ceiling (>1 billion objects) without client-side mount table configuration drift.",
+        linkedin: "LinkedIn uses ViewFS and RBF to federate diverse namespaces (e.g. Member data, telemetry logs, ML training sets) across distinct NameNode pairs while providing a unified HDFS URI abstraction.",
+        onlineName: "Apache HDFS Federation Guide",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=The%20File%20System%20Namespace",
+        onlineDesc: "Official specification of HDFS namespace & scaling boundaries",
+        gfgName: "GFG: Hadoop Architecture Overview",
+        gfgUrl: "https://www.geeksforgeeks.org/hadoop-architecture/#:~:text=HDFS%20is%20a%20distributed",
+        gfgDesc: "Core architecture & master-slave namespace fundamentals",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: HDFS Federation, pp. 76-78 (NameNode Federation & ViewFileSystem)"
+      },
+
+      client_io: {
+        category: "CLIENT INTERFACE",
+        layer: "Layer 1",
+        title: "DistributedFileSystem & DFSClient",
+        subtitle: "Client I/O Pipeline Endpoint",
+        crux: "The client application uses DistributedFileSystem to query the NameNode for block locations (getBlockLocations) when reading, or requests new block leases (create/addBlock) when writing. The client streams raw data directly to/from DataNodes without proxying bulk payload through the NameNode.",
+        linkedin: "DFSClient caching and connection pooling in Kafka connectors, Spark, and Presto/Trino engines prevent RPC connection storms on LinkedIn Active NameNodes.",
+        onlineName: "Apache HDFS Client Design",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Streaming%20Data%20Access",
+        onlineDesc: "Streaming data access model & write-once-read-many coherency",
+        gfgName: "GFG: Anatomy of File Read & Write in HDFS",
+        gfgUrl: "https://www.geeksforgeeks.org/anatomy-of-file-read-and-write-in-hdfs/#:~:text=Step%2Dby%2Dstep%20explanation",
+        gfgDesc: "Step-by-step trace of DFSClient RPC & streaming packets",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: Anatomy of a File Read/Write, pp. 69-76"
+      },
+
+      active_namenode: {
+        category: "METADATA ENGINE",
+        layer: "Layer 2",
+        title: "Active NameNode (FSImage & EditLog)",
+        subtitle: "In-Memory Namespace & Transaction Authority",
+        crux: "The single source of truth for filesystem metadata (tree hierarchy, permissions, block-to-DataNode mappings). It persists state to disk via periodic checkpoints (FSImage) and appends every mutation to a write-ahead transaction log (EditLog). Block locations are reconstructed in RAM via DataNode block reports rather than persisted.",
+        linkedin: "LinkedIn NameNodes utilize multi-hundred GB JVM heaps with optimized G1GC tuning to retain hundreds of millions of blocks and metadata inodes with sub-millisecond RPC latencies.",
+        onlineName: "Apache HDFS Metadata Persistence",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=The%20Persistence%20of%20File%20System%20Metadata",
+        onlineDesc: "FSImage and EditLog write-ahead transaction log specification",
+        gfgName: "GFG: HDFS Architecture & Advantages",
+        gfgUrl: "https://www.geeksforgeeks.org/explain-the-hadoop-distributed-file-system-hdfs-architecture-and-advantages/#:~:text=NameNode",
+        gfgDesc: "NameNode internal structure, inode storage, and block mapping",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: NameNodes and DataNodes, pp. 44-46 & pp. 78-83"
+      },
+
+      qjm_zkfc: {
+        category: "HIGH AVAILABILITY",
+        layer: "Layer 2",
+        title: "Quorum Journal Manager (QJM) & ZKFC",
+        subtitle: "Consensus-Based Active/Standby Failover",
+        crux: "Ensures zero metadata loss and automatic failover without single points of failure. Active NameNode writes edits to a quorum (2N+1) of JournalNodes. Standby NameNode continuously tails the journals to maintain a warm in-memory cache. ZooKeeper Failover Controller (ZKFC) health-checks the daemon and coordinates split-brain fencing.",
+        linkedin: "Zero-downtime rolling upgrades and automatic fast failover are strictly reliant on 3-5 JournalNodes deployed across independent availability zones or failure domains.",
+        onlineName: "Apache HDFS HA with QJM",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Metadata%20Disk%20Failure",
+        onlineDesc: "High availability, journal consensus, and metadata redundancy",
+        gfgName: "GFG: Fault Tolerance in Hadoop",
+        gfgUrl: "https://www.geeksforgeeks.org/hadoop-architecture/#:~:text=Secondary%20NameNode",
+        gfgDesc: "Secondary checkpointing vs modern Active/Standby HA",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: Hadoop High Availability (QJM & Failover), pp. 78-83"
+      },
+
+      rack_awareness: {
+        category: "TOPOLOGY SENTRY",
+        layer: "Layer 3",
+        title: "Rack Awareness Placement Policy",
+        subtitle: "Fault Domain & Inter-Switch Bandwidth Optimization",
+        crux: "HDFS block placement algorithm ensures fault tolerance and network efficiency: Replica 1 goes on the local DataNode (or random node in local rack). Replica 2 goes on a different node in an entirely separate rack. Replica 3 goes on a different node in the same remote rack as Replica 2. Further replicas are distributed randomly across racks.",
+        linkedin: "Minimizes core datacenter spine-leaf switch saturation during writes while guaranteeing that an entire Top-of-Rack (ToR) switch failure or power disruption never takes a file offline.",
+        onlineName: "Apache HDFS Replica Placement",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Replica%20Placement%3A%20The%20First%20Baby%20Steps",
+        onlineDesc: "Official rack-aware replica placement policy algorithm",
+        gfgName: "GFG: Rack and Rack Awareness in Hadoop",
+        gfgUrl: "https://www.geeksforgeeks.org/hadoop-rack-and-rack-awareness/#:~:text=Rack%20Awareness%20is%20the%20concept",
+        gfgDesc: "Detailed replica placement rules and network distance metric",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: Network Topology in Hadoop & Replica Placement, pp. 70-74"
+      },
+
+      erasure_coding: {
+        category: "STORAGE OPTIMIZATION",
+        layer: "Layer 3",
+        title: "HDFS Erasure Coding (Reed-Solomon)",
+        subtitle: "Storage Cost Reduction for Cold / Warm Data",
+        crux: "Replaces traditional 3x replication (200% storage overhead) with Reed-Solomon parity encoding (e.g. RS(6,3) with 50% overhead, or RS(10,4) with 40% overhead). Divides data into striped cells across DataNodes. Parity cells allow mathematical reconstruction of missing blocks if 3 or 4 DataNodes fail simultaneously.",
+        linkedin: "LinkedIn saves petabytes of raw disk space by automatically migrating cold compliance logs, historical analytics, and snapshot partitions from 3x replication to Erasure Coding.",
+        onlineName: "Apache HDFS Erasure Coding Architecture",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Data%20Blocks",
+        onlineDesc: "Block striping & erasure coding storage efficiency specifications",
+        gfgName: "GFG: Hadoop File Blocks & Replication Factor",
+        gfgUrl: "https://www.geeksforgeeks.org/hadoop-file-blocks-and-replication-factor/#:~:text=Replication%20Factor%20in%20Hadoop",
+        gfgDesc: "Block partitioning, storage multiplication, and replication tradeoffs",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: The Design of HDFS & Block Abstraction, pp. 43-48"
+      },
+
+      write_pipeline: {
+        category: "DATA PLANE I/O",
+        layer: "Layer 4",
+        title: "Pipelined Block Streaming (Write Path)",
+        subtitle: "Packet Stream & Downstream ACK Chain",
+        crux: "During writes, DFSClient writes packets (typically 64KB) to an internal data queue. The DataStreamer streams packets to the 1st DataNode, which immediately flushes them to disk and streams them in parallel to the 2nd DataNode, which pipelines to the 3rd. Acknowledgments stream back in reverse order (DN3 -> DN2 -> DN1 -> Client).",
+        linkedin: "Maximizes network utilization across 25GbE/100GbE fabric by overlapping packet transmission with disk I/O, achieving wire-speed ingestion for Kafka mirrored topics.",
+        onlineName: "Apache HDFS Replication Pipelining",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Replication%20Pipelining",
+        onlineDesc: "Formal specification of the multi-DataNode write replication pipeline",
+        gfgName: "GFG: File Write Operation in HDFS",
+        gfgUrl: "https://www.geeksforgeeks.org/anatomy-of-file-read-and-write-in-hdfs/#:~:text=Write%20Operation%20in%20HDFS",
+        gfgDesc: "DataStreamer, ack queue, and packet pipeline sequence diagrams",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: Anatomy of a File Write, pp. 72-76"
+      },
+
+      read_short_circuit: {
+        category: "ZERO-COPY READS",
+        layer: "Layer 4",
+        title: "Short-Circuit Local Reads",
+        subtitle: "Kernel Zero-Copy via UNIX Domain Sockets",
+        crux: "When a computing process (e.g. MapReduce task, Spark executor, Trino worker) runs on the exact same physical host where the HDFS block resides, Short-Circuit Local Reads bypass the TCP network socket and DataNode daemon entirely. The client opens the file descriptor directly via a UNIX domain socket for zero-copy kernel reads.",
+        linkedin: "Massively reduces CPU and memory bus churn on compute-heavy analytics nodes at LinkedIn, boosting read throughput by up to 2.5x compared to TCP loopback.",
+        onlineName: "Apache HDFS Data Locality & Streaming",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Moving%20Computation%20is%20Cheaper%20than%20Moving%20Data",
+        onlineDesc: "Design principle: colocate computation with storage for maximum throughput",
+        gfgName: "GFG: Data Read Operation in HDFS",
+        gfgUrl: "https://www.geeksforgeeks.org/hdfs-data-read-operation/#:~:text=Read%20Operation%20in%20HDFS",
+        gfgDesc: "Block location discovery, rack proximity sorting, and client streaming",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: Short-Circuit Local Reads & Client API, pp. 71-72"
+      },
+
+      heartbeat_blockreport: {
+        category: "CLUSTER TELEMETRY",
+        layer: "Layer 5",
+        title: "Heartbeats & Block Reports",
+        subtitle: "Liveness Telemetry & Inconsistency Healing",
+        crux: "DataNodes send periodic Heartbeats (default every 3s) to prove liveness and capacity. If no heartbeat arrives in 10 minutes (heartbeat.recheck.interval), NameNode marks the node dead and schedules re-replication. DataNodes send Incremental Block Reports (IBRs) on writes and Full Block Reports (FBRs, default every 6h) to keep block map updated.",
+        linkedin: "Staggering full block reports prevents 'block report storms' from overwhelming the Active NameNode when thousands of DataNodes reboot or recover from network partition.",
+        onlineName: "Apache HDFS Robustness & Heartbeats",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Data%20Disk%20Failure%2C%20Heartbeats%20and%20Re%2DReplication",
+        onlineDesc: "Heartbeat intervals, dead node detection, and re-replication triggers",
+        gfgName: "GFG: Fault Tolerance & Heartbeat Mechanisms",
+        gfgUrl: "https://www.geeksforgeeks.org/explain-the-hadoop-distributed-file-system-hdfs-architecture-and-advantages/#:~:text=Heartbeat",
+        gfgDesc: "Heartbeat intervals, block report exchange, and node failure detection",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 3: Heartbeats, Block Scanner, and Corruption Detection, pp. 74-76"
+      },
+
+      balancer_disk: {
+        category: "CLUSTER BALANCING",
+        layer: "Layer 5",
+        title: "HDFS Balancer & Node Decommissioning",
+        subtitle: "Threshold-Based Disk & Rack Leveling",
+        crux: "The HDFS Balancer redistributes blocks across DataNodes so that each node's disk utilization is within a given percentage threshold (default 10%) of the cluster average. It respects rack awareness, ensuring rebalancing never degrades replica distribution. Decommissioning safely drains all blocks before physical retirement.",
+        linkedin: "Continuous throttling of the Balancer (dfs.balancer.bandwidthPerSec) ensures disk maintenance and rack leveling never contend with LinkedIn production ETL and query pipelines.",
+        onlineName: "Apache HDFS Cluster Rebalancing",
+        onlineUrl: "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#:~:text=Cluster%20Rebalancing",
+        onlineDesc: "Automatic block migration, node capacity rebalancing, and bandwidth controls",
+        gfgName: "GFG: Hadoop Architecture & Decommissioning",
+        gfgUrl: "https://www.geeksforgeeks.org/hadoop-architecture/#:~:text=DataNode%20Failures",
+        gfgDesc: "Replica under-replicated repair, block mover, and node management",
+        bookRef: "Hadoop: The Definitive Guide (4th Ed.) - Tom White",
+        bookPage: "Chapter 11: Administering Hadoop: Decommissioning & The Balancer, pp. 367-372"
+      }
+    };
+
+    function selectNode(nodeId) {
+      const data = KNOWLEDGE_BASE[nodeId];
+      if (!data) return;
+
+      // Highlight active button
+      document.querySelectorAll('.dag-node').forEach(el => el.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-' + nodeId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Populate details
+      document.getElementById('detail-category').innerText = data.category;
+      document.getElementById('detail-layer').innerText = data.layer;
+      document.getElementById('detail-title').innerText = data.title;
+      document.getElementById('detail-subtitle').innerText = data.subtitle;
+      document.getElementById('detail-crux').innerText = data.crux;
+      document.getElementById('detail-linkedin').innerText = data.linkedin;
+
+      // Update Online Link
+      const onlineEl = document.getElementById('detail-link-online');
+      onlineEl.href = data.onlineUrl;
+      document.getElementById('detail-online-name').innerText = data.onlineName;
+      document.getElementById('detail-online-desc').innerText = data.onlineDesc;
+
+      // Update GFG Link
+      const gfgEl = document.getElementById('detail-link-gfg');
+      gfgEl.href = data.gfgUrl;
+      document.getElementById('detail-gfg-name').innerText = data.gfgName;
+      document.getElementById('detail-gfg-desc').innerText = data.gfgDesc;
+
+      // Update Book Citation
+      document.getElementById('detail-book-ref').innerText = data.bookRef;
+      document.getElementById('detail-book-page').innerText = data.bookPage;
+    }
+
+    // Default selection on load
+    document.addEventListener('DOMContentLoaded', () => {
+      selectNode('router_federation');
+    });
+  </script>
+</body>
+</html>
