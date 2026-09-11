@@ -154,7 +154,7 @@ dhcp-leasefile=/data/dhcp.leases
 dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-# Client static reservations (Pixel 192.168.1.98) reside strictly on Primary Pi 5
+# Note: Mobile clients (Pixel/iOS) remain dynamic; infrastructure only is pinned.
 ```
 
 ---

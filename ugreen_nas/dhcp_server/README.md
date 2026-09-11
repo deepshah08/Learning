@@ -38,8 +38,8 @@ dhcp-leasefile=/data/dhcp.leases
 dhcp-host=88:a2:9e:a6:ab:c5,192.168.1.92,raspberrypi
 dhcp-host=6c:1f:f7:b5:6d:ed,192.168.1.80,DeepDXP2800
 dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
-# Note: Client static reservations (e.g. Pixel 192.168.1.98) reside strictly on Primary Pi 5
-# to prevent duplicate DHCPOFFERs and cross-server DHCPNAK collisions.
+# Note: Mobile clients (Pixel/iPhone) remain dynamic to accommodate private MAC randomization.
+# Only static infrastructure is declared here to prevent duplicate DHCPOFFER races and cross-server DHCPNAK collisions.
 ```
 
 ### Path: `/volume2/docker/dhcp_server/docker-compose.yml`

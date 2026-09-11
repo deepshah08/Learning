@@ -106,13 +106,10 @@ In an **Active-Active Dual DHCP network** (Pi 5 Primary + NAS Secondary Standby)
 +-------------------------------------------------------------------------+
 ```
 
-### The Golden Rule: Zero Duplicate Static Reservations
-- **Rule**: Client static reservations (e.g. `dhcp-host=...,192.168.1.98,Pixel9ProXL`) MUST reside **exclusively on Primary Pi 5**.
-- **The Violation Trap**: If NAS also defines `dhcp-host=...,192.168.1.98`, NAS's 2.5GbE interface races Pi 5 and answers first. When the client acknowledges NAS (`server-id: 192.168.1.80`), Pi 5 sees a request for its reserved IP with another server's ID and broadcasts:
-  ```text
-  DHCPNAK(eth0) 192.168.1.98 wrong server-ID
-  ```
-  This immediately invalidates the client's network lease on Android and tears down Wi-Fi.
+### The Golden Rule: Fixed Infrastructure Only (No Mobile Client Static Pinning)
+- **Infrastructure Static Only**: Static IP reservations (`dhcp-host=...`) are strictly reserved for permanent infrastructure (`raspberrypi: 192.168.1.92`, `DeepDXP2800: 192.168.1.80`, `TCL-RokuTV: 192.168.1.233`).
+- **Dynamic Policy for Mobile Devices (Pixel, iPhone, iPad, Watches)**: Modern mobile operating systems (Android 15, iOS 18) employ private MAC randomization and RFC 4361 DUID identifiers. Pinning these devices via server-side `dhcp-host` creates DUID mismatches, offer races, and `DHCPNAK (wrong server-ID)` storms that sever Wi-Fi Calling (AT&T VoWiFi: `epdg.epc.att.net`) and drop incoming cellular/push notifications. Mobile clients MUST remain purely dynamic within the Primary Pi 5 dynamic pool (`192.168.1.64`–`192.168.1.189`).
+- **Secondary Standby Isolation**: The secondary DHCP server on UGREEN NAS (`192.168.1.80`) must maintain zero client static reservations. It only serves the backup high pool (`192.168.1.190`–`192.168.1.250`).
 
 ---
 
