@@ -97,7 +97,8 @@ A formal 3-iteration stress-testing suite guarantees system reliability:
 ## 📋 4. Deployment & Service Management
 
 ### Systemd Units
-- `email-agent.timer`: Triggers ingestion every 15 minutes.
+- `email-agent.timer`: Triggers ingestion every 6 hours (with on-demand triage via bot).
+- `email-briefing.timer`: Triggers executive briefings at 8:00 AM & 6:00 PM.
 - `email-agent.service`: Executes one-shot ingestion cycle.
 - `email-bot.service`: Continuous background long-polling daemon.
 
