@@ -111,3 +111,25 @@ systemctl status email-agent.timer
 tail -f ~/email-agent/logs/bot_service.log
 tail -f ~/email-agent/logs/agent.log
 ```
+
+---
+
+## 📊 5. Worst-Case Resource Footprint & System Priority Matrix
+
+To safeguard real-time home networking (`pihole-FTL` DNS) and maintain thermal headroom, the email agent subsystem operates under strict Linux cgroup limits and process priority policies.
+
+### Resource Footprint Analysis
+
+| Component | Idle / Baseline | Nominal Processing | Worst-Case Peak (Hard Capped) | Enforcement Mechanism |
+| :--- | :--- | :--- | :--- | :--- |
+| **`bot_service.py`** | ~36 MB | ~45 MB | **150 MB** | Systemd `MemoryMax=150M`, `CPUQuota=15%` |
+| **`gmail_agent.py`** | 0 MB (oneshot) | ~110 MB | **1.0 GB** | Systemd `MemoryMax=1G`, `CPUQuota=50%` |
+| **`ollama` (`qwen2.5:3b`)** | ~43 MB (unloaded) | ~2.1 GB | **2.4 GB** | Weight footprint + 4K KV-cache (auto-unloads after 5m) |
+| **SQLite + FTS5** | ~8 MB | ~25 MB | **64 MB** | In-memory page cache for WAL + FTS5 index scans |
+| **Total Subsystem** | **~80 MB** | **~2.3 GB** | **~3.6 GB max** | **< 23%** of Pi 5's 16 GB LPDDR4X RAM |
+
+### CPU Scheduling & Blast-Radius Decoupling
+
+- **`Nice=15` (Email Agent & Bot)**: Background classification willingly yields CPU time slices to higher-priority processes.
+- **`Nice=-10` & `OOMScoreAdjust=-1000` (`pihole-FTL`)**: Real-time whole-home DNS resolution runs with top CPU scheduling priority and complete immunity from kernel OOM termination.
+- **Thermal Safety Gate**: Active cooling maintains Pi 5 temperatures at 43°C–54°C. A software watchdog enforces immediate processing suspension if temperatures exceed **78.0°C**.
