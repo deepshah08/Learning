@@ -133,3 +133,29 @@ To safeguard real-time home networking (`pihole-FTL` DNS) and maintain thermal h
 - **`Nice=15` (Email Agent & Bot)**: Background classification willingly yields CPU time slices to higher-priority processes.
 - **`Nice=-10` & `OOMScoreAdjust=-1000` (`pihole-FTL`)**: Real-time whole-home DNS resolution runs with top CPU scheduling priority and complete immunity from kernel OOM termination.
 - **Thermal Safety Gate**: Active cooling maintains Pi 5 temperatures at 43°C–54°C. A software watchdog enforces immediate processing suspension if temperatures exceed **78.0°C**.
+
+---
+
+## 🚀 6. Advanced Homelab Intelligence Features (Phase 2 Additions)
+
+### A. Executive Intelligence Briefing (`/digest` & Systemd Timer)
+- **Automated Cadence**: Systemd timer (`email-briefing.timer`) automatically triggers twice daily:
+  - **Morning Briefing**: 8:00 AM (action priorities for the day).
+  - **Evening Rollup**: 6:00 PM (summary of handled items and outstanding reminders).
+- **On-Demand Access**: Send `/digest` to Telegram anytime for an instant executive review of the last 15 emails.
+
+### B. "Who's In My Inbox?" — Subscription & Account Audit (`/audit`)
+- **Subscription & Bill Detection**: Automatically parses invoices, receipts, and membership notices, extracting dollar amounts and renewal frequencies (`monthly` vs `annual`) into the `subscriptions` SQLite table.
+- **Audit Commands**:
+  - `/audit subscriptions` — Displays tracked subscriptions, estimated monthly run-rate, and upcoming renewal amounts.
+  - `/audit vendors` — Displays top sending services and frequency stats.
+  - `/audit trackers` — Displays count of blocked spy pixels and tracking beacons.
+
+### C. Natural Language Q&A Over Inbox (`/ask <question>`)
+- Local **Retrieval-Augmented Generation (RAG)** running directly on Raspberry Pi 5.
+- Uses SQLite FTS5 for sub-millisecond keyword lookup, fetches top 4 matching email context snippets, and feeds them into local `qwen2.5:3b` via Ollama.
+- Delivers a direct, synthesized 1-2 sentence answer with source email citations in seconds.
+
+### D. Email Firewall: Tracking Pixel Stripper & Cold Outreach Auto-Triage
+- **Spy Pixel Neutralization**: Automatically intercepts and strips 1x1 tracking GIF/PNG images and known marketing beacon domains (HubSpot, Superhuman, Mailchimp, Mandrill, Mixmax) from incoming HTML payloads before saving or reading.
+- **Cold Pitch Ghosting**: Recognizes unsolicited B2B pitches, recruiter headhunters, and agency outreach using regex heuristics and Qwen classification. Automatically tags as `AI/Category-ColdOutreach` and moves them out of your primary inbox view.
