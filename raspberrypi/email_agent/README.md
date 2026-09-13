@@ -249,3 +249,43 @@ To permanently eliminate this failure class, four architectural guardrails were 
 | `test_targeted_retrieval` | Query `"git revert conflicts"` after ByteByteGo ingestion | `matches>=1`, sources cite only ByteByteGo | ✅ PASSED |
 | `test_live_qwen_rag` | Live Qwen 2.5 3B synthesis on Pi 5 hardware | Zero crash, temperature nominal (<55°C) | ✅ PASSED |
 
+---
+
+## 🔒 8. Production Hardening & Fallback Elimination (Challenger Iteration 5)
+
+Prior to declaring production readiness for multi-tenant deployment, a comprehensive audit identified and hardened five critical silent failure modes:
+
+### 1. Delivery & Notification Resilience (`notifier.py`)
+- **Telegram 4096-Character Limit Protection**: Implemented `split_telegram_message(text, max_len=4000)` to automatically chunk large briefings, audit logs, or RAG outputs along paragraph boundaries into multi-part messages (`(1/3)`, `(2/3)`).
+- **Two-Tier Resilient Dispatch**: If Telegram returns HTTP 400 due to unescaped Markdown symbols (`_`, `*`, `[` in subject lines), the dispatcher immediately re-posts as raw plain text (`parse_mode=None`), guaranteeing zero dropped notifications.
+
+### 2. Multi-Tenant Ingress & Fail-Closed Security (`bot_service.py` & `user_manager.py`)
+- **Fail-Closed Gate**: Replaced permissive `if CHAT_ID and str(chat_id) != str(CHAT_ID)` with a strict fail-closed check. Unregistered chat IDs receive `⛔ Access Denied` and cannot query any mailbox.
+- **Dynamic Tenant Routing**: Integrated `get_user_by_chat_id()` to route commands to the caller's specific database (`data/<user>_emails.db`), allowing multiple users to safely share the same Telegram bot.
+
+### 3. Inference Resiliency & Smart Context Windowing (`email_classifier.py`)
+- **Smart Context Windowing**: Replaced naive `body[:600]` with `smart_extract_body(body, max_chars=1000)`, intelligently retaining head context (350 chars), tail action items (350 chars), and financial/deadline signals ($amounts, due dates) within a 1,000-char window.
+- **Pessimistic Urgency Escalation**: Bounded Ollama inference with a 25-second socket timeout. Under LLM failure or timeout, emails matching high-urgency regex patterns (`urgent`, `immediate`, `wire transfer`, `fraud`, `security alert`) are escalated to `URGENT` rather than silently degraded to `NORMAL`.
+
+### 4. Database Concurrency, WAL Pruning & Heartbeat (`gmail_agent.py`)
+- **Centralized Connection Factory**: Standardized `get_db_connection(db_path)` with `PRAGMA busy_timeout=10000;` and `timeout=15.0` to eliminate lock contention during concurrent Telegram queries and ingestion batches.
+- **WAL Truncation Checkpoint**: Added post-run `PRAGMA wal_checkpoint(TRUNCATE);` preventing unbounded disk growth.
+- **Operational Heartbeat**: Timestamped `last_successful_run_at` in `system_metadata`, exposed via `/status` for live operational liveness monitoring.
+
+### 5. Headless Auth & Systemd Unit Ceilings (`systemd/email-agent.service`)
+- **Headless OAuth Guard**: Throws `HeadlessAuthError` in automated/non-interactive runs if refresh fails, avoiding headless browser launch hangs.
+- **Execution Ceiling**: Added `TimeoutStartSec=300s` to prevent hung network threads from blocking subsequent timer runs.
+
+---
+
+### Verification Matrix (Iteration 5)
+
+| Test Case | Condition Tested | Expected Invariant | Result |
+| :--- | :--- | :--- | :--- |
+| `test_telegram_chunking` | 9,500 character executive briefing | Chunked into $\le 4000$-char parts with part indicators | ✅ PASSED |
+| `test_smart_context_windowing` | 2,000+ char email with buried `$1,850.00 due Monday` | Signals preserved within 1,000-char budget | ✅ PASSED |
+| `test_pessimistic_urgency` | Critical security alert under model degradation | Priority escalated to `URGENT`, `action_needed=True` | ✅ PASSED |
+| `test_fail_closed_gate` | Unauthorized Telegram `chat_id` | Access blocked, zero data leaked | ✅ PASSED |
+| `test_concurrency_and_heartbeat` | Simultaneous WAL write/read + `wal_checkpoint(TRUNCATE)` | Zero lock errors, liveness heartbeat recorded | ✅ PASSED |
+
+
