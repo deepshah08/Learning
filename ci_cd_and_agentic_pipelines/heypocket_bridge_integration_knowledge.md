@@ -81,7 +81,10 @@ The HeyPocket Bridge sits at the perimeter of the homelab agent swarm, acting as
 │                                 ▼                                      │
 │                      Tool: search_pocket_conversations                 │
 │                      Tool: search_pocket_actionitems                   │
-│                      Tool: get_account_info                            │
+│                      Tool: update_pocket_actionitem                    │
+│                      Tool: get_account_info / list_pocket_folders      │
+│                      Tool: get_pocket_conversation (Pro)               │
+│                      Tool: query_pocket_meetings (Pro)                 │
 │                                                                        │
 └────────────────────────────────────────────────────────────────────────┘
 ```
@@ -90,6 +93,29 @@ The HeyPocket Bridge sits at the perimeter of the homelab agent swarm, acting as
 - **Transport**: JSON-RPC 2.0 over streamable HTTP with Server-Sent Events (SSE) data lines (`data: {...}`).
 - **Session Continuity**: Retains `mcp-session-id` across queries for stateful context window caching.
 - **Standard Library Compliance**: Uses Python stdlib `urllib.request` exclusively. Zero third-party packages.
+
+### C. Bulk Ingestion & REST API v1 Plane (Batch & Audio Pipeline)
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                   BULK INGESTION PLANE: REST API v1                    │
+├────────────────────────────────────────────────────────────────────────┤
+│                                                                        │
+│   PocketRESTClient ──► public.heypocketai.com/api/v1                   │
+│          │                                                             │
+│          ├──► GET  /public/recordings          (List recordings)       │
+│          ├──► GET  /public/recordings/{id}     (Details + Transcripts) │
+│          ├──► POST /public/search              (Semantic search)       │
+│          ├──► POST /public/recordings/upload-url (S3 upload ingress)   │
+│          ├──► GET  /public/recordings/{id}/audio-url (Audio export)    │
+│          └──► GET  /public/folders & /tags     (Taxonomy)              │
+│                                                                        │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key facts about REST API v1 Plane:**
+- **Direct Bulk Extraction**: Pulls full recording objects with detailed metadata, diarized speaker segments (`originalText`), and AI markdown summaries.
+- **Bi-Directional Audio Pipeline**: Generates pre-signed S3 upload URLs (`POST /public/recordings/upload-url`) to send external homelab audio into Pocket for cloud transcription, and retrieves temporary pre-signed download URLs (`GET /public/recordings/{id}/audio-url`) for local offline archiving.
 
 ---
 
@@ -100,11 +126,11 @@ The HeyPocket Bridge sits at the perimeter of the homelab agent swarm, acting as
 | Component | Role | Owner / Where it lives | Touched? |
 |---|---|---|:---:|
 | `webhook_receiver.py` | Multi-threaded HTTP listener, HMAC auth, replay guard | `plugins/heypocket-bridge/core/` | ✅ Created |
-| `markdown_emitter.py` | Frontmatter serialization, diarization, task routing | `plugins/heypocket-bridge/core/` | ✅ Created |
-| `pocket_client.py` | Remote MCP client, CLI, SSE parser, cloud syncer | `plugins/heypocket-bridge/core/` | ✅ Created |
+| `markdown_emitter.py` | Frontmatter serialization, diarization, task routing | `plugins/heypocket-bridge/core/` | ✅ Enhanced |
+| `pocket_client.py` | Dual MCP & REST API v1 client & CLI (`PocketRESTClient`) | `plugins/heypocket-bridge/core/` | ✅ Enhanced |
 | `simulator.py` | Offline synthetic payload generator & fault tester | `plugins/heypocket-bridge/core/` | ✅ Created |
-| `test_heypocket_bridge.py`| Comprehensive 33-case test suite | `plugins/heypocket-bridge/core/tests/` | ✅ Created |
-| `SKILL.md` | Autonomous agent operating protocol & tool descriptors | `plugins/heypocket-bridge/skills/` | ✅ Created |
+| `test_heypocket_bridge.py`| Comprehensive 49-case test suite | `plugins/heypocket-bridge/core/tests/` | ✅ Enhanced |
+| `SKILL.md` | Autonomous agent operating protocol & tool descriptors | `plugins/heypocket-bridge/skills/` | ✅ Enhanced |
 | `pihole-FTL` | Whole-home DNS & DHCP (Port 53, Option 6) | Raspberry Pi 5 (`192.168.1.92`) | ❌ Unchanged |
 | `Second Brain Vault` | Git-backed Markdown knowledge repository | Homelab Storage (`Project 02`) | ❌ Target |
 
