@@ -288,4 +288,22 @@ Prior to declaring production readiness for multi-tenant deployment, a comprehen
 | `test_fail_closed_gate` | Unauthorized Telegram `chat_id` | Access blocked, zero data leaked | ✅ PASSED |
 | `test_concurrency_and_heartbeat` | Simultaneous WAL write/read + `wal_checkpoint(TRUNCATE)` | Zero lock errors, liveness heartbeat recorded | ✅ PASSED |
 
+---
+
+## 🔄 9. On-Demand Feedback Learning & Account Disambiguation
+
+### Dual-Account Topology & Label Synchronization Semantics
+When operating with a dual-account setup for Advanced Protection Program (APP) isolation:
+- **Ingress Account (`deepshah7977@gmail.com`)**: Primary identity with APP enforced. An auto-forwarding rule forwards raw RFC822 messages to the operational processing account. **Note**: RFC822 email forwarding transmits only message headers and body—Gmail labels, categories, and folder moves do *not* propagate across accounts.
+- **Operational Account (`sl4ught3rcl4y@gmail.com`)**: Dedicated email intelligence hub holding the OAuth credentials. All triage labels (`AI/Category-*`, `AI/Priority-*`, `AI/Auto-Archived`), SQLite records, and user feedback mechanisms live here. **User corrections and email re-labeling must occur in this account.**
+
+### Feedback Sync Bottleneck & Optimization
+1. **The Ingestion Window Blindspot**:
+   - *Previous*: `sync_user_feedback()` queried `ORDER BY processed_at DESC LIMIT 40` from SQLite, performing 40 individual `messages().get()` API calls. Emails processed earlier (e.g., items 303–306 out of 308) fell outside the 40-email horizon and were permanently ignored.
+   - *Fix*: Replaced message-by-message polling with targeted label search queries (`q="label:AI-Category-Shopping"`, `q="label:INBOX label:AI-Auto-Archived"`, `q="label:AI-Priority-Urgent"`). This checks 100% of re-labeled emails in 6 batch calls instead of 40+, guaranteeing $O(1)$ query overhead regardless of mailbox size.
+2. **On-Demand Cadence Trigger**:
+   - *Previous*: Feedback learning was tied to the 6-hour cron ingestion timer. Running `/rules` was a passive database reader, displaying no updates until the next scheduled run.
+   - *Fix*: Integrated on-demand feedback sync directly into `cmd_rules()` in `bot_service.py`. When a user runs `/rules` in Telegram, the bot immediately polls Gmail for label changes, updates `sender_rules`, and displays the newly learned rules in real time.
+
+
 
