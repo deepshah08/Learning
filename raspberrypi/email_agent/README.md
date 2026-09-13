@@ -335,6 +335,11 @@ Because email triage is decoupled from synchronous user waiting by running on a 
   - **Rule Conflicts**: Verifies recently ingested emails against established `sender_rules`.
   - **Alerting**: Dispatches instant Telegram notifications if health score drops below 70% or invariant violations occur.
 
+### 5. Extended 15-Minute Dynamic RAM Residency (`keep_alive=15m`)
+- **Configuration**: Deployed systemd drop-in override `/etc/systemd/system/ollama.service.d/override.conf` setting `Environment="OLLAMA_KEEP_ALIVE=15m"` and updated all generation/embedding API payloads (`keep_alive="15m"`).
+- **Behavior**: Bumped the idle expiration timer from 5 minutes to 15 minutes. When `qwen2.5:3b` or `all-minilm` is loaded into memory, it remains warm for 15 minutes post-query, eliminating the 1.8s cold-start delay for conversational `/ask` threads, while automatically evicting afterwards to release 2.1 GB of RAM back to the Pi 5.
+
+
 
 
 
