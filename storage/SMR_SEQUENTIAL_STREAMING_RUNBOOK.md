@@ -154,3 +154,37 @@ ssh deepshah08@192.168.1.92 "~/scripts/df_share/share_manager.sh status"
 # Manually tear down early once recipient finishes downloading
 ssh deepshah08@192.168.1.92 "~/scripts/df_share/share_manager.sh stop"
 ```
+
+---
+
+## 🔔 7. Self-Service "Digital Doorbell" PIN Trigger (Option 1)
+
+> **Purpose**: Enables the recipient (cousin) to self-trigger the cold storage wake-up anytime via a single PIN web form without disturbing the administrator, while maintaining 0 RPM SMR sleep during idle periods.
+
+### Flow Architecture
+```text
+┌───────────────────────────────┐
+│ Recipient opens Doorbell URL: │
+│ https://...:8088/             │
+└──────────────┬────────────────┘
+               │ Submits PIN (e.g. DhuriFenil2026)
+               ▼
+┌───────────────────────────────┐
+│ Doorbell Service (RAM only)   │
+│ - Rate limits failed attempts │
+│ - Verifies constant-time hash │
+│ - Runs share_manager.sh start │
+└──────────────┬────────────────┘
+               │ Dynamic Redirect (3s splash)
+               ▼
+┌───────────────────────────────┐
+│ Live Ephemeral 4-Hour Stream  │
+│ https://...:8089/df?token=XYZ │
+└───────────────────────────────┘
+```
+
+### Components Deployed
+1. **Dispatcher**: `~/scripts/df_share/doorbell_service.py` (Port 8088, pure RAM, 0 SMR lookups).
+2. **Access Key (PIN)**: `DhuriFenil2026` (Configurable in script).
+3. **Safety Protection**: Built-in 5-attempt rate-limiting per client IP (prevents automated guessing).
+4. **Auto-Redirect**: On successful PIN submission, the recipient is presented with a 3-second animated "Waking Cold Archive" splash screen that automatically redirects their browser to their fresh tokenized download URL.
