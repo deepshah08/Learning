@@ -378,10 +378,15 @@ In collaboration with autonomous peer agents (Codex), the system was elevated fr
   10. *Negative Boundary*: Untrusted names and non-existent contracts
 - Optional evaluation flag `--gemini-judge` sends retrieved context and synthesized answers to Gemini for rigorous faithfulness, relevance, and completeness scoring (0–100).
 
-### 5. Verification & Performance Profile
-- **Challenge Suite**: All 5 iterations of `challenge_suite.py` passed with 0 failures on Pi 5 hardware.
-- **Unit & Mocked Integration**: Full suite in `test_pipeline.py` passed.
-- **Inference Latency Profile**: On the Pi 5's Cortex-A76 cores, warm Qwen 2.5 3B inference takes ~16 seconds per query; serialized execution of all 10 persona queries exceeds 180 seconds. In production, single user queries in Telegram benefit from the 15-minute warm RAM residency (`keep_alive="15m"`).
+### 6. False-Positive URGENT Remediation & Social Network Pre-filtering (September 13, 2026)
+- **Root Cause of Starred Influx**: In `gmail_agent.py`, any email classified as `priority == "URGENT"` was automatically tagged with the Gmail system label `STARRED` and dispatched an instant Telegram alert.
+- **The Trigger**: Social notifications (`facebookmail.com`, `linkedin.com`, `instagram.com`) were absent from Tier-2 seed rules and Tier-3 pre-filters. When local CPU Ollama inference timed out under quota limits, the code invoked the pessimistic fallback. Slogans and phrases such as "story that expires in 24 hours" or "security" triggered emergency priority escalation to `URGENT`.
+- **Architectural Fixes**:
+  1. Added `SOCIAL_NETWORK_DOMAINS` and matching rules in `knowledge_rules.py`: social network friend suggestions, stories, photo updates, and group digests are classified deterministically as `Personal` / `LOW` priority with `auto_archive=True`.
+  2. Added fast path in `quick_prefilter` (`email_classifier.py`) intercepting social network traffic before calling LLMs.
+  3. Added `EXCLUDE_URGENCY_PATTERNS` to `classify_with_llm` pessimistic fallback to strictly prevent marketing/social language from escalating to `URGENT`.
+  4. Executed live remediation: un-starred all 22 false-positive emails in Gmail, removed `AI/Priority-Urgent` labels, and corrected their SQLite records (`processed_emails`).
+
 
 
 
