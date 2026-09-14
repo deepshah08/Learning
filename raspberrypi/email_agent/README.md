@@ -339,6 +339,12 @@ Because email triage is decoupled from synchronous user waiting by running on a 
 - **Configuration**: Deployed systemd drop-in override `/etc/systemd/system/ollama.service.d/override.conf` setting `Environment="OLLAMA_KEEP_ALIVE=15m"` and updated all generation/embedding API payloads (`keep_alive="15m"`).
 - **Behavior**: Bumped the idle expiration timer from 5 minutes to 15 minutes. When `qwen2.5:3b` or `all-minilm` is loaded into memory, it remains warm for 15 minutes post-query, eliminating the 1.8s cold-start delay for conversational `/ask` threads, while automatically evicting afterwards to release 2.1 GB of RAM back to the Pi 5.
 
+### 6. CPU Throttling & Pi-hole FTL Network Shield (`CPUQuota=250%`, `Nice=10`)
+- **Audit Finding**: During the September 13, 2026 infrastructure audit, un-throttled Ollama generation reached **338% CPU** across all 4 BCM2712 cores during batch email classification, driving the 15-minute system load average to 4.2 and triggering Pi-hole FTL warnings (`WARNING: Long-term load larger than number of processors: 4.2 > 4`).
+- **Remediation**: Added `CPUQuota=250%` and `Nice=10` to `/etc/systemd/system/ollama.service.d/override.conf`.
+- **System Invariant**: Caps Ollama to a maximum of 2.5 cores, strictly reserving 1.5 cores for Pi-hole v6 FTL (`Nice=-10`, `OOMScoreAdjust=-1000`), Unbound recursive DNS (`127.0.0.1:5335`), and Linux kernel network packet interrupts.
+
+
 
 
 
