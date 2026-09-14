@@ -161,18 +161,23 @@ CREATE TABLE subscriptions (
 
 ## 🤖 4. Local LLM & Ollama Runtime Configuration
 
-* **Ollama Service**: Managed via `/etc/systemd/system/ollama.service` running `ollama serve` on `127.0.0.1:11434`.
-* **Dynamic RAM Residency (`keep_alive=15m`)**:
-  * Configured via systemd drop-in: `/etc/systemd/system/ollama.service.d/override.conf`:
+* **Dynamic RAM Residency & CPU Throttling**:
+  * Configured via systemd drop-in override: `/etc/systemd/system/ollama.service.d/override.conf`:
     ```ini
     [Service]
     Environment="OLLAMA_KEEP_ALIVE=15m"
+    Nice=10
+    CPUQuota=250%
     ```
-  * Python calls in `email_classifier.py`, `bot_service.py`, and `vector_store.py` explicitly send `"keep_alive": "15m"`.
-  * **Behavior**: Models stay warm in RAM for 15 minutes after any query to provide instant responses, then automatically evict to free RAM down to ~43 MB.
+  * **15-Minute RAM Keep-Alive**: Python calls in `email_classifier.py`, `bot_service.py`, and `vector_store.py` send `"keep_alive": "15m"`. Models stay warm in RAM for 15 minutes after any query for instant response, then automatically evict to free RAM down to ~43 MB.
+  * **250% CPU Quota & Pi-hole FTL Shield (CRITICAL)**:
+    * *Audit Finding (Sept 13, 2026)*: Un-throttled Ollama was observed consuming **338% CPU** across all 4 cores during batch email processing, causing 15-minute system load averages to spike to 4.2 and triggering Pi-hole FTL load warnings (`WARNING: Long-term load larger than number of processors: 4.2 > 4`).
+    * *Hard Ceiling*: `CPUQuota=250%` restricts Ollama to a maximum of 2.5 CPU cores, strictly reserving 1.5 cores for Pi-hole v6 FTL (`Nice=-10`), Unbound recursive DNS (`127.0.0.1:5335`), and kernel network interrupts.
+    * *Process Priority*: `Nice=10` ensures background AI model generation yields CPU cycles to DNS lookups and DHCP handshakes.
 * **Models**:
   1. `qwen2.5:3b` (Q4_K_M, 1.8 GB disk, ~2.4 GB RAM when warm): Tier-4 advisory triage and RAG QA synthesis.
   2. `all-minilm` (44 MB disk, ~120 MB RAM when warm): 384-dimensional dense semantic vector embeddings.
+
 
 ---
 
@@ -329,3 +334,5 @@ print('Categories:', c.execute('SELECT category, count(*) FROM processed_emails 
 2. **Network & DNS Safety**: Pi 5 runs alongside Pi-hole DNS infrastructure. Never modify core network routing, bind to `0.0.0.0:53`, or introduce network timeouts that stall whole-home DNS.
 3. **Database Concurrency**: Always access SQLite through `get_db_connection(db_path)` which enforces WAL mode and a 10,000ms busy timeout to prevent locking conflicts between Telegram commands and batch ingestion.
 4. **Safety Invariants**: Never allow an email with priority `URGENT` or `IMPORTANT` to have `auto_archived = 1`. This invariant is monitored by `background_evaluator.py`.
+5. **CPU Throttling & Pi-hole Protection**: Never remove or increase `CPUQuota=250%` or `Nice=10` from `/etc/systemd/system/ollama.service.d/override.conf`, and never configure Ollama/llama-server to utilize 4 full CPU threads. The primary Pi 5 node handles whole-home DNS/DHCP (`pihole-FTL`); background AI triage must never starve DNS resolution of CPU cycles. `email-agent.service` is also throttled (`CPUQuota=50%`, `Nice=15`, `MemoryMax=1G`).
+
