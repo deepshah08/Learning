@@ -85,21 +85,22 @@ dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
 # Note: Mobile clients (Pixel/iPhone) remain dynamic to accommodate private MAC randomization.
 ```
 
-### Wi-Fi ARP Keep-Alive Sentry (`/etc/systemd/system/wifi-keepalive.service`)
-```ini
-[Unit]
-Description=Wi-Fi ARP Keep-Alive Daemon
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/wifi-keepalive.sh
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-```
+### Process Priority & AI Worker Throttling (`/etc/systemd/system/`)
+To guarantee sub-millisecond DNS latency and prevent background AI inference from starving network interrupts:
+- **`pihole-FTL` High Priority Override** (`/etc/systemd/system/pihole-FTL.service.d/override.conf`):
+  ```ini
+  [Service]
+  Nice=-10
+  OOMScoreAdjust=-1000
+  ```
+- **`ollama` AI Worker Quota & Nice Throttle** (`/etc/systemd/system/ollama.service.d/override.conf`):
+  ```ini
+  [Service]
+  Environment="OLLAMA_KEEP_ALIVE=15m"
+  Nice=10
+  CPUQuota=250%
+  ```
+  *(Caps Ollama across all threads to 2.5 cores maximum, preserving 1.5 cores for Pi-hole, Unbound, and kernel networking).*
 
 ---
 

@@ -157,6 +157,19 @@ dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
 # Note: Mobile clients (Pixel/iOS) remain dynamic; infrastructure only is pinned.
 ```
 
+### Critical Configuration 3 (`pihole.toml` on NAS Secondary Pi-hole Container):
+```toml
+[dns]
+  # Synchronized local LAN host mapping for seamless failover without NXDOMAIN
+  hosts = [
+    "192.168.1.92 raspberrypi.lan pi.hole",
+    "192.168.1.80 DeepDXP2800.lan",
+    "192.168.1.233 tcl-rokutv.lan"
+  ]
+```
+> [!NOTE]
+> `/volume2/docker/pihole/etc-dnsmasq.d/99-dns-redundancy.conf` was sanitized to remove legacy macvlan `dhcp-option=6` public DNS leaks (`1.1.1.1`), retaining only `all-servers` for concurrent upstream queries.
+
 ---
 
 ## 📱 4. Heterogeneous Client OS Protections
