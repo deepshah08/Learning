@@ -344,6 +344,46 @@ Because email triage is decoupled from synchronous user waiting by running on a 
 - **Remediation**: Added `CPUQuota=250%` and `Nice=10` to `/etc/systemd/system/ollama.service.d/override.conf`.
 - **System Invariant**: Caps Ollama to a maximum of 2.5 cores, strictly reserving 1.5 cores for Pi-hole v6 FTL (`Nice=-10`, `OOMScoreAdjust=-1000`), Unbound recursive DNS (`127.0.0.1:5335`), and Linux kernel network packet interrupts.
 
+---
+
+## 🚀 11. Dual-Agent Architectural Elevation: Gemini Teacher, Interactive Feedback & Persona Evaluation
+
+In collaboration with autonomous peer agents (Codex), the system was elevated from passive classification to an active, recursive-learning intelligence platform:
+
+### 1. Authoritative Teacher & Recursive Distillation (`gemini_teacher.py`)
+- **Role**: Serves as the authoritative ground truth for ambiguous categories (`Finance`, `Other`).
+- **Mechanics**: Inspects newly classified emails. When Gemini overrides a local prediction, the disagreement is atomically recorded in `model_mistakes` (with detailed reasoning), `sender_rules` are generated, Gmail labels are auto-reconciled via `service.users().messages().modify()`, and the mistake is distilled into Qwen's few-shot prompt.
+- **Fail-Safe Operation**: Uses lightweight direct HTTP (`requests`) with zero heavyweight dependencies. If `GEMINI_API_KEY` is not set in `config/.env`, the module remains completely inert and local inference runs unmodified.
+
+### 2. Interactive Telegram Feedback & Durable Audit Logging (`bot_service.py`)
+- **One-Tap Relabeling**: `/digest` output includes inline buttons allowing 1-tap label reassignment (`Shopping`, `Finance`, `Work`, `Personal`, etc.).
+- **RAG Answer Rating**: `/ask` responses feature `[👍 Accurate]` and `[👎 Bad Context]` buttons.
+- **Tenant-Safe Callbacks**: User interactions are validated against tenant chat IDs and logged durably in `rag_feedback_log` for continuous quality auditing.
+
+### 3. Hardened Negative Boundaries & Grounding
+- **Nearest-Neighbor Shield**: Enforces strict relevance scoring thresholds (`RAG_DENSE_MIN_SCORE=0.36`) and explicit capitalized entity verification.
+- **Anti-Hallucination Gate**: Eliminates spurious name associations (e.g. asserting "John sent the contract" when no matching email exists in the mailbox). Queries with zero matching evidence return an explicit negative answer with exactly 0 citations and 0 leaked context tokens.
+
+### 4. 10-Persona Real-User Experience Evaluation (`test_user_experience.py`)
+- Simulates 10 distinct user profiles across real mailbox queries:
+  1. *Executive*: Urgent deadlines and pending tasks
+  2. *Shopper*: Order deliveries and package tracking (Skechers, Under Armour)
+  3. *Developer*: System design and architecture updates
+  4. *Finance*: Statements from Chase or Amex (verified negative boundary)
+  5. *Traveler*: Flight and itinerary reservations
+  6. *Manager*: Action items requiring reply or review
+  7. *Security*: Suspicious login and security notices
+  8. *Subscriber*: Recurring memberships and billed run-rates
+  9. *Personal*: Family and friend communications
+  10. *Negative Boundary*: Untrusted names and non-existent contracts
+- Optional evaluation flag `--gemini-judge` sends retrieved context and synthesized answers to Gemini for rigorous faithfulness, relevance, and completeness scoring (0–100).
+
+### 5. Verification & Performance Profile
+- **Challenge Suite**: All 5 iterations of `challenge_suite.py` passed with 0 failures on Pi 5 hardware.
+- **Unit & Mocked Integration**: Full suite in `test_pipeline.py` passed.
+- **Inference Latency Profile**: On the Pi 5's Cortex-A76 cores, warm Qwen 2.5 3B inference takes ~16 seconds per query; serialized execution of all 10 persona queries exceeds 180 seconds. In production, single user queries in Telegram benefit from the 15-minute warm RAM residency (`keep_alive="15m"`).
+
+
 
 
 
