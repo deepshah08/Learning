@@ -116,3 +116,41 @@ echo "[*] Verifying remote archive integrity..."
 ssh "$REMOTE_HOST" "ls -lh '${SMR_ROOT}/${REMOTE_SUBDIR}/${ARCHIVE_NAME}' && tar -tf '${SMR_ROOT}/${REMOTE_SUBDIR}/${ARCHIVE_NAME}' | head -n 5"
 echo "[+] Archive successfully written and verified on SMR storage!"
 ```
+
+---
+
+## 🌐 6. On-Demand Ephemeral Sharing (Architecture 3: Scale-to-Zero)
+
+> **Philosophy**: Zero background containers, 0% idle CPU, 0 MB idle RAM, and guaranteed 0 RPM mechanical drive spindown for 364 days/year. Activates strictly on-demand when the recipient needs to download.
+
+### Controller Location (Pi 5)
+`~/scripts/df_share/share_manager.sh`
+
+### Architecture & Security Workflow
+1. **Idle State**: Tailscale Funnel / Serve is off. Port 8089 is completely dead. SMR drive rests in 0 RPM sleep.
+2. **On Trigger (`share_manager.sh start [HOURS]`)**:
+   - Generates a cryptographically random session token (`secrets.token_urlsafe(16)`).
+   - Starts an isolated, read-only Python streaming service (`server.py`) binding strictly to `127.0.0.1:8089`.
+   - Exposes port 8089 over **Tailscale Funnel** (`https://pi5-media-nas.tail983cc9.ts.net:8089/df?token=<SECRET>`).
+   - Starts an automated background self-destruct timer (default 4 hours).
+3. **Recipient Experience**:
+   - Opens the link in any modern browser on phone, Mac, or PC (no Tailscale client needed).
+   - Clean landing page detailing archive contents, size (60 GB), and a single **Download Master Archive** button.
+   - Server implements **HTTP 206 Partial Content (Range requests)** allowing paused or interrupted downloads to resume smoothly.
+4. **On Completion / Teardown (`share_manager.sh stop`)**:
+   - Unbinds and disables Tailscale Funnel / Serve.
+   - Terminates the streaming process.
+   - Clears the active session token.
+   - Verifies 0 processes and 0 open ports remain active.
+
+### Live CLI Operational Commands
+```bash
+# Start 4-hour ephemeral portal (prints public HTTPS URL + token)
+ssh deepshah08@192.168.1.92 "~/scripts/df_share/share_manager.sh start 4"
+
+# Check current status
+ssh deepshah08@192.168.1.92 "~/scripts/df_share/share_manager.sh status"
+
+# Manually tear down early once recipient finishes downloading
+ssh deepshah08@192.168.1.92 "~/scripts/df_share/share_manager.sh stop"
+```
