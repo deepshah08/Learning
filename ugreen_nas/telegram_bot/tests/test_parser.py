@@ -57,3 +57,23 @@ def test_parse_subtitles_default():
     assert req.title == "House of the Dragon"
     assert req.resolution == "4K"
     assert req.embedded_subtitles is True
+
+@pytest.mark.asyncio
+async def test_parse_media_query_api_error(monkeypatch):
+    from llm_parser import parse_media_query
+
+    # Mock genai.Client to raise an exception
+    class MockClient:
+        def __init__(self, *args, **kwargs):
+            raise Exception("API Error")
+
+    # we need to mock google.genai.Client
+    import google.genai
+    monkeypatch.setattr(google.genai, "Client", MockClient)
+
+    query = "Download Inception in 1080p"
+    req = await parse_media_query(query, api_key="fake_key")
+
+    # It should fallback to parse_with_heuristics
+    expected_req = parse_with_heuristics(query)
+    assert req == expected_req
