@@ -125,9 +125,38 @@ ser.close()
 
 ---
 
-## 5. References & Cross-Links
+## 5. Future Expansion Roadmap & To-Do Queue
+
+### A. Momentum Custom Firmware Integration (Evaluation & To-Do)
+* **Status**: 📋 **Planned / Backlog**
+* **Primary Motivations**:
+  1. **Unlocked Sub-GHz TX Spectrum**: Removes regional geo-blocking in the CC1101 radio driver to allow transmission/replay on custom gate and vehicle bands (e.g. 300–348 MHz, 387–464 MHz, 779–928 MHz).
+  2. **Device-Level Security (PIN Lock)**: Adds a startup and idle button-sequence PIN lock to protect sensitive NFC keys, Sub-GHz captures, and 2FA credentials if physically lost or stolen.
+  3. **On-Device File Manager**: Full filesystem navigation directly on the LCD screen (copy, paste, rename, and hex-preview files on `/ext`).
+  4. **Custom BLE Personas**: Disguise Bluetooth advertising identity (name, MAC address, appearance) for advanced security auditing.
+* **Trade-Offs & Known Constraints**:
+  - **App Store Sync**: Potential API drift from official `lab.flipper.net` builds; will rely on Momentum's integrated app catalog.
+  - **RF Responsibility**: Hardware filters are unlocked; operator is responsible for avoiding restricted/emergency radio frequencies.
+  - **Battery Impact**: Standby run-time slightly reduced from ~7–10 days to ~5–7 days due to richer background hooks.
+  - **Mobile BLE Re-pairing**: May require "Forgetting Device" in phone Bluetooth settings when switching firmwares.
+* **Execution Runbook (When Ready)**:
+  1. Create a full SD card snapshot via CLI or card reader.
+  2. Connect to [https://momentum-fw.dev](https://momentum-fw.dev) in Chrome via WebUSB.
+  3. Flash the latest release build (preserves existing SD card assets).
+  4. Set PIN lock under `Settings -> Security`.
+
+### B. Hardware Expansion Modules (GPIO Header)
+* **ESP32-S2 / WiFi Devboard**: Adds 802.11 Wi-Fi packet monitoring, Marauder deauthentication auditing, and direct webhook dispatching to Raspberry Pi 5 `n8n` (`http://192.168.1.92:5678`).
+* **NRF24L01+ Module**: Adds 2.4 GHz transceiver for wireless mouse/keyboard auditing (MouseJack) and 2.4 GHz spectrum sniffing.
+* **All-in-One Multi-Board (Mayhem)**: Combines ESP32 + NRF24 + amplified external CC1101 SMA antenna (100m+ RF range).
+
+---
+
+## 6. References & Cross-Links
 
 * **Single Source of Truth Inventory**: [HARDWARE_AND_SYSTEMS_INVENTORY.md](../../HARDWARE_AND_SYSTEMS_INVENTORY.md)
 * **Master Documentation Index**: [README.md](../../README.md)
 * **Official Flipper Documentation**: [https://docs.flipper.net](https://docs.flipper.net)
 * **Flipper Lab (Apps & Web Serial)**: [https://lab.flipper.net](https://lab.flipper.net)
+* **Momentum Firmware Portal**: [https://momentum-fw.dev](https://momentum-fw.dev)
+
