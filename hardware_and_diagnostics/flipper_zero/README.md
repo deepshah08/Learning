@@ -146,9 +146,11 @@ ser.close()
   4. Set PIN lock under `Settings -> Security`.
 
 ### B. Hardware Expansion Modules (GPIO Header)
+> *Note: Full hardware specs, pinout maps, and acquisition wishlist are cataloged in [**`HARDWARE_ADDONS.md`**](HARDWARE_ADDONS.md).*
 * **ESP32-S2 / WiFi Devboard**: Adds 802.11 Wi-Fi packet monitoring, Marauder deauthentication auditing, and direct webhook dispatching to Raspberry Pi 5 `n8n` (`http://192.168.1.92:5678`).
 * **NRF24L01+ Module**: Adds 2.4 GHz transceiver for wireless mouse/keyboard auditing (MouseJack) and 2.4 GHz spectrum sniffing.
 * **All-in-One Multi-Board (Mayhem)**: Combines ESP32 + NRF24 + amplified external CC1101 SMA antenna (100m+ RF range).
+* **Flippenheimer & CAN Modules**: DIY Geiger-Müller radiation tube and OBD-II MCP2515 CAN transceiver.
 
 ---
 
