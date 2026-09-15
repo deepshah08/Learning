@@ -22,7 +22,12 @@ class RadarrClient:
                 headers=self.headers
             )
             if resp.status_code == 200:
-                return resp.json()
+                try:
+                    data = resp.json()
+                    # Filter out items that do not have a 'title' key
+                    return [item for item in data if "title" in item]
+                except ValueError:
+                    return []
             return []
 
     async def add_movie(
