@@ -73,21 +73,23 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     status_msg = await update.message.reply_text("🔍 Checking homelab services...")
     
-    # Test Radarr
-    radarr_ok = False
-    try:
-        res = await media_manager.radarr.lookup_movie("Inception")
-        radarr_ok = True if res else False
-    except Exception:
-        radarr_ok = False
+    import asyncio
 
-    # Test Sonarr
-    sonarr_ok = False
-    try:
-        res = await media_manager.sonarr.lookup_series("Stranger Things")
-        sonarr_ok = True if res else False
-    except Exception:
-        sonarr_ok = False
+    async def check_radarr():
+        try:
+            res = await media_manager.radarr.lookup_movie("Inception")
+            return bool(res)
+        except Exception:
+            return False
+
+    async def check_sonarr():
+        try:
+            res = await media_manager.sonarr.lookup_series("Stranger Things")
+            return bool(res)
+        except Exception:
+            return False
+
+    radarr_ok, sonarr_ok = await asyncio.gather(check_radarr(), check_sonarr())
 
     report = (
         "📊 **Homelab Services Status:**\n\n"
