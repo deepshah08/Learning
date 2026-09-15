@@ -93,37 +93,25 @@ edns-buffer-size: 1232
 
 ---
 
-## 🔗 3. Dual Split-Scope DHCP Architecture & Lease Lifecycle
+## 🔗 3. Single Authoritative DHCP Architecture & Scope Hardening
 
-### Current Topology:
-- **Primary DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal `pihole-FTL` on Gigabit Ethernet (`eth0`).
-  - **Primary Pool**: `192.168.1.64` – `192.168.1.189` (126 addresses).
-  - **Physical Link**: Gigabit Full Duplex Wired Ethernet (Zero Wi-Fi station isolation, zero broadcast drops).
+### Topology & Forensic Reality:
+- **Sole DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal `pihole-FTL` on Gigabit Ethernet (`eth0`).
+  - **Dynamic Pool**: `192.168.1.64` – `192.168.1.250` (187 non-overlapping addresses).
   - **Interface Policy**: DHCP served strictly on `eth0` (`no-dhcp-interface=wlan0`).
-  - **Mode**: Non-Authoritative Coexistence (Prevents NAKing secondary leases).
-- **Secondary Standby DHCP Server**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`network_mode: host`, `port=0`).
-  - **Secondary Standby Pool**: `192.168.1.190` – `192.168.1.250` (61 non-overlapping addresses).
-  - **Mode**: Non-Authoritative Standby (0 IP conflict, automatically steps in if Pi 5 is offline).
+  - **Mode**: Authoritative.
+- **Standby Cold DHCP Container**: UGREEN DXP2800 NAS (`192.168.1.80`) — `nas_dhcp_server` container (`stopped`).
+  - **Why Dual Active-Active DHCP Was Terminated**: Pi-hole v6 FTL hardcodes `dhcp-authoritative` in its C source code whenever `dhcp.active = true`. If a secondary DHCP server (NAS) runs simultaneously on the same L2 broadcast domain, NAS's 2.5GbE interface races Pi 5. Whenever a mobile client accepts NAS's offer, Pi 5 intercepts the request and broadcasts `DHCPNAK (wrong server-ID / address not available)`. This destroys the client's network stack and leaves Android devices stuck in an infinite *"Obtaining IP address..."* loop. Running a single authoritative DHCP server on Pi 5 completely eliminates NAK storms.
 - **Lease Duration**: 24 hours.
-- **Option 6 (DNS)**: `[192.168.1.92, 192.168.1.80]` on BOTH nodes (Local-only, zero public DNS leak).
+- **Option 6 (DNS)**: `[192.168.1.92, 192.168.1.80]` (Primary Pi 5 + Secondary NAS DNS).
 - **Gateway Router (Option 3)**: `192.168.1.254`.
-- **AT&T Router DHCP**: **Disabled.** AT&T BGW320 firmware locks DNS to `192.168.1.254`, bypassing Pi-hole entirely.
-
-### Lease Lifecycle & Failover Dynamics:
-```text
-T=0h (Normal)   Client broadcasts DHCPDISCOVER -> Pi 5 answers in <0.5ms (Primary Pool 64-189) -> Client ACK
-T=0h (Failover) If Pi 5 is down -> NAS answers (Secondary Pool 190-250) -> Client ACK (Zero conflict)
-T=12h           T1 Renewal: Client unicasts DHCPREQUEST to active lease server (silent, no disruption)
-T=21h           T2 Rebind: Client broadcasts DHCPREQUEST (fallback if T1 server unavailable)
-T=24h           Lease Expiry: Client re-acquires from whichever server is online
-```
 
 ### Critical Configuration 1 (`/etc/pihole/pihole.toml` on Pi 5 Primary):
 ```toml
 [dhcp]
   active = true
   start = "192.168.1.64"
-  end = "192.168.1.189"
+  end = "192.168.1.250"
   router = "192.168.1.254"
   leaseTime = "24h"
   rapidCommit = false

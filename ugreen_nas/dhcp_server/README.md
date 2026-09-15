@@ -2,9 +2,9 @@
 
 > **Context**: High-performance, low-latency, containerized Secondary Standby DHCP server running on the UGREEN DXP2800 NAS, coupled with the Project #31 automated SLO Watchdog Daemon.  
 > **Host**: UGREEN DXP2800 NAS (`192.168.1.80` Static | 2.5GbE Hardwired Copper)  
-> **Role**: Secondary Standby DHCP Server + Real-Time SRE Watchdog Sentry  
-> **Status**: 🟢 **Production Verified (Standby Fallback)**  
-> **Last Verified**: 2026-09-07  
+> **Role**: Cold Standby DHCP Server (Ready on demand if Pi 5 is offline)  
+> **Status**: ⚪ **Cold Standby (Stopped)** — *Must NOT run concurrently with Pi-hole v6 FTL on Pi 5 (Pi-hole FTL hardcodes dhcp-authoritative and will NAK NAS-offered leases)*.  
+> **Last Verified**: 2026-09-14  
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Service | Container Name | Network Mode | Ports Bound | Role / Scope |
 | :--- | :--- | :--- | :--- | :--- |
-| **Standby DHCP** | `nas_dhcp_server` | `host` | `67/udp` | Standby Split-Scope Pool (`192.168.1.190` – `192.168.1.250`) |
+| **Standby DHCP** | `nas_dhcp_server` | `host` | `67/udp` | Cold Standby Pool (`192.168.1.190` – `192.168.1.250`). Kept stopped during normal operations. |
 | **SLO Watchdog** | `nas_slo_watchdog` | `host` | None (Outbound Sockets) | Continuous 60s probe of Primary (Pi 5) & Secondary (NAS) DNS |
 
 ---
