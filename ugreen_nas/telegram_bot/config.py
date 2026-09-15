@@ -2,7 +2,7 @@
 Configuration module for Telegram Media Automation Bot.
 Loads environment variables with strict type validation using Pydantic Settings.
 """
-from typing import List, Optional
+from typing import List, Optional, Set
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 
@@ -10,7 +10,7 @@ from pydantic import Field
 class BotConfig(BaseSettings):
     # Telegram Credentials
     telegram_bot_token: str = Field(default="", alias="TELEGRAM_BOT_TOKEN")
-    allowed_user_ids: List[int] = Field(default_factory=list, alias="ALLOWED_USER_IDS")
+    allowed_user_ids: Set[int] = Field(default_factory=set, alias="ALLOWED_USER_IDS")
 
     # LLM Settings (for Natural Language Extraction)
     llm_api_key: Optional[str] = Field(default=None, alias="LLM_API_KEY")
