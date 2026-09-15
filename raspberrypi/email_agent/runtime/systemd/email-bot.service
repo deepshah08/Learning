@@ -1,0 +1,25 @@
+[Unit]
+Description=Pi-loop Interactive Telegram Command Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deepshah08
+WorkingDirectory=/home/deepshah08/email-agent
+ExecStart=/home/deepshah08/email-agent/venv/bin/python bot_service.py
+
+# Low priority & minimal resource usage
+Nice=15
+CPUQuota=15%
+MemoryMax=150M
+
+# Logging
+StandardOutput=append:/home/deepshah08/email-agent/logs/bot_service.log
+StandardError=append:/home/deepshah08/email-agent/logs/bot_service.log
+
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

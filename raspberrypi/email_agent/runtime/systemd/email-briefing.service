@@ -1,0 +1,17 @@
+[Unit]
+Description=Pi-loop Daily Executive Intelligence Briefing
+After=network-online.target ollama.service email-bot.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deepshah08
+WorkingDirectory=/home/deepshah08/email-agent
+ExecStart=/home/deepshah08/email-agent/venv/bin/python -c "import bot_service; bot_service.cmd_digest(bot_service.CHAT_ID, 'scheduled')"
+
+Nice=15
+CPUQuota=30%
+MemoryMax=200M
+
+StandardOutput=append:/home/deepshah08/email-agent/logs/briefing.log
+StandardError=append:/home/deepshah08/email-agent/logs/briefing.log

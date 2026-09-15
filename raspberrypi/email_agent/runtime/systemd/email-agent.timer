@@ -1,0 +1,12 @@
+[Unit]
+Description=Run email agent every 6 hours
+Requires=email-agent.service
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=6h
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

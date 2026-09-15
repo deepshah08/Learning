@@ -1,0 +1,25 @@
+[Unit]
+Description=Pi-loop Email Intelligence Agent
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deepshah08
+WorkingDirectory=/home/deepshah08/email-agent
+ExecStart=/home/deepshah08/email-agent/venv/bin/python gmail_agent.py --all-users
+
+# Timeout & Throttling — per AGENTS.md: AI workers must be constrained
+TimeoutStartSec=900s
+Nice=15
+CPUQuota=50%
+MemoryMax=1G
+
+# Logging
+StandardOutput=append:/home/deepshah08/email-agent/logs/agent.log
+StandardError=append:/home/deepshah08/email-agent/logs/agent.log
+
+# Never auto-restart on failure: this is a scheduled timer job.
+# Automatic restart loops cause runaway retry storms against Ollama.
+Restart=no
+

@@ -1,0 +1,12 @@
+[Unit]
+Description=Trigger Pi-loop Daily Executive Briefing (8:00 AM & 6:00 PM)
+
+[Timer]
+# Morning briefing at 08:00
+OnCalendar=*-*-* 08:00:00
+# Evening briefing at 18:00
+OnCalendar=*-*-* 18:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
