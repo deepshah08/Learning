@@ -44,6 +44,14 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 
 ---
 
+## Current Integration Focus: CruxDAG + SimuVerse
+
+The learner-facing architecture is split into an independent CruxDAG Pathfinder
+(tutorial path, provenance reader, concept DAG) and SimuVerse (interactive
+simulation player). The systems link at the learner handoff but release and
+scale independently. See the [investigation](ci_cd_and_agentic_pipelines/cruxdag_simuverse/cruxdag_simuverse_investigation.md)
+and [durable knowledge](ci_cd_and_agentic_pipelines/cruxdag_simuverse/cruxdag_simuverse_knowledge.md).
+
 ## 🛠️ Global Execution Protocol for Agents
 When initiating a session:
 1. Reference this `PROJECTS_ROADMAP.md` to identify dependencies, interfaces, and target ports.

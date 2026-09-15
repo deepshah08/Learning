@@ -9,18 +9,18 @@
 ## 1. Multi-Repo CI/CD Matrix & Health Overview
 
 ```text
-┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   ECOSYSTEM CI/CD TEST MATRIX                                   │
-├────────────────────────────┬─────────────────────────────┬──────────────┬───────────────────────┤
-│ Repository                 │ Workflow File               │ Test Count   │ Quality Gates         │
-├────────────────────────────┼─────────────────────────────┼──────────────┼───────────────────────┤
-│ `raspberry-pi-5-ecosystem` │ `.github/workflows/ci.yml`  │ 44 Tests     │ Flake8 + Pytest (60s) │
-│ `antigravity_projects`     │ `.github/workflows/deploy.yml`│ 19,000+ Files│ TypeScript + Vite PWA │
-│ `market_project`           │ `.github/workflows/ci.yml`  │ 10 Tests     │ Pytest + Mocked APIs  │
-│ `agentic-workflows`        │ `.github/workflows/*.yml`   │ Matrix (3 OS)│ Python 3.10 & 3.13    │
-│ `antigravity-pipeline-bp`  │ Source Blueprint `v2.2.0`   │ Reusable Spec│ Jules & Keenable Sk.  │
-│ `Learning`                 │ Master Knowledge Base       │ SoT Docs     │ Cross-Session Memory  │
-└────────────────────────────┴─────────────────────────────┴──────────────┴───────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│                     ECOSYSTEM CI/CD TEST MATRIX                            │
+├───────────────────────────┬───────────────────────┬─────────┬──────────────┤
+│ Repository                │ Workflow              │ Tests   │ Gate         │
+├───────────────────────────┼───────────────────────┼─────────┼──────────────┤
+│ raspberry-pi-5-ecosystem  │ ci.yml                │ 44      │ flake8+pytest│
+│ antigravity_projects      │ deploy.yml            │ 19,000+ │ TS + Vite    │
+│ market_project            │ ci.yml                │ 10      │ pytest+mocks │
+│ agentic-workflows         │ *.yml                 │ matrix  │ Py 3.10/13   │
+│ antigravity-pipeline-bp   │ blueprint v2.2.0      │ spec    │ Jules        │
+│ Learning                  │ knowledge base        │ docs    │ SoT          │
+└───────────────────────────┴───────────────────────┴─────────┴──────────────┘
 ```
 
 ---
@@ -92,5 +92,7 @@ npm ci && npm run build
 ## 5. References & Cross-Links
 - [Jules Multi-Agent Pipeline Documentation](JULES_MULTI_AGENT_PIPELINE.md)
 - [Offline Knowledge Center PWA & Scraping Pipeline](OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)
+- [CruxDAG + SimuVerse Investigation](cruxdag_simuverse/cruxdag_simuverse_investigation.md)
+- [CruxDAG + SimuVerse Knowledge](cruxdag_simuverse/cruxdag_simuverse_knowledge.md)
 - [Master Project Roadmap](../PROJECTS_ROADMAP.md)
 - [Hardware & Systems Inventory](../HARDWARE_AND_SYSTEMS_INVENTORY.md)
