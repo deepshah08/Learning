@@ -57,3 +57,12 @@ def test_parse_subtitles_default():
     assert req.title == "House of the Dragon"
     assert req.resolution == "4K"
     assert req.embedded_subtitles is True
+
+def test_parse_empty_query():
+    req1 = parse_with_heuristics('')
+    assert req1.title == ''
+    assert req1.media_type == 'movie'
+
+    req2 = parse_with_heuristics('   ')
+    assert req2.title == ''
+    assert req2.media_type == 'movie'
