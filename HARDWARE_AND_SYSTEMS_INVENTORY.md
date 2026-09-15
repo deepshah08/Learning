@@ -126,3 +126,12 @@
    - **Pi 5 (16GB RAM)**: Local LLM caching, background batch processing, offline audio transcription, document indexing.
    - **NAS (Intel N100 + QuickSync)**: Low-latency NVMe transactions, 4K QuickSync hardware media streaming, and native file sharing.
 
+---
+
+## 🛠️ 5. Portable Diagnostic & RF Tooling Inventory
+
+| Device | Model & UID | Firmware | Primary Storage | Role & Interface | Documentation Link |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Flipper Zero** | `Epriesol` (UID: `58688D0127E18000`, HW Ver 15) | Release 1.4.3 (Radio: 1.20.0 light) | 32GB MicroSD (FAT32, ~29.7 GiB, 1-bit SPI) | Sub-GHz, NFC (Mifare), RFID (125kHz), IR universal remotes, BadUSB audits (`/dev/cu.usbmodemflip_Epriesol1`) | [flipper_zero/README.md](hardware_and_diagnostics/flipper_zero/README.md) |
+
+
