@@ -1,6 +1,10 @@
 # 📬 Pi-loop Email Intelligence Agent
 
 > **Autonomous, privacy-first email triage, semantic classification, and proactive task-tracking pipeline running on Raspberry Pi 5 with local Ollama LLMs and real-time Telegram Bot intelligence.**
+>
+> Companion investigation: [`pi_loop_email_agent_investigation.md`](./pi_loop_email_agent_investigation.md)
+> Companion durable knowledge: [`pi_loop_email_agent_knowledge.md`](./pi_loop_email_agent_knowledge.md)
+> Deployable runtime snapshot: [`runtime/`](./runtime/)
 
 ---
 
@@ -257,7 +261,7 @@ Prior to declaring production readiness for multi-tenant deployment, a comprehen
 
 ### 1. Delivery & Notification Resilience (`notifier.py`)
 - **Telegram 4096-Character Limit Protection**: Implemented `split_telegram_message(text, max_len=4000)` to automatically chunk large briefings, audit logs, or RAG outputs along paragraph boundaries into multi-part messages (`(1/3)`, `(2/3)`).
-- **Two-Tier Resilient Dispatch**: If Telegram returns HTTP 400 due to unescaped Markdown symbols (`_`, `*`, `[` in subject lines), the dispatcher immediately re-posts as raw plain text (`parse_mode=None`), guaranteeing zero dropped notifications.
+- **Plaintext-First Dispatch (current)**: Dynamic digest, urgent-alert, and evaluator content is sent without Telegram Markdown so arbitrary subject/sender text cannot trigger entity parsing failures. Only HTTP 429 and 5xx responses receive one bounded retry; permanent 4xx responses are not duplicated.
 
 ### 2. Multi-Tenant Ingress & Fail-Closed Security (`bot_service.py` & `user_manager.py`)
 - **Fail-Closed Gate**: Replaced permissive `if CHAT_ID and str(chat_id) != str(CHAT_ID)` with a strict fail-closed check. Unregistered chat IDs receive `⛔ Access Denied` and cannot query any mailbox.
@@ -339,10 +343,15 @@ Because email triage is decoupled from synchronous user waiting by running on a 
 - **Configuration**: Deployed systemd drop-in override `/etc/systemd/system/ollama.service.d/override.conf` setting `Environment="OLLAMA_KEEP_ALIVE=15m"` and updated all generation/embedding API payloads (`keep_alive="15m"`).
 - **Behavior**: Bumped the idle expiration timer from 5 minutes to 15 minutes. When `qwen2.5:3b` or `all-minilm` is loaded into memory, it remains warm for 15 minutes post-query, eliminating the 1.8s cold-start delay for conversational `/ask` threads, while automatically evicting afterwards to release 2.1 GB of RAM back to the Pi 5.
 
-### 6. CPU Throttling & Pi-hole FTL Network Shield (`CPUQuota=250%`, `Nice=10`)
+### 6. CPU Throttling & Pi-hole FTL Network Shield (historical design corrected)
 - **Audit Finding**: During the September 13, 2026 infrastructure audit, un-throttled Ollama generation reached **338% CPU** across all 4 BCM2712 cores during batch email classification, driving the 15-minute system load average to 4.2 and triggering Pi-hole FTL warnings (`WARNING: Long-term load larger than number of processors: 4.2 > 4`).
 - **Remediation**: Added `CPUQuota=250%` and `Nice=10` to `/etc/systemd/system/ollama.service.d/override.conf`.
 - **System Invariant**: Caps Ollama to a maximum of 2.5 cores, strictly reserving 1.5 cores for Pi-hole v6 FTL (`Nice=-10`, `OOMScoreAdjust=-1000`), Unbound recursive DNS (`127.0.0.1:5335`), and Linux kernel network packet interrupts.
+
+> **Current-state correction (2026-09-15):** Live verification found Ollama at
+> `CPUQuota=150%`, `Nice=15`, with email-agent at 50% and the bot at 15%.
+> Pi-hole FTL remains `Nice=-10` and `OOMScoreAdjust=-1000`. See the paired
+> knowledge document and `runtime/RESOURCE_BUDGET.md` for current budgets.
 
 ---
 
@@ -386,8 +395,6 @@ In collaboration with autonomous peer agents (Codex), the system was elevated fr
   2. Added fast path in `quick_prefilter` (`email_classifier.py`) intercepting social network traffic before calling LLMs.
   3. Added `EXCLUDE_URGENCY_PATTERNS` to `classify_with_llm` pessimistic fallback to strictly prevent marketing/social language from escalating to `URGENT`.
   4. Executed live remediation: un-starred all 22 false-positive emails in Gmail, removed `AI/Priority-Urgent` labels, and corrected their SQLite records (`processed_emails`).
-
-
 
 
 

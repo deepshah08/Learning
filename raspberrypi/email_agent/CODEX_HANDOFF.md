@@ -3,6 +3,14 @@
 > **Target Audience**: Autonomous AI Engineering Agents (Codex, Cursor, Claude Code) & Developers taking over development, maintenance, and architectural extension of the **Pi-loop Email Intelligence Platform**.
 > **Status**: Production-Active on Raspberry Pi 5.
 > **Date**: September 2026.
+>
+> **Current-state companion:** [`pi_loop_email_agent_knowledge.md`](./pi_loop_email_agent_knowledge.md)
+> **Investigation history:** [`pi_loop_email_agent_investigation.md`](./pi_loop_email_agent_investigation.md)
+> **Deployable runtime:** [`runtime/`](./runtime/)
+
+> **Correction (2026-09-15):** Some sections below preserve historical design
+> values. For live limits, notification behavior, measured overages, and the
+> current Pi-hole/AI priority contract, use the companion knowledge document.
 
 ---
 
@@ -335,4 +343,3 @@ print('Categories:', c.execute('SELECT category, count(*) FROM processed_emails 
 3. **Database Concurrency**: Always access SQLite through `get_db_connection(db_path)` which enforces WAL mode and a 10,000ms busy timeout to prevent locking conflicts between Telegram commands and batch ingestion.
 4. **Safety Invariants**: Never allow an email with priority `URGENT` or `IMPORTANT` to have `auto_archived = 1`. This invariant is monitored by `background_evaluator.py`.
 5. **CPU Throttling & Pi-hole Protection**: Never remove or increase `CPUQuota=250%` or `Nice=10` from `/etc/systemd/system/ollama.service.d/override.conf`, and never configure Ollama/llama-server to utilize 4 full CPU threads. The primary Pi 5 node handles whole-home DNS/DHCP (`pihole-FTL`); background AI triage must never starve DNS resolution of CPU cycles. `email-agent.service` is also throttled (`CPUQuota=50%`, `Nice=15`, `MemoryMax=1G`).
-
