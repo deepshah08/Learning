@@ -60,7 +60,8 @@ When initiating a session:
    - DNS & Network: [`networking/DNS_NETWORK_HANDOFF.md`](networking/DNS_NETWORK_HANDOFF.md)
 3. **Any SLO violation is an Incident.** Treat client-side degradation caused by homelab services as immediate-priority work. Refer to the Incident Classification Matrix in the relevant handoff document.
 4. Verify system states before altering container bindings or disk mounts.
-5. Synchronize changes to `deepshah08/Learning` repository.
+5. **Continuous Performance & Complexity Alignment**: Reference [SYSTEMS_BENCHMARKING_AND_OPTIMIZATIONS.md](SYSTEMS_BENCHMARKING_AND_OPTIMIZATIONS.md) before implementing algorithmic or data-pipeline changes to preserve verified complexity gains ($O(N^2) \to O(N)$) and storage-tier write boundaries.
+6. Synchronize changes to `deepshah08/Learning` repository.
 
 ---
 

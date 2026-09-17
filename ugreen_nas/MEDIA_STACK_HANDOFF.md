@@ -4,7 +4,7 @@
 > **Host Node**: UGREEN DXP2800 NAS (`192.168.1.80` | Intel N100, 8GB DDR5, 2.5GbE Wired Ethernet)  
 > **Operating System**: UGOS Pro (Debian 12 Kernel)  
 > **Status**: 🟢 **Production Healthy & Hardened**  
-> **Last Verified**: 2026-08-29  
+> **Last Verified**: 2026-09-16  
 > **SLO Enforcement**: Strict — Any violation is a **SEV-2 Incident** requiring immediate remediation.
 
 ---
@@ -48,17 +48,17 @@ flowchart TD
     Qbit -->|"6. Ratio 1.0 Reached"| Pause["Auto-Pause Torrent"]
     Pause -->|"7. Atomic Hardlink"| Hardlink["0-Byte Hardlink\n/data/torrents -> /data/media"]
     Hardlink -->|"8. Subtitles"| Bazarr["Bazarr :6767\nEN + HI Subtitles"]
-    Hardlink -->|"9. Library Scan"| Plex["Plex :32400\nIntel QuickSync HW Transcode"]
+    Hardlink -->|"9. Targeted Refresh"| Plex["Plex :32400\nIntel QuickSync HW Transcode"]
     Plex -->|"10. Direct Play"| Clients["TCL TV / iPhone / Mac"]
 ```
 
 ### Hardlink & Instant Sync Mechanics:
 1. qBittorrent downloads to `/data/torrents/movies/` (NVMe for incomplete, SATA for complete).
 2. Radarr/Sonarr creates a **0-byte atomic hardlink** at `/data/media/movies/` or `/data/media/tv/`.
-3. **Triple-Redundancy Instant Sync**:
-   - **Tier 1 (Instant Push Webhook)**: Radarr and Sonarr immediately call Plex's internal API (`http://192.168.1.80:32400`) on Download/Import/Upgrade to refresh only the exact media folder (<2s latency).
-   - **Tier 2 (Inotify Auto-Scanner)**: Plex server has `FSEventLibraryUpdatesEnabled=1` and `FSEventLibraryPartialScanEnabled=1` enabled to detect filesystem folder changes.
-   - **Tier 3 (Periodic Sweep Fallback)**: Plex runs a scheduled partial sweep every 15 minutes (`ScheduledLibraryUpdateInterval=900`) as a safety net.
+3. **Dual-Tier Event-Driven Sync (Zero Idle Mechanical Spin-up)**:
+   - **Tier 1 (Instant Push Webhook)**: Radarr and Sonarr immediately call Plex's internal API (`http://192.168.1.80:32400`) on Download/Import/Upgrade to refresh strictly the targeted media directory (<2s latency).
+   - **Tier 2 (Inotify Auto-Scanner)**: Plex server has `FSEventLibraryUpdatesEnabled=1` and `FSEventLibraryPartialScanEnabled=1` enabled to detect new filesystem items without full library walks.
+   - *Note*: Scheduled timer-based library walks (`ScheduledLibraryUpdatesEnabled=0`) and deep background media analysis are explicitly disabled to allow `/volume1` mechanical HDDs to stay in 0 RPM deep hibernation.
 4. Plex streams the file with **zero duplicate disk space** and **zero additional SSD wear**.
 5. Original torrent file remains seeded until Ratio = 1.0, then auto-pauses.
 
@@ -93,16 +93,16 @@ Session\TempPath=/data/torrents/incomplete
 
 ## 🚀 4. Live Container Stack & Port Map
 
-| Service | Port | Endpoint | Health |
-| :--- | :--- | :--- | :--- |
-| **Plex Media Server** | `32400` | `http://192.168.1.80:32400/web` | 🟢 QuickSync 4K HDR |
-| **Prowlarr** | `9696` | `http://192.168.1.80:9696` | 🟢 Indexer Sync |
-| **Radarr** | `7878` | `http://192.168.1.80:7878` | 🟢 Movie Automation |
-| **Sonarr** | `8989` | `http://192.168.1.80:8989` | 🟢 TV Automation |
-| **qBittorrent** | `8080` | `http://192.168.1.80:8080` | 🟢 P2P Port 6881 |
-| **Bazarr** | `6767` | `http://192.168.1.80:6767` | 🟢 Subtitle Sync |
-| **Seerr** | `5055` | `http://192.168.1.80:5055` | 🟢 Request Portal (v3.4.1) |
-| **Tautulli** | `8181` | `http://192.168.1.80:8181` | 🟢 Stream Telemetry |
+| Service | Port | Endpoint | Health | Version / State |
+| :--- | :--- | :--- | :--- | :--- |
+| **Plex Media Server** | `32400` | `http://192.168.1.80:32400/web` | 🟢 QuickSync 4K HDR | `v1.43.4.10903` (Updated 2026-09-15) |
+| **Prowlarr** | `9696` | `http://192.168.1.80:9696` | 🟢 Indexer Sync | Latest LinuxServer (Updated 2026-09-15) |
+| **Radarr** | `7878` | `http://192.168.1.80:7878` | 🟢 Movie Automation | Latest LinuxServer (Updated 2026-09-15) |
+| **Sonarr** | `8989` | `http://192.168.1.80:8989` | 🟢 TV Automation | Latest LinuxServer (Updated 2026-09-15) |
+| **qBittorrent** | `8080` | `http://192.168.1.80:8080` | 🟢 P2P Port 6881 | Latest LinuxServer (Updated 2026-09-15) |
+| **Bazarr** | `6767` | `http://192.168.1.80:6767` | 🟢 Subtitle Sync | Latest LinuxServer (Updated 2026-09-15) |
+| **Seerr** | `5055` | `http://192.168.1.80:5055` | 🟢 Request Portal | `ghcr.io/seerr-team/seerr:latest` (v3.4.1) |
+| **Tautulli** | `8181` | `http://192.168.1.80:8181` | 🟢 Stream Telemetry | Latest LinuxServer (Updated 2026-09-15) |
 
 ---
 
