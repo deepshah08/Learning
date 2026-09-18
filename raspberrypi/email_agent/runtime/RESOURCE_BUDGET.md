@@ -103,6 +103,25 @@ Corrective actions:
   function. The function is now implemented and covered by a regression test,
   so genuine guardrail failures are no longer silently discarded.
 
+### 2026-09-18 14:29 PDT — avoidable chat synthesis (within deadline)
+
+- Observed: `/ask can you mark all as read` retrieved two unrelated records
+  and spent 41,458 ms in Qwen synthesis. This remained below the 45-second RAG
+  deadline, so it is not a formal overage and did not change Gmail.
+- Cause: an operational bulk-read intent reached semantic retrieval instead of
+  a command-specific path.
+- Corrective action: natural latest-N requests now read SQLite directly;
+  natural bulk-read requests are refused by read-only `/ask` and directed to
+  `/mark-read all`. The latter needs a user/chat/action-bound, five-minute,
+  single-use confirmation before it lists `is:unread` and removes `UNREAD` in
+  batches of at most 1,000 messages.
+- Validation: local and Pi unit suites verified the guard, token consumption,
+  and batch request shape. No confirmation was tapped during validation; no
+  live Gmail mutation or pipeline run occurred.
+- Live post-deploy snapshot: FTL RSS about 69 MB, bot RSS about 52 MB, Ollama
+  RSS about 40 MB. FTL remained nice -10 with `oom_score_adj=-1000`;
+  CPU/I/O/pids cgroups are available, memory cgroups are not.
+
 ## Operating policy
 
 - Do not increase the 900-second systemd timeout to hide slow dependencies.

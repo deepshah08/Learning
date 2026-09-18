@@ -30,9 +30,20 @@ from gmail_agent import (
 from bot_service import query_rag
 from bot_service import (
     _category_keyboard,
+    _correction_priority_hint,
+    _is_mark_all_read_request,
+    _latest_request_count,
+    _priority_keyboard,
     apply_category_feedback,
+    apply_priority_feedback,
+    cmd_ask,
+    consume_pending_action,
+    create_pending_action,
+    find_correction_candidates,
+    mark_all_gmail_as_read,
     rate_rag_interaction,
     record_rag_interaction,
+    send_plain_message,
 )
 from gemini_teacher import (
     TeacherError,
@@ -74,6 +85,19 @@ def test_telegram_plaintext_and_bounded_retry_policy():
         send_telegram_direct("guardrail-chat", "alert")
     assert len(transient_calls) == 2
     assert transient_calls[-1]["json"]["chat_id"] == "guardrail-chat"
+
+    class BotResponse:
+        ok = True
+
+        def json(self):
+            return {"ok": True}
+
+    bot_calls = []
+    with patch("bot_service.BOT_TOKEN", "token"), \
+         patch("bot_service.requests.post", side_effect=lambda *args, **kwargs: bot_calls.append(kwargs) or BotResponse()):
+        send_plain_message("chat-id", "Subject [with] untrusted _markup_")
+    assert len(bot_calls) == 1
+    assert "parse_mode" not in bot_calls[0]["json"]
 
 
 def test_real_ollama_http_deadline_and_gemini_retry_budget():
@@ -140,6 +164,41 @@ class FakeGmailService:
 
     def execute(self):
         return {}
+
+
+class FakeUnreadGmailService:
+    """Small Gmail list/batch fake used to validate bounded bulk read changes."""
+
+    def __init__(self):
+        self.list_calls = []
+        self.batch_changes = []
+        self._pages = [
+            {"messages": [{"id": "unread-1"}, {"id": "unread-2"}], "nextPageToken": "page-2"},
+            {"messages": [{"id": "unread-3"}]},
+        ]
+
+    def users(self):
+        return self
+
+    def messages(self):
+        return self
+
+    def list(self, **kwargs):
+        self.list_calls.append(kwargs)
+        index = 1 if kwargs.get("pageToken") else 0
+        return _FakeRequest(self._pages[index])
+
+    def batchModify(self, **kwargs):
+        self.batch_changes.append(kwargs)
+        return _FakeRequest({})
+
+
+class _FakeRequest:
+    def __init__(self, payload):
+        self.payload = payload
+
+    def execute(self):
+        return self.payload
 
 
 def seed_feedback_email(db_path: Path, msg_id: str = "feedback-1"):
@@ -469,6 +528,88 @@ def test_telegram_label_and_rag_feedback_persistence():
         assert len(callbacks) == 7
         assert all(len(value.encode("utf-8")) <= 64 for value in callbacks)
 
+
+def test_priority_feedback_and_chat_intent_guardrails():
+    with tempfile.NamedTemporaryFile(suffix=".db") as tmp:
+        db_path = Path(tmp.name)
+        init_db(db_path)
+        seed_feedback_email(db_path, "priority-1")
+        conn = sqlite3.connect(db_path)
+        conn.execute(
+            "UPDATE processed_emails SET subject = 'Pets, partners and pools' WHERE msg_id = 'priority-1'"
+        )
+        conn.commit()
+        conn.close()
+
+        service = FakeGmailService()
+        labels = {
+            "AI/Priority-Urgent": "urgent-id",
+            "AI/Priority-Important": "important-id",
+        }
+        learned = apply_priority_feedback(
+            service, db_path, labels, "priority-1", "IMPORTANT"
+        )
+        assert learned == "orders@brand.com"
+        assert service.modifications == [{
+            "userId": "me",
+            "id": "priority-1",
+            "body": {"addLabelIds": ["important-id"], "removeLabelIds": ["urgent-id"]},
+        }]
+
+        conn = sqlite3.connect(db_path)
+        persisted = conn.execute(
+            "SELECT priority, status FROM processed_emails WHERE msg_id = 'priority-1'"
+        ).fetchone()
+        learned_rule = conn.execute(
+            "SELECT priority FROM sender_rules WHERE sender_pattern = 'orders@brand.com'"
+        ).fetchone()
+        conn.close()
+        assert persisted == ("IMPORTANT", "corrected")
+        assert learned_rule == ("IMPORTANT",)
+
+        candidates = find_correction_candidates(
+            db_path, "Pets, partners and pools was not imp"
+        )
+        assert [row["msg_id"] for row in candidates] == ["priority-1"]
+        assert _correction_priority_hint("Pets, partners and pools was not imp") == "NORMAL"
+
+        keyboard = _priority_keyboard("deep", "priority-1")
+        callbacks = [button["callback_data"] for row in keyboard["inline_keyboard"] for button in row]
+        assert len(callbacks) == 4
+        assert all(len(value.encode("utf-8")) <= 64 for value in callbacks)
+
+        assert _latest_request_count("last 5 emails") == 5
+        assert _latest_request_count("show latest emails") == 5
+        assert _latest_request_count("show system design emails") is None
+        assert _is_mark_all_read_request("can you mark all as read")
+        assert not _is_mark_all_read_request("which emails are unread?")
+
+
+def test_bulk_mark_read_requires_single_use_confirmation_and_batches_gmail():
+    with tempfile.NamedTemporaryFile(suffix=".db") as tmp:
+        db_path = Path(tmp.name)
+        init_db(db_path)
+        nonce = create_pending_action(db_path, "deep", 1234, "mark_all_read")
+        assert consume_pending_action(db_path, "deep", 1234, "mark_all_read", nonce)
+        assert not consume_pending_action(db_path, "deep", 1234, "mark_all_read", nonce)
+        assert not consume_pending_action(db_path, "other", 1234, "mark_all_read", nonce)
+
+    service = FakeUnreadGmailService()
+    assert mark_all_gmail_as_read(service, page_size=2) == 3
+    assert [call["q"] for call in service.list_calls] == ["is:unread", "is:unread"]
+    assert service.batch_changes == [{
+        "userId": "me",
+        "body": {"ids": ["unread-1", "unread-2", "unread-3"], "removeLabelIds": ["UNREAD"]},
+    }]
+
+
+def test_read_only_ask_does_not_call_rag_for_bulk_mutation_request():
+    with patch("bot_service.send_plain_message") as send_plain, \
+         patch("bot_service.query_rag") as query:
+        cmd_ask(1234, "can you mark all as read")
+    query.assert_not_called()
+    assert "did not call Qwen or change Gmail" in send_plain.call_args.args[1]
+
 if __name__ == "__main__":
     test_zero_quota_skips_gmail_request()
     test_real_ollama_http_deadline_and_gemini_retry_budget()
@@ -482,4 +623,7 @@ if __name__ == "__main__":
     test_rag_negative_boundary_zero_matches()
     test_gemini_teacher_json_and_reconciliation()
     test_telegram_label_and_rag_feedback_persistence()
+    test_priority_feedback_and_chat_intent_guardrails()
+    test_bulk_mark_read_requires_single_use_confirmation_and_batches_gmail()
+    test_read_only_ask_does_not_call_rag_for_bulk_mutation_request()
     print("✅ All unit checks passed successfully!")

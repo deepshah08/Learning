@@ -197,6 +197,73 @@ Keep dynamic CPU scheduling priority and quotas. Do not pin FTL to a core or
 raise AI ceilings without evidence of DNS degradation. OOM immunity and
 relative CPU priority are the effective P0 protections currently available.
 
+## Iteration 7 — Chat-driven command routing and feedback repair
+
+### Trigger and evidence
+
+Telegram history on 2026-09-18 exposed command classes that should not enter
+semantic retrieval:
+
+| Chat request | Observed pre-fix behavior | Cost / defect |
+|---|---|---|
+| `/ask can you mark all as read` | Matched two unrelated records and called Qwen | 41,458 ms synthesis; no Gmail state change |
+| `/ask last 5 emails` | Attempted retrieval rather than a local list | Could return no matches instead of inbox state |
+| `/rules 💸 Pets, partners and pools was not imp` | Ignored the argument and ran Gmail feedback sync | Could not correct the intended priority |
+
+The 41,458 ms request remained below the 45-second RAG deadline, so it was
+not a recorded resource overage. It was still an avoidable model allocation
+for an operational intent. Existing long-poll connection resets were observed
+in historical logs; the daemon recovered and remained active, so no restart
+policy change was justified.
+
+### Decisions
+
+1. Classify deterministic mailbox intents before RAG. A latest-N request reads
+   SQLite directly; a bulk mark-as-read request never invokes Qwen.
+2. Treat every Gmail mutation as an explicit confirmation flow. Natural
+   language only explains the safe command; it cannot mutate Gmail.
+3. Convert bot views containing email-derived fields to direct plaintext.
+   `parse_mode` is omitted rather than sent as JSON `null`.
+4. Make priority corrections a first-class, target-bound feedback operation.
+   The natural correction phrase finds candidates but a user tap selects and
+   applies the priority.
+
+### Implemented behavior
+
+- `/latest [N]` lists the latest 1--20 processed records from SQLite.
+- `/ask last 5 emails` and equivalent latest/recent wording use that path;
+  no retrieval or Qwen synthesis occurs.
+- `/ask ... mark all ... read` responds that `/ask` is read-only and
+  directs the user to `/mark-read all`.
+- `/mark-read all` creates a user/chat/action-bound random nonce with a
+  five-minute TTL. The confirmation callback atomically consumes it once,
+  lists only `is:unread`, and removes Gmail's `UNREAD` label in batches of
+  at most 1,000 IDs.
+- The bulk operation was unit-tested but not pressed against the live inbox;
+  deployment therefore made no Gmail read-state change.
+- `/rules <correction>` and `/correct <correction>` find candidates using
+  local subject terms. Both category and priority keyboards are tenant-bound.
+  A priority tap updates Gmail labels, `processed_emails`,
+  `email_label_state`, `user_corrections`, and the sender rule together.
+- Briefing, reminders, rules, search results, RAG answers, and correction
+  cards now use plaintext for dynamic fields. Search rejects punctuation-only
+  FTS input before it can create an invalid query.
+
+### Validation and live state
+
+- Added tests for plaintext payload omission, priority feedback persistence,
+  correction lookup, single-use confirmation, Gmail batch payloads, and the
+  no-Qwen bulk-read guard.
+- Local: `py_compile`, `test_pipeline.py`, `test_accuracy_pipeline.py`,
+  and `challenge_suite.py` passed. The expected evaluator-invariant message
+  in the accuracy suite is a test fixture, not a live incident.
+- Pi: staged compile and `venv/bin/python test_pipeline.py` passed; bot
+  deployed and last restarted cleanly at 2026-09-18 14:52 PDT.
+- Live service check: Pi-hole FTL, bot, Ollama, and agent timer were active.
+  FTL process nice was -10, `oom_score_adj=-1000`, RSS about 69 MB; bot RSS
+  about 52 MB; Ollama RSS about 40 MB. CPU/I/O/pids cgroups remain available,
+  but memory cgroups do not.
+
 ## Validation sequence and final evidence
 
 The following were run after implementation:
@@ -213,6 +280,10 @@ The following were run after implementation:
    waiting for its next scheduled run.
 7. Runtime snapshot copied into this repository, secret-scanned, committed,
    and pushed.
+8. Chat-driven bot review and deployment — deterministic routing, explicit
+   bulk-read confirmation, priority feedback, and plaintext bot views passed
+   local and Pi unit checks without a production Gmail mutation or pipeline
+   overage.
 
 ## Remaining questions
 

@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import re
+import secrets
 import sqlite3
 import subprocess
 import time
@@ -62,12 +63,22 @@ CATEGORY_CHOICES = (
 CATEGORY_LABELS = {
     category: f"AI/Category-{category}" for _, category in CATEGORY_CHOICES
 }
+PRIORITY_CHOICES = (
+    ("🔴 Urgent", "URGENT"),
+    ("🟡 Important", "IMPORTANT"),
+    ("🟢 Normal", "NORMAL"),
+    ("⚪ Low", "LOW"),
+)
+PRIORITY_LABELS = {
+    "URGENT": "AI/Priority-Urgent",
+    "IMPORTANT": "AI/Priority-Important",
+}
 
 
 def send_message(
     chat_id: str | int,
     text: str,
-    parse_mode: str = "Markdown",
+    parse_mode: str | None = "Markdown",
     reply_markup: dict | None = None,
 ) -> list[dict]:
     """Send text message to Telegram chat with chunking and plaintext fallback."""
@@ -82,9 +93,10 @@ def send_message(
             payload = {
                 "chat_id": chat_id,
                 "text": chunk,
-                "parse_mode": parse_mode,
                 "disable_web_page_preview": True,
             }
+            if parse_mode:
+                payload["parse_mode"] = parse_mode
             # Telegram attaches keyboards to a message, so place it only on the
             # final chunk when a long response is split.
             if reply_markup and index == len(chunks) - 1:
@@ -117,6 +129,15 @@ def send_message(
         except Exception as e:
             logger.error(f"Failed to send message: {e}")
     return sent
+
+
+def send_plain_message(
+    chat_id: str | int,
+    text: str,
+    reply_markup: dict | None = None,
+) -> list[dict]:
+    """Send external email-derived content without Telegram markup parsing."""
+    return send_message(chat_id, text, parse_mode=None, reply_markup=reply_markup)
 
 
 def get_db_connection(db_path: Path) -> sqlite3.Connection:
@@ -164,6 +185,18 @@ def init_bot_tables(db_path: Path) -> None:
         if name not in columns:
             conn.execute(f"ALTER TABLE rag_feedback_log ADD COLUMN {name} {definition}")
     conn.execute("CREATE INDEX IF NOT EXISTS idx_rag_feedback_rating ON rag_feedback_log(rating, created_at)")
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS bot_pending_actions (
+            nonce       TEXT PRIMARY KEY,
+            user_id     TEXT NOT NULL,
+            chat_id     TEXT NOT NULL,
+            action      TEXT NOT NULL,
+            created_at  TEXT DEFAULT (datetime('now')),
+            expires_at  TEXT NOT NULL,
+            consumed_at TEXT
+        )
+    """)
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_bot_pending_actions_expiry ON bot_pending_actions(expires_at)")
     conn.commit()
     conn.close()
 
@@ -192,8 +225,11 @@ def _callback_data(*parts: object) -> str:
 def _move_button(user_id: str, msg_id: str) -> dict:
     return {
         "inline_keyboard": [[{
-            "text": "🏷️ Move Label",
+            "text": "🏷️ Correct category",
             "callback_data": _callback_data("menu", user_id, msg_id),
+        }, {
+            "text": "⚑ Correct priority",
+            "callback_data": _callback_data("prmenu", user_id, msg_id),
         }]]
     }
 
@@ -204,6 +240,21 @@ def _category_keyboard(user_id: str, msg_id: str) -> dict:
         for label, category in CATEGORY_CHOICES
     ]
     return {"inline_keyboard": [buttons[0:3], buttons[3:6], buttons[6:7]]}
+
+
+def _priority_keyboard(user_id: str, msg_id: str) -> dict:
+    buttons = [
+        {"text": label, "callback_data": _callback_data("prio", user_id, msg_id, priority)}
+        for label, priority in PRIORITY_CHOICES
+    ]
+    return {"inline_keyboard": [buttons[:2], buttons[2:]]}
+
+
+def _mark_read_keyboard(user_id: str, nonce: str) -> dict:
+    return {"inline_keyboard": [[
+        {"text": "✓ Mark all unread as read", "callback_data": _callback_data("mread", user_id, nonce, "confirm")},
+        {"text": "Cancel", "callback_data": _callback_data("mread", user_id, nonce, "cancel")},
+    ]]}
 
 
 def _rating_keyboard(user_id: str, feedback_id: int) -> dict:
@@ -271,6 +322,79 @@ def rate_rag_interaction(
     conn.commit()
     conn.close()
     return changed
+
+
+def create_pending_action(
+    db_path: Path,
+    user_id: str,
+    chat_id: str | int,
+    action: str,
+    ttl_seconds: int = 300,
+) -> str:
+    """Create a short-lived, single-use confirmation for a Gmail mutation."""
+    if ttl_seconds < 30 or ttl_seconds > 900:
+        raise ValueError("Pending-action TTL must be between 30 and 900 seconds")
+    init_bot_tables(db_path)
+    nonce = secrets.token_urlsafe(6)
+    conn = get_db_connection(db_path)
+    conn.execute("""
+        INSERT INTO bot_pending_actions (nonce, user_id, chat_id, action, expires_at)
+        VALUES (?, ?, ?, ?, datetime('now', ?))
+    """, (nonce, user_id, str(chat_id), action, f"+{ttl_seconds} seconds"))
+    conn.commit()
+    conn.close()
+    return nonce
+
+
+def consume_pending_action(
+    db_path: Path,
+    user_id: str,
+    chat_id: str | int,
+    action: str,
+    nonce: str,
+) -> bool:
+    """Consume an unexpired confirmation exactly once before performing a mutation."""
+    init_bot_tables(db_path)
+    conn = get_db_connection(db_path)
+    cursor = conn.execute("""
+        UPDATE bot_pending_actions
+        SET consumed_at = datetime('now')
+        WHERE nonce = ? AND user_id = ? AND chat_id = ? AND action = ?
+          AND consumed_at IS NULL AND datetime(expires_at) > datetime('now')
+    """, (nonce, user_id, str(chat_id), action))
+    consumed = cursor.rowcount == 1
+    conn.commit()
+    conn.close()
+    return consumed
+
+
+def mark_all_gmail_as_read(service, page_size: int = 500) -> int:
+    """Remove Gmail's UNREAD label from every unread message after confirmation."""
+    if page_size < 1 or page_size > 500:
+        raise ValueError("Gmail page size must be between 1 and 500")
+
+    message_ids: list[str] = []
+    page_token: str | None = None
+    while True:
+        request = service.users().messages().list(
+            userId="me", q="is:unread", maxResults=page_size, pageToken=page_token,
+        )
+        page = request.execute() or {}
+        message_ids.extend(
+            str(message["id"])
+            for message in page.get("messages", [])
+            if message.get("id")
+        )
+        page_token = page.get("nextPageToken")
+        if not page_token:
+            break
+
+    for start in range(0, len(message_ids), 1000):
+        service.users().messages().batchModify(
+            userId="me",
+            body={"ids": message_ids[start:start + 1000], "removeLabelIds": ["UNREAD"]},
+        ).execute()
+    return len(message_ids)
 
 
 def apply_category_feedback(
@@ -359,6 +483,96 @@ def apply_category_feedback(
                 checksum=excluded.checksum,
                 updated_at=datetime('now')
         """, (msg_id, category, row["priority"], row["auto_archived"], checksum))
+        conn.commit()
+    finally:
+        conn.close()
+    return email_addr
+
+
+def apply_priority_feedback(
+    service,
+    db_path: Path,
+    label_ids: dict[str, str],
+    msg_id: str,
+    priority: str,
+) -> str:
+    """Apply a Telegram priority correction and persist its sender-level learning rule."""
+    if priority not in {value for _, value in PRIORITY_CHOICES}:
+        raise ValueError(f"Unsupported priority: {priority}")
+
+    conn = get_db_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("""
+        SELECT sender, subject, priority, category, action_needed, action_type, auto_archived
+        FROM processed_emails WHERE msg_id = ?
+    """, (msg_id,)).fetchone()
+    if row is None:
+        conn.close()
+        raise LookupError("Email is no longer present in the local database")
+
+    target_label = PRIORITY_LABELS.get(priority)
+    if target_label and target_label not in label_ids:
+        conn.close()
+        raise LookupError(f"Gmail label {target_label} is unavailable")
+    remove_ids = [
+        label_ids[label_name] for label_name in PRIORITY_LABELS.values()
+        if label_name in label_ids and label_name != target_label
+    ]
+    add_ids = [label_ids[target_label]] if target_label else []
+
+    try:
+        service.users().messages().modify(
+            userId="me",
+            id=msg_id,
+            body={"addLabelIds": add_ids, "removeLabelIds": list(dict.fromkeys(remove_ids))},
+        ).execute()
+    except Exception:
+        conn.close()
+        raise
+
+    sender = row["sender"]
+    match = re.search(r"<([^<>]+)>", sender)
+    email_addr = (match.group(1) if match else sender).strip().lower()
+    try:
+        conn.execute("""
+            INSERT INTO user_corrections
+                (msg_id, sender, subject, predicted_prio, corrected_prio,
+                 predicted_cat, corrected_cat, predicted_archive, corrected_archive)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            msg_id, sender, row["subject"], row["priority"], priority,
+            row["category"], row["category"], row["auto_archived"], row["auto_archived"],
+        ))
+        conn.execute("""
+            INSERT INTO sender_rules
+                (sender_pattern, priority, category, action_needed, action_type,
+                 auto_archive, rule_source, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, 'telegram_feedback', datetime('now'))
+            ON CONFLICT(sender_pattern) DO UPDATE SET
+                priority=excluded.priority, category=excluded.category,
+                action_needed=excluded.action_needed, action_type=excluded.action_type,
+                auto_archive=excluded.auto_archive, rule_source='telegram_feedback',
+                updated_at=datetime('now')
+        """, (
+            email_addr, priority, row["category"], row["action_needed"],
+            row["action_type"], row["auto_archived"],
+        ))
+        conn.execute(
+            "UPDATE processed_emails SET priority = ?, status = 'corrected' WHERE msg_id = ?",
+            (priority, msg_id),
+        )
+        checksum = f"{row['category']}:{priority}:{row['auto_archived']}"
+        conn.execute("""
+            INSERT INTO email_label_state
+                (msg_id, last_category, last_priority, is_archived, checksum, updated_at)
+            VALUES (?, ?, ?, ?, ?, datetime('now'))
+            ON CONFLICT(msg_id) DO UPDATE SET
+                last_category=excluded.last_category,
+                last_priority=excluded.last_priority,
+                is_archived=excluded.is_archived,
+                checksum=excluded.checksum,
+                updated_at=datetime('now')
+        """, (msg_id, row["category"], priority, row["auto_archived"], checksum))
         conn.commit()
     finally:
         conn.close()
@@ -556,21 +770,20 @@ def cmd_briefing(chat_id: str | int, user_id: str = "deep"):
     ).fetchall()
     conn.close()
 
-    lines = ["📬 *Latest Inbox Briefing*\n"]
-    lines.append("*By Category:*")
+    lines = ["📬 Latest Inbox Briefing", "", "By Category:"]
     for cat, count in cats:
-        lines.append(f"  • {cat}: *{count}*")
+        lines.append(f"  • {cat}: {count}")
 
-    lines.append("\n*By Priority:*")
+    lines.extend(["", "By Priority:"])
     for prio, count in prios:
-        lines.append(f"  • {prio}: *{count}*")
+        lines.append(f"  • {prio}: {count}")
 
     if recent:
-        lines.append("\n*Most Recent Processed:*")
+        lines.extend(["", "Most Recent Processed:"])
         for p, cat, subj in recent:
-            lines.append(f"  • `[{p}]` _{subj[:45]}_")
+            lines.append(f"  • [{p}] {subj[:45]}")
 
-    send_message(chat_id, "\n".join(lines))
+    send_plain_message(chat_id, "\n".join(lines))
 
 
 def cmd_reminders(chat_id: str | int, user_id: str = "deep"):
@@ -592,21 +805,99 @@ def cmd_reminders(chat_id: str | int, user_id: str = "deep"):
     conn.close()
 
     if not pending:
-        send_message(chat_id, "✅ *No pending action items!* You are all caught up.")
+        send_plain_message(chat_id, "✅ No pending action items. You are all caught up.")
         return
 
-    lines = [f"⏳ *Unresolved Action Reminders ({len(pending)})*\n"]
+    lines = [f"⏳ Unresolved Action Reminders ({len(pending)})", ""]
     for row in pending:
-        lines.append(f"• *[{row['action_type']}]* {row['subject'][:50]}")
-        lines.append(f"  From: _{row['sender'][:35]}_")
-    send_message(chat_id, "\n".join(lines))
+        lines.append(f"• [{row['action_type']}] {row['subject'][:50]}")
+        lines.append(f"  From: {row['sender'][:35]}")
+    send_plain_message(chat_id, "\n".join(lines))
 
 
-def cmd_rules(chat_id: str | int, user_id: str = "deep"):
+def _correction_priority_hint(text: str) -> str | None:
+    normalized = text.lower()
+    if re.search(r"\b(not\s+(?:imp|important)|normal)\b", normalized):
+        return "NORMAL"
+    if re.search(r"\b(low|not\s+urgent)\b", normalized):
+        return "LOW"
+    if re.search(r"\b(urgent|critical)\b", normalized):
+        return "URGENT"
+    if re.search(r"\b(imp|important)\b", normalized):
+        return "IMPORTANT"
+    return None
+
+
+def _correction_subject_terms(text: str) -> list[str]:
+    ignored = {
+        "was", "is", "not", "important", "imp", "normal", "low", "urgent",
+        "critical", "priority", "email", "this", "that", "please", "mark",
+    }
+    return [
+        term.lower() for term in re.findall(r"[A-Za-z0-9]+", text)
+        if len(term) > 2 and term.lower() not in ignored
+    ][:6]
+
+
+def find_correction_candidates(db_path: Path, text: str, limit: int = 5) -> list[sqlite3.Row]:
+    """Find recent messages from a natural-language correction without calling Ollama."""
+    terms = _correction_subject_terms(text)
+    if not terms:
+        return []
+    conn = get_db_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    clauses = " AND ".join("LOWER(subject) LIKE ?" for _ in terms)
+    rows = conn.execute(f"""
+        SELECT msg_id, sender, subject, priority, category, processed_at
+        FROM processed_emails
+        WHERE {clauses}
+        ORDER BY processed_at DESC LIMIT ?
+    """, tuple(f"%{term}%" for term in terms) + (limit,)).fetchall()
+    conn.close()
+    return rows
+
+
+def cmd_correct(chat_id: str | int, text: str, user_id: str = "deep"):
+    """Turn a correction phrase into an explicit, target-bound feedback control."""
+    db_path = get_db_path(user_id)
+    if not db_path.exists():
+        send_plain_message(chat_id, "Database not found.")
+        return
+
+    candidates = find_correction_candidates(db_path, text)
+    if not candidates:
+        send_plain_message(
+            chat_id,
+            "I could not identify an email from that correction. Use /search <distinct words> "
+            "and tap Correct category or Correct priority on the matching card.",
+        )
+        return
+
+    priority_hint = _correction_priority_hint(text)
+    for row in candidates:
+        prompt = (
+            "✏️ Correction candidate\n"
+            f"Subject: {row['subject'][:90]}\n"
+            f"Current: {row['priority']} / {row['category']}"
+        )
+        if priority_hint:
+            prompt += f"\nInterpreted request: change priority to {priority_hint}. Select below."
+            keyboard = _priority_keyboard(user_id, row["msg_id"])
+        else:
+            prompt += "\nChoose which label to correct below."
+            keyboard = _move_button(user_id, row["msg_id"])
+        send_plain_message(chat_id, prompt, reply_markup=keyboard)
+
+
+def cmd_rules(chat_id: str | int, user_id: str = "deep", correction_text: str = ""):
     """Handle /rules command: list learned sender overrides and sync on-demand."""
     db_path = get_db_path(user_id)
     if not db_path.exists():
         send_message(chat_id, "⚠️ Database not found.")
+        return
+
+    if correction_text.strip():
+        cmd_correct(chat_id, correction_text, user_id=user_id)
         return
 
     # On-demand sync: detect any labels the user recently moved in Gmail
@@ -630,14 +921,71 @@ def cmd_rules(chat_id: str | int, user_id: str = "deep"):
     conn.close()
 
     if not rules:
-        send_message(chat_id, "ℹ️ *No custom rules learned yet.*\nWhen you move or un-archive emails in Gmail (e.g. into `AI/Category-Shopping`), the AI will automatically learn your preferences!")
+        send_plain_message(chat_id, "ℹ️ No custom rules learned yet.\nWhen you move or un-archive emails in Gmail (for example, into AI/Category-Shopping), the AI will automatically learn your preferences.")
         return
 
-    lines = [f"💡 *Learned Sender Rules ({len(rules)})*\n"]
+    lines = [f"💡 Learned Sender Rules ({len(rules)})", ""]
     for r in rules:
         arch = "Archive" if r["auto_archive"] else "Keep in Inbox"
-        lines.append(f"• `{r['sender_pattern']}` → *{r['category']}* / *{r['priority']}* ({arch})")
-    send_message(chat_id, "\n".join(lines))
+        lines.append(f"• {r['sender_pattern']} → {r['category']} / {r['priority']} ({arch})")
+    send_plain_message(chat_id, "\n".join(lines))
+
+
+def cmd_latest(chat_id: str | int, count: int = 5, user_id: str = "deep"):
+    """List recently processed emails directly from SQLite without local synthesis."""
+    db_path = get_db_path(user_id)
+    if not db_path.exists():
+        send_plain_message(chat_id, "Database not found.")
+        return
+    count = max(1, min(int(count), 20))
+    conn = get_db_connection(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute("""
+        SELECT subject, sender, priority, category, processed_at
+        FROM processed_emails
+        ORDER BY datetime(processed_at) DESC LIMIT ?
+    """, (count,)).fetchall()
+    conn.close()
+    if not rows:
+        send_plain_message(chat_id, "No processed emails are available yet.")
+        return
+    lines = [f"📬 Latest {len(rows)} processed emails"]
+    for row in rows:
+        lines.append(f"• [{row['priority']}] {row['subject'][:80]}")
+        lines.append(f"  From: {row['sender'][:60]} · {row['category']}")
+    send_plain_message(chat_id, "\n".join(lines))
+
+
+def _latest_request_count(question: str) -> int | None:
+    match = re.search(
+        r"\b(?:last|latest|recent|newest)\s*(\d+)?\s*(?:email|emails|message|messages)\b",
+        question.lower(),
+    )
+    if not match:
+        return None
+    return int(match.group(1) or 5)
+
+
+def _is_mark_all_read_request(question: str) -> bool:
+    normalized = " ".join(question.lower().split())
+    return bool(re.search(r"\b(?:mark|set)\b.*\b(?:all|everything)\b.*\bread\b", normalized))
+
+
+def cmd_mark_read(chat_id: str | int, scope: str, user_id: str = "deep"):
+    """Request explicit, expiring confirmation before bulk Gmail read-state mutation."""
+    if scope.strip().lower() not in {"all", "all unread"}:
+        send_plain_message(chat_id, "Usage: /mark-read all\nThis always requires a confirmation tap.")
+        return
+    db_path = get_db_path(user_id)
+    if not db_path.exists():
+        send_plain_message(chat_id, "Database not found.")
+        return
+    nonce = create_pending_action(db_path, user_id, chat_id, "mark_all_read")
+    send_plain_message(
+        chat_id,
+        "This will mark every unread message in Gmail as read. It changes Gmail and expires in 5 minutes.",
+        reply_markup=_mark_read_keyboard(user_id, nonce),
+    )
 
 
 def cmd_search(chat_id: str | int, query: str, user_id: str = "deep"):
@@ -648,7 +996,7 @@ def cmd_search(chat_id: str | int, query: str, user_id: str = "deep"):
         return
 
     if not query.strip():
-        send_message(chat_id, "Usage: `/search <query>`\nExample: `/search flight` or `/search invoice`")
+        send_plain_message(chat_id, "Usage: /search <query>\nExample: /search flight or /search invoice")
         return
 
     conn = get_db_connection(db_path)
@@ -663,6 +1011,10 @@ def cmd_search(chat_id: str | int, query: str, user_id: str = "deep"):
     if fts_exists:
         # FTS5 search
         safe_q = re.sub(r'[^\w\s]', '', query)
+        if not safe_q.strip():
+            conn.close()
+            send_plain_message(chat_id, "Search needs at least one letter or number.")
+            return
         results = c.execute("""
             SELECT e.priority, e.category, e.subject, e.summary, e.sender
             FROM emails_fts f
@@ -683,15 +1035,15 @@ def cmd_search(chat_id: str | int, query: str, user_id: str = "deep"):
     conn.close()
 
     if not results:
-        send_message(chat_id, f"🔍 No emails found matching: *{query}*")
+        send_plain_message(chat_id, f"🔍 No emails found matching: {query}")
         return
 
-    lines = [f"🔍 *Search Results for:* _{query}_\n"]
+    lines = [f"🔍 Search Results for: {query}", ""]
     for r in results:
-        lines.append(f"• `[{r['priority']}]` *{r['subject'][:50]}*")
+        lines.append(f"• [{r['priority']}] {r['subject'][:50]}")
         if r['summary']:
-            lines.append(f"  _{r['summary'][:80]}_")
-    send_message(chat_id, "\n".join(lines))
+            lines.append(f"  {r['summary'][:80]}")
+    send_plain_message(chat_id, "\n".join(lines))
 
 
 RAG_STOP_WORDS = {
@@ -840,7 +1192,7 @@ def query_rag(db_path: Path, question: str) -> dict:
     )
 
     if ollama is None:
-        sources = [f"• _{r['subject'][:45]}_ ({r['sender'][:25]})" for r in results[:2]]
+        sources = [f"• {r['subject'][:45]} ({r['sender'][:25]})" for r in results[:2]]
         return {
             "ok": True,
             "matches": len(results),
@@ -860,7 +1212,7 @@ def query_rag(db_path: Path, question: str) -> dict:
         if not answer:
             answer = "I reviewed the matching emails but could not formulate a conclusive answer."
 
-        sources = [f"• _{r['subject'][:45]}_ ({r['sender'][:25]})" for r in results[:2]]
+        sources = [f"• {r['subject'][:45]} ({r['sender'][:25]})" for r in results[:2]]
         return {
             "ok": True,
             "matches": len(results),
@@ -873,7 +1225,7 @@ def query_rag(db_path: Path, question: str) -> dict:
     except requests.exceptions.Timeout:
         elapsed_ms = int((time.monotonic() - synthesis_started) * 1000)
         logger.warning("RAG synthesis exceeded %.1fs budget", rag_timeout)
-        sources = [f"• _{r['subject'][:45]}_ ({r['sender'][:25]})" for r in results[:2]]
+        sources = [f"• {r['subject'][:45]} ({r['sender'][:25]})" for r in results[:2]]
         return {
             "ok": True,
             "matches": len(results),
@@ -900,7 +1252,20 @@ def cmd_ask(chat_id: str | int, question: str, user_id: str = "deep"):
     Retrieval-Augmented Generation (RAG) over inbox using SQLite FTS5 + local Qwen 2.5 3B.
     """
     if not question.strip():
-        send_message(chat_id, "Usage: `/ask <question>`\nExample: `/ask What was my invoice total from AWS?` or `/ask Did anyone email about the lease?`")
+        send_plain_message(chat_id, "Usage: /ask <question>\nExample: /ask What was my invoice total from AWS? or /ask Did anyone email about the lease?")
+        return
+
+    if _is_mark_all_read_request(question):
+        send_plain_message(
+            chat_id,
+            "/ask is read-only, so I did not call Qwen or change Gmail. "
+            "Use /mark-read all to request a separately confirmed bulk read-state change.",
+        )
+        return
+
+    latest_count = _latest_request_count(question)
+    if latest_count is not None:
+        cmd_latest(chat_id, latest_count, user_id=user_id)
         return
 
     db_path = get_db_path(user_id)
@@ -914,27 +1279,27 @@ def cmd_ask(chat_id: str | int, question: str, user_id: str = "deep"):
     if res.get("matches", 0) == 0:
         try:
             feedback_id = record_rag_interaction(db_path, user_id, chat_id, question, res)
-            send_message(
+            send_plain_message(
                 chat_id, res["answer"],
                 reply_markup=_rating_keyboard(user_id, feedback_id),
             )
         except Exception as e:
             logger.warning(f"Could not persist negative RAG feedback prompt: {e}")
-            send_message(chat_id, res["answer"])
+            send_plain_message(chat_id, res["answer"])
         return
 
     if res.get("sources"):
         sources_text = "\n".join(res["sources"])
-        full_reply = f"💡 *Answer:*\n{res['answer']}\n\n📎 *Sources:*\n{sources_text}"
+        full_reply = f"💡 Answer:\n{res['answer']}\n\n📎 Sources:\n{sources_text}"
     else:
-        full_reply = f"💡 *Answer:*\n{res['answer']}"
+        full_reply = f"💡 Answer:\n{res['answer']}"
 
     try:
         feedback_id = record_rag_interaction(db_path, user_id, chat_id, question, res)
-        send_message(chat_id, full_reply, reply_markup=_rating_keyboard(user_id, feedback_id))
+        send_plain_message(chat_id, full_reply, reply_markup=_rating_keyboard(user_id, feedback_id))
     except Exception as e:
         logger.warning(f"Could not persist RAG feedback prompt: {e}")
-        send_message(chat_id, full_reply)
+        send_plain_message(chat_id, full_reply)
 
 
 def cmd_audit(chat_id: str | int, mode: str = "subscriptions", user_id: str = "deep"):
@@ -960,17 +1325,17 @@ def cmd_audit(chat_id: str | int, mode: str = "subscriptions", user_id: str = "d
             subs = c.execute("SELECT vendor, amount, frequency, last_billed_at FROM subscriptions ORDER BY amount DESC LIMIT 10").fetchall()
 
         if not subs:
-            send_message(chat_id, "💳 *Subscription Audit*\nNo recurring subscriptions detected yet. As bills and invoices arrive, they will be tracked automatically.")
+            send_plain_message(chat_id, "💳 Subscription Audit\nNo recurring subscriptions detected yet. As bills and invoices arrive, they will be tracked automatically.")
             conn.close()
             return
 
         total_monthly = sum(r["amount"] for r in subs if r["frequency"] == "monthly")
-        lines = [f"💳 *Subscription & Recurring Bill Audit*\n"]
-        lines.append(f"Estimated Monthly Run-Rate: *${total_monthly:.2f}*\n")
+        lines = ["💳 Subscription & Recurring Bill Audit", ""]
+        lines.append(f"Estimated Monthly Run-Rate: ${total_monthly:.2f}")
         for s in subs:
             freq = "/mo" if s["frequency"] == "monthly" else "/yr"
-            lines.append(f"• *{s['vendor']}*: `${s['amount']:.2f}{freq}`")
-        send_message(chat_id, "\n".join(lines))
+            lines.append(f"• {s['vendor']}: ${s['amount']:.2f}{freq}")
+        send_plain_message(chat_id, "\n".join(lines))
 
     elif mode in ("vendors", "senders"):
         # Top sending services
@@ -980,10 +1345,10 @@ def cmd_audit(chat_id: str | int, mode: str = "subscriptions", user_id: str = "d
             ORDER BY incoming_count DESC LIMIT 8
         """).fetchall()
 
-        lines = ["🏢 *Top Sender & Vendor Audit*\n"]
+        lines = ["🏢 Top Sender & Vendor Audit", ""]
         for s in stats:
-            lines.append(f"• `{s['email_address'][:35]}` — *{s['incoming_count']}* emails")
-        send_message(chat_id, "\n".join(lines))
+            lines.append(f"• {s['email_address'][:35]} — {s['incoming_count']} emails")
+        send_plain_message(chat_id, "\n".join(lines))
 
     elif mode in ("trackers", "security", "firewall"):
         # Check blocked tracking pixels
@@ -1037,33 +1402,34 @@ def cmd_digest(chat_id: str | int, period: str = "today", user_id: str = "deep")
     action_items = [r for r in recent if r["action_needed"] == 1]
     archived_count = len([r for r in recent if r["priority"] == "LOW"])
 
-    lines = [f"👔 *Executive Intelligence Briefing* ({datetime.now().strftime('%b %d, %I:%M %p')})\n"]
-    lines.append(f"📊 Activity: *{len(recent)}* emails reviewed · *{archived_count}* noise auto-archived\n")
+    lines = [f"👔 Executive Intelligence Briefing ({datetime.now().strftime('%b %d, %I:%M %p')})", ""]
+    lines.append(f"📊 Activity: {len(recent)} emails reviewed · {archived_count} noise auto-archived")
+    lines.append("")
 
     if urgent:
-        lines.append("🔴 *Immediate Action Required:*")
+        lines.append("🔴 Immediate Action Required:")
         for u in urgent:
-            lines.append(f"  • *[{u['action_type']}]* {u['subject'][:45]}")
+            lines.append(f"  • [{u['action_type']}] {u['subject'][:45]}")
             if u['summary']:
-                lines.append(f"    _{u['summary'][:70]}_")
+                lines.append(f"    {u['summary'][:70]}")
         lines.append("")
 
     if important:
-        lines.append("🟡 *High-Priority Decisions & Threads:*")
+        lines.append("🟡 High-Priority Decisions & Threads:")
         for im in important[:4]:
-            lines.append(f"  • {im['subject'][:50]} (_{im['sender'][:25]}_)")
+            lines.append(f"  • {im['subject'][:50]} ({im['sender'][:25]})")
         lines.append("")
 
     if action_items and not urgent:
-        lines.append("⏳ *Pending To-Dos:*")
+        lines.append("⏳ Pending To-Dos:")
         for act in action_items[:3]:
-            lines.append(f"  • *[{act['action_type']}]* {act['subject'][:45]}")
+            lines.append(f"  • [{act['action_type']}] {act['subject'][:45]}")
         lines.append("")
 
     if not urgent and not important:
-        lines.append("✨ *Status:* Inbox is in great shape. No high-urgency fires detected.")
+        lines.append("✨ Status: Inbox is in great shape. No high-urgency fires detected.")
 
-    send_message(chat_id, "\n".join(lines))
+    send_plain_message(chat_id, "\n".join(lines))
 
     # Send compact review cards so each surfaced email has an unambiguous
     # correction target. Limiting the set keeps a digest from becoming noisy.
@@ -1072,12 +1438,12 @@ def cmd_digest(chat_id: str | int, period: str = "today", user_id: str = "deep")
         review_items = list(recent[:3])
     for item in review_items[:8]:
         card = (
-            f"`[{item['priority']}]` *{item['subject'][:70]}*\n"
-            f"_{item['sender'][:55]}_\n"
-            f"Current label: *{item['category']}*"
+            f"[{item['priority']}] {item['subject'][:70]}\n"
+            f"{item['sender'][:55]}\n"
+            f"Current label: {item['category']}"
         )
         try:
-            send_message(chat_id, card, reply_markup=_move_button(user_id, item["msg_id"]))
+            send_plain_message(chat_id, card, reply_markup=_move_button(user_id, item["msg_id"]))
         except ValueError as e:
             logger.warning(f"Cannot attach label callback for {item['msg_id']}: {e}")
 
@@ -1094,7 +1460,10 @@ def cmd_help(chat_id: str | int):
         "• `/resources` - Runtime budgets, overages, and recent pipeline costs\n"
         "• `/reminders` - Actionable emails waiting on your reply\n"
         "• `/rules` - Learned sender overrides and preferences\n"
+        "• `/correct <email words> [not important|low|urgent]` - Find an email and correct its label\n"
         "• `/search <query>` - Instant FTS5 search over all processed emails\n"
+        "• `/latest [N]` - List recent processed emails without Qwen\n"
+        "• `/mark-read all` - Mark all unread Gmail messages read after confirmation\n"
         "• `/help` - Show this command menu\n\n"
         "🛡️ *Privacy*: Spy tracking pixels are automatically stripped, and cold sales pitches are isolated."
     )
@@ -1142,6 +1511,15 @@ def handle_callback_query(callback: dict) -> None:
             acknowledge()
             return
 
+        if action == "prmenu" and len(parts) == 3:
+            _telegram_call("editMessageReplyMarkup", {
+                "chat_id": chat_id,
+                "message_id": message_id,
+                "reply_markup": _priority_keyboard(current_user_id, parts[2]),
+            })
+            acknowledge()
+            return
+
         if action == "cat" and len(parts) == 4:
             msg_id, category = parts[2], parts[3]
             db_path = get_db_path(current_user_id)
@@ -1158,6 +1536,54 @@ def handle_callback_query(callback: dict) -> None:
                 "text": f"✅ Moved to {category} and learned a permanent rule for {sender_rule}.",
             })
             acknowledge(f"Moved to {category}")
+            return
+
+        if action == "prio" and len(parts) == 4:
+            msg_id, priority = parts[2], parts[3]
+            db_path = get_db_path(current_user_id)
+            from gmail_agent import ensure_labels, get_gmail_service, get_user_profile
+            profile = get_user_profile(current_user_id)
+            service = get_gmail_service(profile)
+            label_ids = ensure_labels(service)
+            sender_rule = apply_priority_feedback(
+                service, db_path, label_ids, msg_id, priority,
+            )
+            _telegram_call("editMessageText", {
+                "chat_id": chat_id,
+                "message_id": message_id,
+                "text": f"✅ Priority changed to {priority}; learned a sender rule for {sender_rule}.",
+            })
+            acknowledge(f"Priority changed to {priority}")
+            return
+
+        if action == "mread" and len(parts) == 4:
+            nonce, decision = parts[2], parts[3]
+            db_path = get_db_path(current_user_id)
+            if decision not in {"confirm", "cancel"}:
+                acknowledge("Unsupported confirmation action", alert=True)
+                return
+            if not consume_pending_action(
+                db_path, current_user_id, chat_id, "mark_all_read", nonce,
+            ):
+                acknowledge("This confirmation was already used or expired.", alert=True)
+                return
+            if decision == "cancel":
+                _telegram_call("editMessageText", {
+                    "chat_id": chat_id,
+                    "message_id": message_id,
+                    "text": "Bulk mark-as-read canceled. No Gmail messages changed.",
+                })
+                acknowledge("Canceled")
+                return
+            from gmail_agent import get_gmail_service, get_user_profile
+            profile = get_user_profile(current_user_id)
+            changed = mark_all_gmail_as_read(get_gmail_service(profile))
+            _telegram_call("editMessageText", {
+                "chat_id": chat_id,
+                "message_id": message_id,
+                "text": f"✅ Marked {changed} unread Gmail messages as read.",
+            })
+            acknowledge(f"Marked {changed} messages read")
             return
 
         if action == "rag" and len(parts) == 4:
@@ -1244,11 +1670,35 @@ def poll_updates():
                 elif text.startswith("/reminders"):
                     cmd_reminders(chat_id, user_id=current_user_id)
                 elif text.startswith("/rules"):
-                    cmd_rules(chat_id, user_id=current_user_id)
+                    parts = text.split(maxsplit=1)
+                    correction = parts[1] if len(parts) > 1 else ""
+                    cmd_rules(chat_id, user_id=current_user_id, correction_text=correction)
+                elif text.startswith("/correct"):
+                    parts = text.split(maxsplit=1)
+                    correction = parts[1] if len(parts) > 1 else ""
+                    if not correction:
+                        send_plain_message(
+                            chat_id,
+                            "Usage: `/correct <email words> [not important|low|urgent]`",
+                        )
+                    else:
+                        cmd_correct(chat_id, correction, user_id=current_user_id)
                 elif text.startswith("/search"):
                     parts = text.split(maxsplit=1)
                     q = parts[1] if len(parts) > 1 else ""
                     cmd_search(chat_id, q, user_id=current_user_id)
+                elif text.startswith("/latest"):
+                    parts = text.split(maxsplit=1)
+                    try:
+                        count = int(parts[1]) if len(parts) > 1 else 5
+                    except ValueError:
+                        send_plain_message(chat_id, "Usage: `/latest [1-20]`")
+                        continue
+                    cmd_latest(chat_id, count, user_id=current_user_id)
+                elif text.startswith("/mark-read"):
+                    parts = text.split(maxsplit=1)
+                    scope = parts[1] if len(parts) > 1 else ""
+                    cmd_mark_read(chat_id, scope, user_id=current_user_id)
                 elif text.startswith("/ask"):
                     parts = text.split(maxsplit=1)
                     q = parts[1] if len(parts) > 1 else ""

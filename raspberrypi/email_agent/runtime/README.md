@@ -18,6 +18,10 @@ Validation recorded before publication:
   resource-budget overage.
 - The historical 900-second ingestion failure remains documented in
   `RESOURCE_BUDGET.md`.
+- Incremental bot review on 2026-09-18 passed local and Pi unit checks. It
+  added deterministic latest-email routing, explicit one-time confirmation
+  for bulk mark-as-read, priority feedback, and plaintext dynamic bot views;
+  it did not perform a live Gmail mutation or pipeline run.
 
 The systemd templates are references for deployment; the live Pi may contain
 host-specific drop-ins and credentials outside this directory.
