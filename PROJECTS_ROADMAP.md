@@ -39,6 +39,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **29** | **Jules Multi-Agent PR Reviewer & Blueprint v2.2.0** | Agent Swarm / CI/CD | 🟢 Production | Autonomous PR Reviewer + Keenable CLI Skills | Blueprint Tagged `v2.2.0` ([Docs](ci_cd_and_agentic_pipelines/JULES_MULTI_AGENT_PIPELINE.md)) |
 | **30** | **Offline Knowledge Center PWA & Scraping Pipeline** | Web App / Knowledge Base | 🟢 Production | 19,086 Precached Offline Articles (GitHub Pages) | Automated CI Deploy ([Docs](ci_cd_and_agentic_pipelines/OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)) |
 | **31-100** | **Homelab Extended Ecosystem (70 Projects)** | Full Infrastructure Swarm | 🟢 Production / Merged | Orchestrated via Jules Multi-Agent Swarm | 100/100 Projects Merged into `main` ([Complete Swarm Dossier](ci_cd_and_agentic_pipelines/100_PROJECT_HOMELAB_SWARM_ORCHESTRATION.md)) |
+| **101** | **GEEKOM IT13 Max AI & Compute Node** | Compute / Local AI | 🟡 Provisioning | Port `22`, `3389`, `11434` (Intel Core Ultra 9 185H + Arc) | Pre-checks & Runbook ([Docs](hardware_and_diagnostics/it13max_compute_node/README.md)) |
 
 > 🏆 **Swarm Milestone Achieved (2026-09-06)**: All 100 projects across the homelab monorepo (`deepshah08/raspberry-pi-5-ecosystem`) are 100% implemented, containerized, verified with unit tests, and squash-merged into `main`. The unified control plane is exposed via **Project 100: Homelab Master Unified Orchestration Dashboard & Swarm CLI** (`projects/100-master-dashboard/swarm_cli.py`).
 
