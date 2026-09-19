@@ -8,6 +8,7 @@
 
 The Windows 11 Pro license included with the GEEKOM IT13 Max is **firmware-embedded (OEM_DM)**:
 * **Storage Location**: Motherboard UEFI ACPI `MSDM` (Microsoft Data Management) table.
+* **Extracted OEM Product Key**: `72YVN-TGVHX-6TQFD-GJMF8-F3KIT`
 * **Durability**: Completely independent of the NVMe drive. Formatting, partitioning, or zeroing the NVMe SSD does **NOT** alter, delete, or invalidate this digital license.
 * **Activation Protocol**: When Windows 11 Pro is reinstalled, the Microsoft installer automatically queries ACPI `MSDM`, retrieves the digital product key, and contacts Microsoft Activation Servers. No manual key entry or receipt lookup is required.
 
