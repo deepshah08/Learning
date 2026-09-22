@@ -12,18 +12,25 @@ class RadarrClient:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.headers = {"X-Api-Key": self.api_key}
+        self._client = None
+
+    def _get_client(self) -> httpx.AsyncClient:
+        if self._client is None:
+            self._client = httpx.AsyncClient()
+        return self._client
 
     async def lookup_movie(self, title: str) -> List[Dict[str, Any]]:
         """Search for movies by title via Radarr lookup API."""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.get(
-                f"{self.base_url}/api/v3/movie/lookup",
-                params={"term": title},
-                headers=self.headers
-            )
-            if resp.status_code == 200:
-                return resp.json()
-            return []
+        client = self._get_client()
+        resp = await client.get(
+            f"{self.base_url}/api/v3/movie/lookup",
+            params={"term": title},
+            headers=self.headers,
+            timeout=10.0
+        )
+        if resp.status_code == 200:
+            return resp.json()
+        return []
 
     async def add_movie(
         self,
@@ -46,13 +53,14 @@ class RadarrClient:
                 "searchForMovie": search_now
             }
         }
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            resp = await client.post(
-                f"{self.base_url}/api/v3/movie",
-                json=payload,
-                headers=self.headers
-            )
-            return resp.json()
+        client = self._get_client()
+        resp = await client.post(
+            f"{self.base_url}/api/v3/movie",
+            json=payload,
+            headers=self.headers,
+            timeout=15.0
+        )
+        return resp.json()
 
 
 class SonarrClient:
@@ -60,18 +68,25 @@ class SonarrClient:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.headers = {"X-Api-Key": self.api_key}
+        self._client = None
+
+    def _get_client(self) -> httpx.AsyncClient:
+        if self._client is None:
+            self._client = httpx.AsyncClient()
+        return self._client
 
     async def lookup_series(self, title: str) -> List[Dict[str, Any]]:
         """Search for TV series by title via Sonarr lookup API."""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.get(
-                f"{self.base_url}/api/v3/series/lookup",
-                params={"term": title},
-                headers=self.headers
-            )
-            if resp.status_code == 200:
-                return resp.json()
-            return []
+        client = self._get_client()
+        resp = await client.get(
+            f"{self.base_url}/api/v3/series/lookup",
+            params={"term": title},
+            headers=self.headers,
+            timeout=10.0
+        )
+        if resp.status_code == 200:
+            return resp.json()
+        return []
 
     async def add_series(
         self,
@@ -102,13 +117,14 @@ class SonarrClient:
                 "searchForMissingEpisodes": search_now
             }
         }
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            resp = await client.post(
-                f"{self.base_url}/api/v3/series",
-                json=payload,
-                headers=self.headers
-            )
-            return resp.json()
+        client = self._get_client()
+        resp = await client.post(
+            f"{self.base_url}/api/v3/series",
+            json=payload,
+            headers=self.headers,
+            timeout=15.0
+        )
+        return resp.json()
 
 
 class MediaManager:
