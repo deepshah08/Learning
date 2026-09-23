@@ -2,8 +2,9 @@
 
 > Hardware inventory, original architecture, and provisioning record for Node 3. The
 > deployed runtime source and current execution evidence are maintained in the private
-> [IT13 Max repository](https://github.com/deepshah08/it13max).  
-> **Last reviewed**: 2026-09-22  
+> [IT13 Max repository](https://github.com/deepshah08/it13max).
+>
+> **Last reviewed**: 2026-09-22
 > **Status**: ✅ Goals 1–6 deployed; remediation complete pending independent Astra review.
 
 The paired MDS documents capture the implementation journey and current design

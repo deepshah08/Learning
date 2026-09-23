@@ -1,7 +1,9 @@
 # IT13 Max Investigation: From architecture plan to versioned deployment
 
-**Status:** Goals 1–6 deployed; R1–R6 and round-two R2/R6 repairs complete; independent Astra review pending.  
-**Implementation source:** [private `deepshah08/it13max` repository](https://github.com/deepshah08/it13max)  
+**Status:** Goals 1–6 deployed; R1–R6 and round-two R2/R6 repairs complete; independent Astra review pending.
+
+**Implementation source:** [private `deepshah08/it13max` repository](https://github.com/deepshah08/it13max)
+
 **Companion:** durable system knowledge at [it13max_knowledge.md](./it13max_knowledge.md)
 
 ---
