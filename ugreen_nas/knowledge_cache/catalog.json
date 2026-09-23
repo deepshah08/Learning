@@ -1,0 +1,2877 @@
+[
+  {
+    "id": 61,
+    "title": "UGOS Pro Desktop Guide",
+    "category_path": "Application Guide > UGOS Pro > UGOS Pro Desktop Guide"
+  },
+  {
+    "id": 60,
+    "title": "Log in UGOS Pro System",
+    "category_path": "Application Guide > UGOS Pro > Log in UGOS Pro System"
+  },
+  {
+    "id": 510,
+    "title": "How to Enable Two-Factor Authentication (2FA) to Enhance System Security?",
+    "category_path": "Application Guide > UGOS Pro > How to Enable Two-Factor Authentication (2FA) to Enhance System Security?"
+  },
+  {
+    "id": 739,
+    "title": "Universal Search User Guide",
+    "category_path": "Application Guide > UGOS Pro > Universal Search User Guide"
+  },
+  {
+    "id": 814,
+    "title": "How to Enable Fingerprint and Face Login on UGREEN NAS?",
+    "category_path": "Application Guide > UGOS Pro > How to Enable Fingerprint and Face Login on UGREEN NAS?"
+  },
+  {
+    "id": 287,
+    "title": "Beginner's Guide",
+    "category_path": "Application Guide > UGOS Pro > Beginner's Guide"
+  },
+  {
+    "id": 772,
+    "title": "Introduction to the UGOS Pro System",
+    "category_path": "Application Guide > UGOS Pro > Introduction to the UGOS Pro System"
+  },
+  {
+    "id": 855,
+    "title": "How to Perform Shutdown/Reboot and Set Power Schedules on Your NAS",
+    "category_path": "Application Guide > UGOS Pro > How to Perform Shutdown/Reboot and Set Power Schedules on Your NAS"
+  },
+  {
+    "id": 606,
+    "title": "Introduction and User Guide for UGREEN NAS System's Breakpoint Resume Function",
+    "category_path": "Application Guide > UGOS Pro > Introduction and User Guide for UGREEN NAS System's Breakpoint Resume Function"
+  },
+  {
+    "id": 669,
+    "title": "UGREEN NAS Getting Started Tutorial Collection",
+    "category_path": "Application Guide > UGOS Pro > UGREEN NAS Getting Started Tutorial Collection"
+  },
+  {
+    "id": 773,
+    "title": "How to Change and Manage Passwords?",
+    "category_path": "Application Guide > UGOS Pro > How to Change and Manage Passwords?"
+  },
+  {
+    "id": 695,
+    "title": "Guide to Switching Accounts on PC/Mobile Client",
+    "category_path": "Application Guide > UGOS Pro > Guide to Switching Accounts on PC/Mobile Client"
+  },
+  {
+    "id": 873,
+    "title": "Unbind a Device or Transfer Ownership",
+    "category_path": "Application Guide > UGOS Pro > Unbind a Device or Transfer Ownership"
+  },
+  {
+    "id": 868,
+    "title": "Enable Client Lock Screen Protection",
+    "category_path": "Application Guide > UGOS Pro > Enable Client Lock Screen Protection"
+  },
+  {
+    "id": 870,
+    "title": "How to Set the Client to Launch at Startup?",
+    "category_path": "Application Guide > UGOS Pro > How to Set the Client to Launch at Startup?"
+  },
+  {
+    "id": 872,
+    "title": "Manage Local Account and UGREEN Account",
+    "category_path": "Application Guide > UGOS Pro > Manage Local Account and UGREEN Account"
+  },
+  {
+    "id": 63,
+    "title": "Control Panel",
+    "category_path": "Application Guide > Control Panel > Control Panel"
+  },
+  {
+    "id": 862,
+    "title": "How to Configure a DDNS Domain Name to Log In to UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > How to Configure a DDNS Domain Name to Log In to UGREEN NAS?"
+  },
+  {
+    "id": 100,
+    "title": "Network Settings",
+    "category_path": "Application Guide > Control Panel > Network Settings"
+  },
+  {
+    "id": 110,
+    "title": "How to Use the Update & Restore Feature",
+    "category_path": "Application Guide > Control Panel > How to Use the Update & Restore Feature"
+  },
+  {
+    "id": 97,
+    "title": "Time and Language",
+    "category_path": "Application Guide > Control Panel > Time and Language"
+  },
+  {
+    "id": 84,
+    "title": "Terminal",
+    "category_path": "Application Guide > Control Panel > Terminal"
+  },
+  {
+    "id": 219,
+    "title": "Device Connection",
+    "category_path": "Application Guide > Control Panel > Device Connection"
+  },
+  {
+    "id": 108,
+    "title": "Indexing Service",
+    "category_path": "Application Guide > Control Panel > Indexing Service"
+  },
+  {
+    "id": 86,
+    "title": "Remote Access",
+    "category_path": "Application Guide > Control Panel > Remote Access"
+  },
+  {
+    "id": 886,
+    "title": "How to Manage App Installation Locations, Access Permissions, and App Data Resets?",
+    "category_path": "Application Guide > Control Panel > How to Manage App Installation Locations, Access Permissions, and App Data Resets?"
+  },
+  {
+    "id": 93,
+    "title": "Domain and LDAP",
+    "category_path": "Application Guide > Control Panel > Domain and LDAP"
+  },
+  {
+    "id": 85,
+    "title": "LAN Connection",
+    "category_path": "Application Guide > Control Panel > LAN Connection"
+  },
+  {
+    "id": 109,
+    "title": "About",
+    "category_path": "Application Guide > Control Panel > About"
+  },
+  {
+    "id": 618,
+    "title": "Add New Users",
+    "category_path": "Application Guide > Control Panel > User Management > Add New Users"
+  },
+  {
+    "id": 524,
+    "title": "Priority of Conflicts Between Individual Permissions and User Group Permissions",
+    "category_path": "Application Guide > Control Panel > User Management > Priority of Conflicts Between Individual Permissions and User Group Permissions"
+  },
+  {
+    "id": 525,
+    "title": "Solution for Conflicts Between Multiple User Group Permissions",
+    "category_path": "Application Guide > Control Panel > User Management > Solution for Conflicts Between Multiple User Group Permissions"
+  },
+  {
+    "id": 920,
+    "title": "User Management FAQs",
+    "category_path": "Application Guide > Control Panel > User Management > User Management FAQs"
+  },
+  {
+    "id": 75,
+    "title": "Manage User Groups",
+    "category_path": "Application Guide > Control Panel > User Management > Manage User Groups"
+  },
+  {
+    "id": 74,
+    "title": "Create User Group",
+    "category_path": "Application Guide > Control Panel > User Management > Create User Group"
+  },
+  {
+    "id": 72,
+    "title": "Managing Users",
+    "category_path": "Application Guide > Control Panel > User Management > Managing Users"
+  },
+  {
+    "id": 852,
+    "title": "How to Create User Accounts and Assign Permissions",
+    "category_path": "Application Guide > Control Panel > User Management > How to Create User Accounts and Assign Permissions"
+  },
+  {
+    "id": 80,
+    "title": "NFS",
+    "category_path": "Application Guide > Control Panel > File Service > NFS"
+  },
+  {
+    "id": 77,
+    "title": "File Service",
+    "category_path": "Application Guide > Control Panel > File Service > File Service"
+  },
+  {
+    "id": 359,
+    "title": "Mount UGREEN NAS Drives on a Computer via SMB",
+    "category_path": "Application Guide > Control Panel > File Service > Mount UGREEN NAS Drives on a Computer via SMB"
+  },
+  {
+    "id": 506,
+    "title": "[FAQ] What to Do If I Failed Access NAS Shared Folders via Windows File Explorer (SMB)?",
+    "category_path": "Application Guide > Control Panel > File Service > [FAQ] What to Do If I Failed Access NAS Shared Folders via Windows File Explorer (SMB)?"
+  },
+  {
+    "id": 512,
+    "title": "What to Do if a Windows Computer Cannot Access SMB via IP Address?",
+    "category_path": "Application Guide > Control Panel > File Service > What to Do if a Windows Computer Cannot Access SMB via IP Address?"
+  },
+  {
+    "id": 626,
+    "title": "To solve the issue of Windows being unable to connect to UGREEN NAS via the WebDAV HTTP protocol",
+    "category_path": "Application Guide > Control Panel > File Service > To solve the issue of Windows being unable to connect to UGREEN NAS via the WebDAV HTTP protocol"
+  },
+  {
+    "id": 627,
+    "title": "To solve the issue of Windows failing to connect to NAS via WebDAV (Error Code 0x80070043)",
+    "category_path": "Application Guide > Control Panel > File Service > To solve the issue of Windows failing to connect to NAS via WebDAV (Error Code 0x80070043)"
+  },
+  {
+    "id": 625,
+    "title": "To resolve the issue of file size limitations with WebDAV transfers on Windows, which is a default setting of 50MB",
+    "category_path": "Application Guide > Control Panel > File Service > To resolve the issue of file size limitations with WebDAV transfers on Windows, which is a default setting of 50MB"
+  },
+  {
+    "id": 619,
+    "title": "Enable Insecure Guest Logon in Windows to Fix SMB Connection Issues",
+    "category_path": "Application Guide > Control Panel > File Service > Enable Insecure Guest Logon in Windows to Fix SMB Connection Issues"
+  },
+  {
+    "id": 228,
+    "title": "Risks of Enabling SMB1 Protocol",
+    "category_path": "Application Guide > Control Panel > File Service > Risks of Enabling SMB1 Protocol"
+  },
+  {
+    "id": 491,
+    "title": "How to Connect to UGREEN NAS via NFS on Windows",
+    "category_path": "Application Guide > Control Panel > File Service > How to Connect to UGREEN NAS via NFS on Windows"
+  },
+  {
+    "id": 488,
+    "title": "Why does connecting to UGOS Pro via WebDAV on Windows fail with an 'cannot access' error?",
+    "category_path": "Application Guide > Control Panel > File Service > Why does connecting to UGOS Pro via WebDAV on Windows fail with an 'cannot access' error?"
+  },
+  {
+    "id": 766,
+    "title": "Mounting NFS Fails with \"Command Line Error. Invalid Parameter.\"",
+    "category_path": "Application Guide > Control Panel > File Service > Mounting NFS Fails with \"Command Line Error. Invalid Parameter.\""
+  },
+  {
+    "id": 427,
+    "title": "[FAQ] NFS Protocol Access to Shared Directory Results in \"Access Denied\" Notification",
+    "category_path": "Application Guide > Control Panel > File Service > [FAQ] NFS Protocol Access to Shared Directory Results in \"Access Denied\" Notification"
+  },
+  {
+    "id": 381,
+    "title": "[FAQ] Unable to Connect to UGREEN NAS via WebDAV HTTP Protocol in Windows File Explorer",
+    "category_path": "Application Guide > Control Panel > File Service > [FAQ] Unable to Connect to UGREEN NAS via WebDAV HTTP Protocol in Windows File Explorer"
+  },
+  {
+    "id": 352,
+    "title": "Enable Network Hostname Resolution Sharing",
+    "category_path": "Application Guide > Control Panel > File Service > Enable Network Hostname Resolution Sharing"
+  },
+  {
+    "id": 489,
+    "title": "[Tutorial] How to Access Files on UGREEN NAS via FTP Protocol",
+    "category_path": "Application Guide > Control Panel > File Service > [Tutorial] How to Access Files on UGREEN NAS via FTP Protocol"
+  },
+  {
+    "id": 624,
+    "title": "To resolve the issue of files not being editable or savable after connecting to UGREEN NAS using the WebDAV protocol",
+    "category_path": "Application Guide > Control Panel > File Service > To resolve the issue of files not being editable or savable after connecting to UGREEN NAS using the WebDAV protocol"
+  },
+  {
+    "id": 620,
+    "title": "Connect to the NAS via NFS on macOS",
+    "category_path": "Application Guide > Control Panel > File Service > Connect to the NAS via NFS on macOS"
+  },
+  {
+    "id": 756,
+    "title": "Rsync Connection Failure with \"Incorrect Username or Password\" Error – Troubleshooting",
+    "category_path": "Application Guide > Control Panel > File Service > Rsync Connection Failure with \"Incorrect Username or Password\" Error – Troubleshooting"
+  },
+  {
+    "id": 492,
+    "title": "[FAQ] Comparison of SMB, FTP, NFS, rsync, and WebDAV Service",
+    "category_path": "Application Guide > Control Panel > File Service > [FAQ] Comparison of SMB, FTP, NFS, rsync, and WebDAV Service"
+  },
+  {
+    "id": 81,
+    "title": "Rsync",
+    "category_path": "Application Guide > Control Panel > File Service > Rsync"
+  },
+  {
+    "id": 82,
+    "title": "WebDAV",
+    "category_path": "Application Guide > Control Panel > File Service > WebDAV"
+  },
+  {
+    "id": 79,
+    "title": "FTP",
+    "category_path": "Application Guide > Control Panel > File Service > FTP"
+  },
+  {
+    "id": 78,
+    "title": "SMB",
+    "category_path": "Application Guide > Control Panel > File Service > SMB"
+  },
+  {
+    "id": 882,
+    "title": "How to Adjust Fan Mode and Fan Speed Curves？",
+    "category_path": "Application Guide > Control Panel > Hardware & Power > How to Adjust Fan Mode and Fan Speed Curves？"
+  },
+  {
+    "id": 94,
+    "title": "Hardware & Power",
+    "category_path": "Application Guide > Control Panel > Hardware & Power > Hardware & Power"
+  },
+  {
+    "id": 907,
+    "title": "Dedicated Graphics Card Feature in Control Panel",
+    "category_path": "Application Guide > Control Panel > Hardware & Power > Dedicated Graphics Card Feature in Control Panel"
+  },
+  {
+    "id": 597,
+    "title": "Account Security",
+    "category_path": "Application Guide > Control Panel > Security > Account Security"
+  },
+  {
+    "id": 225,
+    "title": "Security",
+    "category_path": "Application Guide > Control Panel > Security > Security"
+  },
+  {
+    "id": 107,
+    "title": "Certificates",
+    "category_path": "Application Guide > Control Panel > Security > Certificates"
+  },
+  {
+    "id": 106,
+    "title": "Firewall",
+    "category_path": "Application Guide > Control Panel > Security > Firewall"
+  },
+  {
+    "id": 481,
+    "title": "How to Connect to UGOS Pro via SSH with Root Privileges?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Connect to UGOS Pro via SSH with Root Privileges?"
+  },
+  {
+    "id": 324,
+    "title": "How to Set Up Link Aggregation on UGREEN NAS to Improve Transfer Speed？",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Set Up Link Aggregation on UGREEN NAS to Improve Transfer Speed？"
+  },
+  {
+    "id": 437,
+    "title": "How to Enable Hard Drive Sleep on UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Enable Hard Drive Sleep on UGREEN NAS?"
+  },
+  {
+    "id": 353,
+    "title": "How to Configure Firewall Rules to Improve System Security?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Configure Firewall Rules to Improve System Security?"
+  },
+  {
+    "id": 413,
+    "title": "What Should I Do If My IP Address Is Blocked When Logging In to UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > What Should I Do If My IP Address Is Blocked When Logging In to UGREEN NAS?"
+  },
+  {
+    "id": 661,
+    "title": "What Is the Purpose of Service Order in Network?",
+    "category_path": "Application Guide > Control Panel > FAQ > What Is the Purpose of Service Order in Network?"
+  },
+  {
+    "id": 660,
+    "title": "How to Set the Outbound Traffic Speed for a Port?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Set the Outbound Traffic Speed for a Port?"
+  },
+  {
+    "id": 448,
+    "title": "How to Enhance the Security of Your UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Enhance the Security of Your UGREEN NAS?"
+  },
+  {
+    "id": 708,
+    "title": "How to Enable UPS and Configure the NUT Server Feature on a UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Enable UPS and Configure the NUT Server Feature on a UGREEN NAS?"
+  },
+  {
+    "id": 647,
+    "title": "NFC Recognition Feature User Guide",
+    "category_path": "Application Guide > Control Panel > FAQ > NFC Recognition Feature User Guide"
+  },
+  {
+    "id": 581,
+    "title": "What to Do If \"No Device Found\" Appears During Registration or Scanning?",
+    "category_path": "Application Guide > Control Panel > FAQ > What to Do If \"No Device Found\" Appears During Registration or Scanning?"
+  },
+  {
+    "id": 294,
+    "title": "How to Reset the Network Settings and Administrator Password on Your UGREEN NAS",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Reset the Network Settings and Administrator Password on Your UGREEN NAS"
+  },
+  {
+    "id": 325,
+    "title": "How to Reset to Factory Settings",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Reset to Factory Settings"
+  },
+  {
+    "id": 609,
+    "title": "UGREEN NAS Thunderbolt Direct-Attach Usage Guide",
+    "category_path": "Application Guide > Control Panel > FAQ > UGREEN NAS Thunderbolt Direct-Attach Usage Guide"
+  },
+  {
+    "id": 451,
+    "title": "How to Fix Slow Local Network Transfer Speeds on UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Fix Slow Local Network Transfer Speeds on UGREEN NAS?"
+  },
+  {
+    "id": 384,
+    "title": "What is DHCP?",
+    "category_path": "Application Guide > Control Panel > FAQ > What is DHCP?"
+  },
+  {
+    "id": 610,
+    "title": "How to change the UGREENlink ID of your UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to change the UGREENlink ID of your UGREEN NAS?"
+  },
+  {
+    "id": 703,
+    "title": "Why doesn't the Schneider APC UPS automatically power back on after being set to shut down automatically?",
+    "category_path": "Application Guide > Control Panel > FAQ > Why doesn't the Schneider APC UPS automatically power back on after being set to shut down automatically?"
+  },
+  {
+    "id": 704,
+    "title": "How to Manually Update the Firmware of UGREEN UPS",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Manually Update the Firmware of UGREEN UPS"
+  },
+  {
+    "id": 454,
+    "title": "How to Remotely Access UGREEN NAS via UGREENlink Without Public IP?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Remotely Access UGREEN NAS via UGREENlink Without Public IP?"
+  },
+  {
+    "id": 464,
+    "title": "How to Back Up and Restore UGOS Pro System Settings When Replacing or Resetting a UGREEN NAS Device?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Back Up and Restore UGOS Pro System Settings When Replacing or Resetting a UGREEN NAS Device?"
+  },
+  {
+    "id": 320,
+    "title": "How to Invite Friends to Bind to UGREEN NAS Device",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Invite Friends to Bind to UGREEN NAS Device"
+  },
+  {
+    "id": 598,
+    "title": "Account and Permission Settings – Frequently Asked Questions (FAQ)",
+    "category_path": "Application Guide > Control Panel > FAQ > Account and Permission Settings – Frequently Asked Questions (FAQ)"
+  },
+  {
+    "id": 465,
+    "title": "Will Resetting the UGREEN NAS to Factory Settings Erase Data and Affect Hard Drive Files?",
+    "category_path": "Application Guide > Control Panel > FAQ > Will Resetting the UGREEN NAS to Factory Settings Erase Data and Affect Hard Drive Files?"
+  },
+  {
+    "id": 350,
+    "title": "Backup Mac Files to UGREEN NAS Using Time Machine",
+    "category_path": "Application Guide > Control Panel > FAQ > Backup Mac Files to UGREEN NAS Using Time Machine"
+  },
+  {
+    "id": 774,
+    "title": "SSH Encryption Algorithm Configuration Guide",
+    "category_path": "Application Guide > Control Panel > FAQ > SSH Encryption Algorithm Configuration Guide"
+  },
+  {
+    "id": 435,
+    "title": "What should I do if I forget the administrator password when logging in to UGOS Pro?",
+    "category_path": "Application Guide > Control Panel > FAQ > What should I do if I forget the administrator password when logging in to UGOS Pro?"
+  },
+  {
+    "id": 388,
+    "title": "How to Check if Your Computer and UGREEN NAS are on the Same LAN",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Check if Your Computer and UGREEN NAS are on the Same LAN"
+  },
+  {
+    "id": 496,
+    "title": "[FAQ] How to Check If Your UGREEN NAS is Assigned a Public IP Address？",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] How to Check If Your UGREEN NAS is Assigned a Public IP Address？"
+  },
+  {
+    "id": 490,
+    "title": "[Tutorial] How to Access Files on UGREEN NAS via WebDAV?",
+    "category_path": "Application Guide > Control Panel > FAQ > [Tutorial] How to Access Files on UGREEN NAS via WebDAV?"
+  },
+  {
+    "id": 584,
+    "title": "Wake up Previously Logged-in Devices on UGOS Pro Using Windows/macOS",
+    "category_path": "Application Guide > Control Panel > FAQ > Wake up Previously Logged-in Devices on UGOS Pro Using Windows/macOS"
+  },
+  {
+    "id": 373,
+    "title": "[FAQ] What’s the difference between UGREENlink and DDNS?",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] What’s the difference between UGREENlink and DDNS?"
+  },
+  {
+    "id": 523,
+    "title": "How to Prevent Common Users from Changing Their Passwords",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Prevent Common Users from Changing Their Passwords"
+  },
+  {
+    "id": 315,
+    "title": "How to Create User Accounts in Bulk?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Create User Accounts in Bulk?"
+  },
+  {
+    "id": 354,
+    "title": "How to Create Firewall Rules to Allow or Deny IP Address Access to UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Create Firewall Rules to Allow or Deny IP Address Access to UGREEN NAS?"
+  },
+  {
+    "id": 355,
+    "title": "How to Configure a Whitelist on UGREEN NAS？",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Configure a Whitelist on UGREEN NAS？"
+  },
+  {
+    "id": 375,
+    "title": "NAS Connecting to Vision Pro",
+    "category_path": "Application Guide > Control Panel > FAQ > NAS Connecting to Vision Pro"
+  },
+  {
+    "id": 382,
+    "title": "What to Do if the Time Display on UGREEN NAS Is Incorrect (Not Matching the Local Time)?",
+    "category_path": "Application Guide > Control Panel > FAQ > What to Do if the Time Display on UGREEN NAS Is Incorrect (Not Matching the Local Time)?"
+  },
+  {
+    "id": 383,
+    "title": "How to Perform a System Firmware Upgrade?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Perform a System Firmware Upgrade?"
+  },
+  {
+    "id": 385,
+    "title": "What is the MTU value?",
+    "category_path": "Application Guide > Control Panel > FAQ > What is the MTU value?"
+  },
+  {
+    "id": 386,
+    "title": "How to Set DHCP on a Computer",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Set DHCP on a Computer"
+  },
+  {
+    "id": 387,
+    "title": "What is Network Bridging?",
+    "category_path": "Application Guide > Control Panel > FAQ > What is Network Bridging?"
+  },
+  {
+    "id": 416,
+    "title": "[FAQ] What are the features of the reset button?",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] What are the features of the reset button?"
+  },
+  {
+    "id": 426,
+    "title": "[FAQ] NFS Mounting Prompts \"'mount' Is Not Recognized as an Internal or External Command, Operable Program or Batch File\"",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] NFS Mounting Prompts \"'mount' Is Not Recognized as an Internal or External Command, Operable Program or Batch File\""
+  },
+  {
+    "id": 428,
+    "title": "[FAQ] Folder names in Chinese display garbled characters after mounting NFS using Windows File Explorer",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] Folder names in Chinese display garbled characters after mounting NFS using Windows File Explorer"
+  },
+  {
+    "id": 434,
+    "title": "Where to set up the file indexing whitelist in UGOS Pro?",
+    "category_path": "Application Guide > Control Panel > FAQ > Where to set up the file indexing whitelist in UGOS Pro?"
+  },
+  {
+    "id": 442,
+    "title": "How to Connect and Configure a UPS on a UGREEN NAS to Protect Your Data Protection During Power Interruptions？",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Connect and Configure a UPS on a UGREEN NAS to Protect Your Data Protection During Power Interruptions？"
+  },
+  {
+    "id": 443,
+    "title": "How to check the firmware version of the device and client?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to check the firmware version of the device and client?"
+  },
+  {
+    "id": 449,
+    "title": "[FAQ] How to Enable Network Wake and Wake on LAN (WOL) in UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] How to Enable Network Wake and Wake on LAN (WOL) in UGREEN NAS?"
+  },
+  {
+    "id": 450,
+    "title": "[FAQ] What to Do if the UGREEN NAS Device Fails to Power on within the Internal Network Environment?",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] What to Do if the UGREEN NAS Device Fails to Power on within the Internal Network Environment?"
+  },
+  {
+    "id": 458,
+    "title": "How to Choose Between Normal Bridging (Bridge Mode) and Virtual Bridging (Macvlan Mode)? What’s the Difference Between the Two?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Choose Between Normal Bridging (Bridge Mode) and Virtual Bridging (Macvlan Mode)? What’s the Difference Between the Two?"
+  },
+  {
+    "id": 499,
+    "title": "How to Determine the Status and Identify Errors of UGREEN NAS via LED Indicators?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to Determine the Status and Identify Errors of UGREEN NAS via LED Indicators?"
+  },
+  {
+    "id": 521,
+    "title": "How to change a common user to an administrator user?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to change a common user to an administrator user?"
+  },
+  {
+    "id": 522,
+    "title": "What is the difference between administrator and common user permissions?",
+    "category_path": "Application Guide > Control Panel > FAQ > What is the difference between administrator and common user permissions?"
+  },
+  {
+    "id": 617,
+    "title": "How to check the IP Address of Your UGREEN NAS?",
+    "category_path": "Application Guide > Control Panel > FAQ > How to check the IP Address of Your UGREEN NAS?"
+  },
+  {
+    "id": 644,
+    "title": "The Performance Differences of Thunderbolt Direct Connection Function in Sleep Mode on Windows and Mac Computers and Their Solutions",
+    "category_path": "Application Guide > Control Panel > FAQ > The Performance Differences of Thunderbolt Direct Connection Function in Sleep Mode on Windows and Mac Computers and Their Solutions"
+  },
+  {
+    "id": 670,
+    "title": "[FAQ] How do I switch the NAS appearance mode to dark mode on mobile?",
+    "category_path": "Application Guide > Control Panel > FAQ > [FAQ] How do I switch the NAS appearance mode to dark mode on mobile?"
+  },
+  {
+    "id": 923,
+    "title": "Connect External Storage Devices (SD Cards/USB Flash Drives) and Manage Files",
+    "category_path": "Application Guide > Files > Connect External Storage Devices (SD Cards/USB Flash Drives) and Manage Files"
+  },
+  {
+    "id": 155,
+    "title": "File Sharing",
+    "category_path": "Application Guide > Files > File Sharing"
+  },
+  {
+    "id": 220,
+    "title": "File Management Settings",
+    "category_path": "Application Guide > Files > File Management Settings"
+  },
+  {
+    "id": 146,
+    "title": "Basic File Operations",
+    "category_path": "Application Guide > Files > Basic File Operations"
+  },
+  {
+    "id": 224,
+    "title": "Files",
+    "category_path": "Application Guide > Files > Files"
+  },
+  {
+    "id": 770,
+    "title": "Folder Management",
+    "category_path": "Application Guide > Files > Folder Management"
+  },
+  {
+    "id": 139,
+    "title": "Create New Folder",
+    "category_path": "Application Guide > Files > Create New Folder"
+  },
+  {
+    "id": 142,
+    "title": "File Permission Settings",
+    "category_path": "Application Guide > Files > File Permission Settings"
+  },
+  {
+    "id": 151,
+    "title": "Search for Files or Folders",
+    "category_path": "Application Guide > Files > Search for Files or Folders"
+  },
+  {
+    "id": 877,
+    "title": "How to Quickly Organize Files with File Organization?",
+    "category_path": "Application Guide > Files > How to Quickly Organize Files with File Organization?"
+  },
+  {
+    "id": 878,
+    "title": "How to Quickly Organize Files with Smart Tagging？",
+    "category_path": "Application Guide > Files > How to Quickly Organize Files with Smart Tagging？"
+  },
+  {
+    "id": 158,
+    "title": "Quickly Clean Up Duplicate Files with File Deduplication",
+    "category_path": "Application Guide > Files > Quickly Clean Up Duplicate Files with File Deduplication"
+  },
+  {
+    "id": 156,
+    "title": "File Collection",
+    "category_path": "Application Guide > Files > File Collection"
+  },
+  {
+    "id": 912,
+    "title": "Folder Encryption",
+    "category_path": "Application Guide > Files > Folder Encryption"
+  },
+  {
+    "id": 802,
+    "title": "Mount 115 Drive via Network Folder",
+    "category_path": "Application Guide > Files > Network Folder > Mount 115 Drive via Network Folder"
+  },
+  {
+    "id": 906,
+    "title": "Mount OneDrive Using the Network folder Feature",
+    "category_path": "Application Guide > Files > Network Folder > Mount OneDrive Using the Network folder Feature"
+  },
+  {
+    "id": 153,
+    "title": "Network Folder Connection Guide",
+    "category_path": "Application Guide > Files > Network Folder > Network Folder Connection Guide"
+  },
+  {
+    "id": 159,
+    "title": "How to Use and Manage Recycle Bin?",
+    "category_path": "Application Guide > Files > Recycle bin > How to Use and Manage Recycle Bin?"
+  },
+  {
+    "id": 875,
+    "title": "Does the Recycle Bin Use NAS Storage Space? How to Clear It?",
+    "category_path": "Application Guide > Files > Recycle bin > Does the Recycle Bin Use NAS Storage Space? How to Clear It?"
+  },
+  {
+    "id": 858,
+    "title": "How to Configure a Recycle Bin Cleanup Plan?",
+    "category_path": "Application Guide > Files > Recycle bin > How to Configure a Recycle Bin Cleanup Plan?"
+  },
+  {
+    "id": 856,
+    "title": "How to Show or Hide Folder Recycle Bin",
+    "category_path": "Application Guide > Files > Recycle bin > How to Show or Hide Folder Recycle Bin"
+  },
+  {
+    "id": 832,
+    "title": "How Parent Folder Permissions Affect Subfolders and Files",
+    "category_path": "Application Guide > Files > FAQ > How Parent Folder Permissions Affect Subfolders and Files"
+  },
+  {
+    "id": 918,
+    "title": "Managing File Collaboration Permissions for Family and Team Members",
+    "category_path": "Application Guide > Files > FAQ > Managing File Collaboration Permissions for Family and Team Members"
+  },
+  {
+    "id": 819,
+    "title": "Guide to Using the Address Bar in Vault and Files",
+    "category_path": "Application Guide > Files > FAQ > Guide to Using the Address Bar in Vault and Files"
+  },
+  {
+    "id": 363,
+    "title": "Shared Folder Permissions Guide",
+    "category_path": "Application Guide > Files > FAQ > Shared Folder Permissions Guide"
+  },
+  {
+    "id": 893,
+    "title": "How to Delete a Shared Folder？",
+    "category_path": "Application Guide > Files > FAQ > How to Delete a Shared Folder？"
+  },
+  {
+    "id": 604,
+    "title": "How to Enable and Manage Personal Folder",
+    "category_path": "Application Guide > Files > FAQ > How to Enable and Manage Personal Folder"
+  },
+  {
+    "id": 863,
+    "title": "How to Generate File Sharing and Request Links via DDNS?",
+    "category_path": "Application Guide > Files > FAQ > How to Generate File Sharing and Request Links via DDNS?"
+  },
+  {
+    "id": 865,
+    "title": "How to Use Details Preview in Files?",
+    "category_path": "Application Guide > Files > FAQ > How to Use Details Preview in Files?"
+  },
+  {
+    "id": 425,
+    "title": "How to Share and Collect Files by \"Files\"?",
+    "category_path": "Application Guide > Files > FAQ > How to Share and Collect Files by \"Files\"?"
+  },
+  {
+    "id": 327,
+    "title": "Why Does the Permission Preview Show \"Deny access\" After Granting \"Read & Write\" Permission to a Shared Folder",
+    "category_path": "Application Guide > Files > FAQ > Why Does the Permission Preview Show \"Deny access\" After Granting \"Read & Write\" Permission to a Shared Folder"
+  },
+  {
+    "id": 518,
+    "title": "How to Set \"Read & Write\", \"Read only\", and \"Deny access\" Permissions for Shared Folders in Files When Multiple Users Use NAS",
+    "category_path": "Application Guide > Files > FAQ > How to Set \"Read & Write\", \"Read only\", and \"Deny access\" Permissions for Shared Folders in Files When Multiple Users Use NAS"
+  },
+  {
+    "id": 730,
+    "title": "How to Quickly Grant Shared Folder Management Permissions to a NAS Account",
+    "category_path": "Application Guide > Files > FAQ > How to Quickly Grant Shared Folder Management Permissions to a NAS Account"
+  },
+  {
+    "id": 764,
+    "title": "Implementation and Security Mechanism of Windows ACL in UGREEN NAS",
+    "category_path": "Application Guide > Files > FAQ > Implementation and Security Mechanism of Windows ACL in UGREEN NAS"
+  },
+  {
+    "id": 668,
+    "title": "How to View the Storage Usage of General Users (Sub-Accounts)",
+    "category_path": "Application Guide > Files > FAQ > How to View the Storage Usage of General Users (Sub-Accounts)"
+  },
+  {
+    "id": 667,
+    "title": "Set access permissions for external storage devices for general users (sub-accounts)",
+    "category_path": "Application Guide > Files > FAQ > Set access permissions for external storage devices for general users (sub-accounts)"
+  },
+  {
+    "id": 646,
+    "title": "Summary of Files Shortcuts",
+    "category_path": "Application Guide > Files > FAQ > Summary of Files Shortcuts"
+  },
+  {
+    "id": 526,
+    "title": "When a user tries to access a shared folder and sees the message \"Insufficient permissions to perform this operation,\" how should it be handled?",
+    "category_path": "Application Guide > Files > FAQ > When a user tries to access a shared folder and sees the message \"Insufficient permissions to perform this operation,\" how should it be handled?"
+  },
+  {
+    "id": 519,
+    "title": "What Permissions Are Required for a User to Rename Files or Folders?",
+    "category_path": "Application Guide > Files > FAQ > What Permissions Are Required for a User to Rename Files or Folders?"
+  },
+  {
+    "id": 494,
+    "title": "[Tutorial] How to Create and Configure Shared Folder Permissions?",
+    "category_path": "Application Guide > Files > FAQ > [Tutorial] How to Create and Configure Shared Folder Permissions?"
+  },
+  {
+    "id": 483,
+    "title": "[FAQ] How to Restrict Access to a Specific Subfolder in a Shared Folder?",
+    "category_path": "Application Guide > Files > FAQ > [FAQ] How to Restrict Access to a Specific Subfolder in a Shared Folder?"
+  },
+  {
+    "id": 452,
+    "title": "How to Batch Rename Files and Folders in Files?",
+    "category_path": "Application Guide > Files > FAQ > How to Batch Rename Files and Folders in Files?"
+  },
+  {
+    "id": 216,
+    "title": "Logs",
+    "category_path": "Application Guide > Logs > Logs"
+  },
+  {
+    "id": 871,
+    "title": "Set Log Notification Policies",
+    "category_path": "Application Guide > Logs > Set Log Notification Policies"
+  },
+  {
+    "id": 116,
+    "title": "App Center",
+    "category_path": "Application Guide > App Center > App Center"
+  },
+  {
+    "id": 392,
+    "title": "How to Change the RAID Type?",
+    "category_path": "Application Guide > Storage > How to Change the RAID Type?"
+  },
+  {
+    "id": 254,
+    "title": "External Storage",
+    "category_path": "Application Guide > Storage > External Storage"
+  },
+  {
+    "id": 859,
+    "title": "How to Fix Write Failures Despite Available Storage Space (Reclaim Storage Spac",
+    "category_path": "Application Guide > Storage > How to Fix Write Failures Despite Available Storage Space (Reclaim Storage Spac"
+  },
+  {
+    "id": 132,
+    "title": "How to Choose the Right RAID Level for Your Needs",
+    "category_path": "Application Guide > Storage > How to Choose the Right RAID Level for Your Needs"
+  },
+  {
+    "id": 314,
+    "title": "Hard Drive",
+    "category_path": "Application Guide > Storage > Hard Drive"
+  },
+  {
+    "id": 313,
+    "title": "Storage",
+    "category_path": "Application Guide > Storage > Storage"
+  },
+  {
+    "id": 810,
+    "title": "UGREEN NAS Storage Pool Expansion Guide (Replacing Drives One by One)",
+    "category_path": "Application Guide > Storage > FAQ > UGREEN NAS Storage Pool Expansion Guide (Replacing Drives One by One)"
+  },
+  {
+    "id": 415,
+    "title": "How to Create an SSD Cache on Volume?",
+    "category_path": "Application Guide > Storage > FAQ > How to Create an SSD Cache on Volume?"
+  },
+  {
+    "id": 418,
+    "title": "Relationship Between Hard Disk, Storage Pool, and Storage Volume",
+    "category_path": "Application Guide > Storage > FAQ > Relationship Between Hard Disk, Storage Pool, and Storage Volume"
+  },
+  {
+    "id": 393,
+    "title": "Move Folders to Other Volume",
+    "category_path": "Application Guide > Storage > FAQ > Move Folders to Other Volume"
+  },
+  {
+    "id": 493,
+    "title": "[Tutorial] How to Create Storage Pool and Volume?",
+    "category_path": "Application Guide > Storage > FAQ > [Tutorial] How to Create Storage Pool and Volume?"
+  },
+  {
+    "id": 599,
+    "title": "Storage FAQ Collection",
+    "category_path": "Application Guide > Storage > FAQ > Storage FAQ Collection"
+  },
+  {
+    "id": 638,
+    "title": "Data Organizing Feature",
+    "category_path": "Application Guide > Storage > FAQ > Data Organizing Feature"
+  },
+  {
+    "id": 430,
+    "title": "SSD Cache Types Supported by UGREEN NAS",
+    "category_path": "Application Guide > Storage > FAQ > SSD Cache Types Supported by UGREEN NAS"
+  },
+  {
+    "id": 767,
+    "title": "Migrating Hard Drives to a New UGREEN NAS Device",
+    "category_path": "Application Guide > Storage > FAQ > Migrating Hard Drives to a New UGREEN NAS Device"
+  },
+  {
+    "id": 806,
+    "title": "What to Do When You See \"Storage Pool Has Reached Its Hard Drive Fault Tolerance Limit\" While Disabling a Drive",
+    "category_path": "Application Guide > Storage > FAQ > What to Do When You See \"Storage Pool Has Reached Its Hard Drive Fault Tolerance Limit\" While Disabling a Drive"
+  },
+  {
+    "id": 807,
+    "title": "Why Is There No Significant Performance Improvement After Adding SSD Cache to a Storage Pool?",
+    "category_path": "Application Guide > Storage > FAQ > Why Is There No Significant Performance Improvement After Adding SSD Cache to a Storage Pool?"
+  },
+  {
+    "id": 137,
+    "title": "Hard Disk Installation Assistant (Hardware Disassembly and Risk Notification)",
+    "category_path": "Application Guide > Storage > FAQ > Hard Disk Installation Assistant (Hardware Disassembly and Risk Notification)"
+  },
+  {
+    "id": 296,
+    "title": "[FAQ] How to Solve the Issue When Hard Drive Status Shows as \"Locked\"",
+    "category_path": "Application Guide > Storage > FAQ > [FAQ] How to Solve the Issue When Hard Drive Status Shows as \"Locked\""
+  },
+  {
+    "id": 662,
+    "title": "How to choose a file system for a UGREEN NAS volume?",
+    "category_path": "Application Guide > Storage > FAQ > How to choose a file system for a UGREEN NAS volume?"
+  },
+  {
+    "id": 440,
+    "title": "[FAQ] Insufficient Disk Space: Insert Additional Required Hard Drives into NAS Device",
+    "category_path": "Application Guide > Storage > FAQ > [FAQ] Insufficient Disk Space: Insert Additional Required Hard Drives into NAS Device"
+  },
+  {
+    "id": 439,
+    "title": "[Tutorial] How to Mount a Hard Drive from Another UGREEN NAS Device as External Storage in UGOS Pro?",
+    "category_path": "Application Guide > Storage > FAQ > [Tutorial] How to Mount a Hard Drive from Another UGREEN NAS Device as External Storage in UGOS Pro?"
+  },
+  {
+    "id": 459,
+    "title": "How to Set up RAID 10 on UGOS Pro?",
+    "category_path": "Application Guide > Storage > FAQ > How to Set up RAID 10 on UGOS Pro?"
+  },
+  {
+    "id": 310,
+    "title": "[FAQ] What is Data Erasure?",
+    "category_path": "Application Guide > Storage > FAQ > [FAQ] What is Data Erasure?"
+  },
+  {
+    "id": 344,
+    "title": "[FAQ] why does my hard disk display a lower capacity than what is displayed on the label?",
+    "category_path": "Application Guide > Storage > FAQ > [FAQ] why does my hard disk display a lower capacity than what is displayed on the label?"
+  },
+  {
+    "id": 412,
+    "title": "How to View the Original Ugos Files in External Storage After Switching to the UGOS Pro System?",
+    "category_path": "Application Guide > Storage > FAQ > How to View the Original Ugos Files in External Storage After Switching to the UGOS Pro System?"
+  },
+  {
+    "id": 420,
+    "title": "[Tutorial] How to Add a Spare Hard Drive (Hot Spare) to a Storage Pool?",
+    "category_path": "Application Guide > Storage > FAQ > [Tutorial] How to Add a Spare Hard Drive (Hot Spare) to a Storage Pool?"
+  },
+  {
+    "id": 471,
+    "title": "[FAQ] What to Do if the RAID Sync Speed is Slow in the Storage?",
+    "category_path": "Application Guide > Storage > FAQ > [FAQ] What to Do if the RAID Sync Speed is Slow in the Storage?"
+  },
+  {
+    "id": 586,
+    "title": "Why does using RAID 0 result in speeds only equivalent to that of a single hard disk?",
+    "category_path": "Application Guide > Storage > FAQ > Why does using RAID 0 result in speeds only equivalent to that of a single hard disk?"
+  },
+  {
+    "id": 587,
+    "title": "External Storage Supported Formats",
+    "category_path": "Application Guide > Storage > FAQ > External Storage Supported Formats"
+  },
+  {
+    "id": 636,
+    "title": "How Hard Disks Work and Why They Make Noise",
+    "category_path": "Application Guide > Storage > FAQ > How Hard Disks Work and Why They Make Noise"
+  },
+  {
+    "id": 498,
+    "title": "[Tutorial] How to Choose the Right Storage Mode for UGREEN NAS?",
+    "category_path": "Application Guide > Storage > FAQ > [Tutorial] How to Choose the Right Storage Mode for UGREEN NAS?"
+  },
+  {
+    "id": 227,
+    "title": "Task Manager User Guide",
+    "category_path": "Application Guide > Task Manager > Task Manager User Guide"
+  },
+  {
+    "id": 123,
+    "title": "Security",
+    "category_path": "Application Guide > Security > Security"
+  },
+  {
+    "id": 938,
+    "title": "Docker User Guide",
+    "category_path": "Application Guide > Docker > Docker User Guide"
+  },
+  {
+    "id": 236,
+    "title": "Docker",
+    "category_path": "Application Guide > Docker > Docker"
+  },
+  {
+    "id": 411,
+    "title": "Docker Compose Project User Guide",
+    "category_path": "Application Guide > Docker > Docker Compose Project User Guide"
+  },
+  {
+    "id": 291,
+    "title": "Docker Network",
+    "category_path": "Application Guide > Docker > Docker Network"
+  },
+  {
+    "id": 290,
+    "title": "Image",
+    "category_path": "Application Guide > Docker > Image"
+  },
+  {
+    "id": 289,
+    "title": "Container",
+    "category_path": "Application Guide > Docker > Container"
+  },
+  {
+    "id": 884,
+    "title": "How to Use a Dedicated GPU in Docker？",
+    "category_path": "Application Guide > Docker > How to Use a Dedicated GPU in Docker？"
+  },
+  {
+    "id": 939,
+    "title": "How to Purchase a Domain and Obtain an AccessKey?",
+    "category_path": "Application Guide > Docker > FAQ > How to Purchase a Domain and Obtain an AccessKey?"
+  },
+  {
+    "id": 356,
+    "title": "What Should I Do If Docker Container Cannot Access a Mapped Folder or Shows a Permission Denied Error?",
+    "category_path": "Application Guide > Docker > FAQ > What Should I Do If Docker Container Cannot Access a Mapped Folder or Shows a Permission Denied Error?"
+  },
+  {
+    "id": 517,
+    "title": "Docker Container Permission Configuration Detailed Explanation",
+    "category_path": "Application Guide > Docker > FAQ > Docker Container Permission Configuration Detailed Explanation"
+  },
+  {
+    "id": 579,
+    "title": "How to Update Third-Party Apps on UGREEN NAS？",
+    "category_path": "Application Guide > Docker > FAQ > How to Update Third-Party Apps on UGREEN NAS？"
+  },
+  {
+    "id": 369,
+    "title": "How to Get PUID and PGID in Docker?",
+    "category_path": "Application Guide > Docker > FAQ > How to Get PUID and PGID in Docker?"
+  },
+  {
+    "id": 560,
+    "title": "[FAQ] How Does Adding a Network Proxy in Firefox Affect Access to Devices on the Local Network?",
+    "category_path": "Application Guide > Docker > FAQ > [FAQ] How Does Adding a Network Proxy in Firefox Affect Access to Devices on the Local Network?"
+  },
+  {
+    "id": 558,
+    "title": "How to Add a Network Proxy in Firefox and Related Precautions",
+    "category_path": "Application Guide > Docker > FAQ > How to Add a Network Proxy in Firefox and Related Precautions"
+  },
+  {
+    "id": 397,
+    "title": "Solutions for Docker Service Running Abnormally",
+    "category_path": "Application Guide > Docker > FAQ > Solutions for Docker Service Running Abnormally"
+  },
+  {
+    "id": 487,
+    "title": "How to Correctly Represent Volumes Mount Paths in the Docker Compose Configuration File?",
+    "category_path": "Application Guide > Docker > FAQ > How to Correctly Represent Volumes Mount Paths in the Docker Compose Configuration File?"
+  },
+  {
+    "id": 484,
+    "title": "Why Does Baserow Run Properly with Docker Compose but the Container Automatically Stops When Created Directly?",
+    "category_path": "Application Guide > Docker > FAQ > Why Does Baserow Run Properly with Docker Compose but the Container Automatically Stops When Created Directly?"
+  },
+  {
+    "id": 297,
+    "title": "How to Configure Registry Images, Image Sources, and Image Proxy in Docker?",
+    "category_path": "Application Guide > Docker > FAQ > How to Configure Registry Images, Image Sources, and Image Proxy in Docker?"
+  },
+  {
+    "id": 743,
+    "title": "How to Add a Quick Access Entry for Docker Containers Using Host Network Mode?",
+    "category_path": "Application Guide > Docker > FAQ > How to Add a Quick Access Entry for Docker Containers Using Host Network Mode?"
+  },
+  {
+    "id": 539,
+    "title": "About Container Application",
+    "category_path": "Application Guide > Docker > FAQ > About Container Application"
+  },
+  {
+    "id": 561,
+    "title": "Why does text get lost when typing in the Firefox browser?",
+    "category_path": "Application Guide > Docker > FAQ > Why does text get lost when typing in the Firefox browser?"
+  },
+  {
+    "id": 461,
+    "title": "[FAQ] Docker Network Modes and Their Applications: Bridge, Host, and Macvlan",
+    "category_path": "Application Guide > Docker > FAQ > [FAQ] Docker Network Modes and Their Applications: Bridge, Host, and Macvlan"
+  },
+  {
+    "id": 611,
+    "title": "Get the real path of the NAS folder and mount it to the Docker container.",
+    "category_path": "Application Guide > Docker > FAQ > Get the real path of the NAS folder and mount it to the Docker container."
+  },
+  {
+    "id": 715,
+    "title": "Set up Docker container desktop shortcuts and enable remote access functionality",
+    "category_path": "Application Guide > Docker > FAQ > Set up Docker container desktop shortcuts and enable remote access functionality"
+  },
+  {
+    "id": 735,
+    "title": "List of Third-Party Container Apps Supporting Remote Access",
+    "category_path": "Application Guide > Docker > FAQ > List of Third-Party Container Apps Supporting Remote Access"
+  },
+  {
+    "id": 357,
+    "title": "How to Enable Domain Name Access with DDNS-GO?",
+    "category_path": "Application Guide > Docker > Docker Gameplay > How to Enable Domain Name Access with DDNS-GO?"
+  },
+  {
+    "id": 593,
+    "title": "Home Assistant User Guide",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Home Assistant User Guide"
+  },
+  {
+    "id": 615,
+    "title": "TaoSync Quick Start Guide",
+    "category_path": "Application Guide > Docker > Docker Gameplay > TaoSync Quick Start Guide"
+  },
+  {
+    "id": 892,
+    "title": "How to Set Up a FreeCAD CAD Workstation with Docker?",
+    "category_path": "Application Guide > Docker > Docker Gameplay > How to Set Up a FreeCAD CAD Workstation with Docker?"
+  },
+  {
+    "id": 419,
+    "title": "Build a SiYuan Knowledge Base with Docker",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Build a SiYuan Knowledge Base with Docker"
+  },
+  {
+    "id": 927,
+    "title": "Deploying the Exameow AI Exam Question Generator with Docker",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying the Exameow AI Exam Question Generator with Docker"
+  },
+  {
+    "id": 360,
+    "title": "Set Up a Plex Media Server with Docker",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set Up a Plex Media Server with Docker"
+  },
+  {
+    "id": 577,
+    "title": "Deploy the Open-Source Self-Hosted Mobile Photo Backup Tool Immich on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploy the Open-Source Self-Hosted Mobile Photo Backup Tool Immich on UGREEN NAS"
+  },
+  {
+    "id": 361,
+    "title": "Set Up Emby Streaming Media Service on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set Up Emby Streaming Media Service on UGREEN NAS"
+  },
+  {
+    "id": 486,
+    "title": "Deploy the Alist Cloud Drive Mount Service on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploy the Alist Cloud Drive Mount Service on UGREEN NAS"
+  },
+  {
+    "id": 348,
+    "title": "Deploying a Qbittorrent Downloader on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying a Qbittorrent Downloader on UGREEN NAS"
+  },
+  {
+    "id": 476,
+    "title": "How to Deploy the Shinobi Open-Source Video Surveillance System Using Docker",
+    "category_path": "Application Guide > Docker > Docker Gameplay > How to Deploy the Shinobi Open-Source Video Surveillance System Using Docker"
+  },
+  {
+    "id": 592,
+    "title": "Quick Start Guide for Jellyfin",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Quick Start Guide for Jellyfin"
+  },
+  {
+    "id": 475,
+    "title": "[Docker Usage] How to Build the Home Assistant Smart Home System with Docker",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] How to Build the Home Assistant Smart Home System with Docker"
+  },
+  {
+    "id": 473,
+    "title": "Deploy the PDF Multi-tool Stirling-PDF on the UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploy the PDF Multi-tool Stirling-PDF on the UGREEN NAS"
+  },
+  {
+    "id": 472,
+    "title": "Deploy Personal Navigation Page Sun-panel on the UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploy Personal Navigation Page Sun-panel on the UGREEN NAS"
+  },
+  {
+    "id": 423,
+    "title": "[Tutorial] How to Deploy TMM for Scraping Movie Information with Docker Compose to Create the Perfect NAS Poster Wall?",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Tutorial] How to Deploy TMM for Scraping Movie Information with Docker Compose to Create the Perfect NAS Poster Wall?"
+  },
+  {
+    "id": 622,
+    "title": "Setting Up Tailscale on UGREEN NAS for Remote Access",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up Tailscale on UGREEN NAS for Remote Access"
+  },
+  {
+    "id": 358,
+    "title": "Set Up Lucky on UGREEN NAS to Enable DDNS Resolution",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set Up Lucky on UGREEN NAS to Enable DDNS Resolution"
+  },
+  {
+    "id": 362,
+    "title": "[Docker Usage] Set Up Jellyfin Streaming Service on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] Set Up Jellyfin Streaming Service on UGREEN NAS"
+  },
+  {
+    "id": 364,
+    "title": "Set Up a Transmission Downloader Using Docker",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set Up a Transmission Downloader Using Docker"
+  },
+  {
+    "id": 370,
+    "title": "[FAQ] How to Create a Private Repository on Alibaba Cloud and Upload Images",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [FAQ] How to Create a Private Repository on Alibaba Cloud and Upload Images"
+  },
+  {
+    "id": 372,
+    "title": "Deploying the Syncthing Open-Source File Synchronization Tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying the Syncthing Open-Source File Synchronization Tool on UGREEN NAS"
+  },
+  {
+    "id": 374,
+    "title": "Set Up VerySync on UGREEN NAS to Enable Cross-Device File Sync and Sharing",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set Up VerySync on UGREEN NAS to Enable Cross-Device File Sync and Sharing"
+  },
+  {
+    "id": 424,
+    "title": "Setting Up a Personal Blog with Docker Compose: A Halo Deployment Tutorial",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up a Personal Blog with Docker Compose: A Halo Deployment Tutorial"
+  },
+  {
+    "id": 436,
+    "title": "Deploying CloudDrive2 on UGREEN NAS and Mounting It as a Local Directory",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying CloudDrive2 on UGREEN NAS and Mounting It as a Local Directory"
+  },
+  {
+    "id": 456,
+    "title": "[FAQ] How to Configure a Macvlan Network in Docker Compose",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [FAQ] How to Configure a Macvlan Network in Docker Compose"
+  },
+  {
+    "id": 457,
+    "title": "How to Run a Container on Docker's Macvlan Network",
+    "category_path": "Application Guide > Docker > Docker Gameplay > How to Run a Container on Docker's Macvlan Network"
+  },
+  {
+    "id": 466,
+    "title": "Deploying WizNote on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying WizNote on UGREEN NAS"
+  },
+  {
+    "id": 467,
+    "title": "Setting Up pgAdmin on UGREEN NAS as a General Database Management Tool",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up pgAdmin on UGREEN NAS as a General Database Management Tool"
+  },
+  {
+    "id": 468,
+    "title": "Setting Up PostgreSQL Database on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up PostgreSQL Database on UGREEN NAS"
+  },
+  {
+    "id": 497,
+    "title": "[Docker Usage] Deploying the Aria2 Downloader on UGREEN NAS and Configuring the Browser Extension",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] Deploying the Aria2 Downloader on UGREEN NAS and Configuring the Browser Extension"
+  },
+  {
+    "id": 500,
+    "title": "Deploy an Online Music Scraper (Music Tag Web) on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploy an Online Music Scraper (Music Tag Web) on UGREEN NAS"
+  },
+  {
+    "id": 502,
+    "title": "[Docker Usage] Set Up Navidrome on UGREEN NAS to Build Your Private Music Library",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] Set Up Navidrome on UGREEN NAS to Build Your Private Music Library"
+  },
+  {
+    "id": 503,
+    "title": "Set Up the Personal Subscription Management Tool Wallos on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set Up the Personal Subscription Management Tool Wallos on UGREEN NAS"
+  },
+  {
+    "id": 507,
+    "title": "[Docker Usage] Deploying the Memos Personal Note App on UGREEN NAS for Cross-Platform, Anytime Note-Taking",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] Deploying the Memos Personal Note App on UGREEN NAS for Cross-Platform, Anytime Note-Taking"
+  },
+  {
+    "id": 511,
+    "title": "[Docker Usage] Deploying CloudDrive2 on UGREEN NAS to Mount 115 Cloud Drive",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] Deploying CloudDrive2 on UGREEN NAS to Mount 115 Cloud Drive"
+  },
+  {
+    "id": 529,
+    "title": "[Docker Usage] Deploying Speedtest-X Speed Test Tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > [Docker Usage] Deploying Speedtest-X Speed Test Tool on UGREEN NAS"
+  },
+  {
+    "id": 541,
+    "title": "Setting Up the Local Full-Text Search Tool file-search on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up the Local Full-Text Search Tool file-search on UGREEN NAS"
+  },
+  {
+    "id": 545,
+    "title": "Setting up Cloud Backup on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting up Cloud Backup on UGREEN NAS"
+  },
+  {
+    "id": 546,
+    "title": "Setting Up MKVToolNix Multimedia Processing Tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up MKVToolNix Multimedia Processing Tool on UGREEN NAS"
+  },
+  {
+    "id": 547,
+    "title": "Setting Up the Kavita Comic Management Tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up the Kavita Comic Management Tool on UGREEN NAS"
+  },
+  {
+    "id": 549,
+    "title": "Deploying Watchtower on UGREEN NAS for Automatic Container Updates",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying Watchtower on UGREEN NAS for Automatic Container Updates"
+  },
+  {
+    "id": 550,
+    "title": "Setting Up UniFi Controller on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up UniFi Controller on UGREEN NAS"
+  },
+  {
+    "id": 552,
+    "title": "Setting up HivisionIDPhotos ID Photo Creation Tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting up HivisionIDPhotos ID Photo Creation Tool on UGREEN NAS"
+  },
+  {
+    "id": 562,
+    "title": "Setting Up a Personal WordPress Blog on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Setting Up a Personal WordPress Blog on UGREEN NAS"
+  },
+  {
+    "id": 563,
+    "title": "Set up a MariaDB database and the phpMyAdmin management tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set up a MariaDB database and the phpMyAdmin management tool on UGREEN NAS"
+  },
+  {
+    "id": 565,
+    "title": "Set up MrDoc Online Document and Knowledge Base System on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set up MrDoc Online Document and Knowledge Base System on UGREEN NAS"
+  },
+  {
+    "id": 566,
+    "title": "Set up the Trilium note-taking tool on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set up the Trilium note-taking tool on UGREEN NAS"
+  },
+  {
+    "id": 570,
+    "title": "Set up Kimi.AI Assistant on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set up Kimi.AI Assistant on UGREEN NAS"
+  },
+  {
+    "id": 589,
+    "title": "The Tutorial for Locally Deploying the DeepSeek-R1 Large Language Model on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > The Tutorial for Locally Deploying the DeepSeek-R1 Large Language Model on UGREEN NAS"
+  },
+  {
+    "id": 590,
+    "title": "Set up Open WebUI to deploy large language models on UGREEN NAS",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Set up Open WebUI to deploy large language models on UGREEN NAS"
+  },
+  {
+    "id": 591,
+    "title": "Deploy the DeepSeek large model on UGREEN NAS using OpenWebUI and the SiliconFlow API",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploy the DeepSeek large model on UGREEN NAS using OpenWebUI and the SiliconFlow API"
+  },
+  {
+    "id": 596,
+    "title": "Deploying DeepSeek Large Model on UGREEN NAS via OpenWebUI + NVIDIA NIM API",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Deploying DeepSeek Large Model on UGREEN NAS via OpenWebUI + NVIDIA NIM API"
+  },
+  {
+    "id": 672,
+    "title": "Music Tag Web Quick Start Guide",
+    "category_path": "Application Guide > Docker > Docker Gameplay > Music Tag Web Quick Start Guide"
+  },
+  {
+    "id": 733,
+    "title": "EasyNVR Quick Start Guide",
+    "category_path": "Application Guide > Docker > Docker Gameplay > EasyNVR Quick Start Guide"
+  },
+  {
+    "id": 532,
+    "title": "qBittorrent User Guide",
+    "category_path": "Application Guide > Docker > Container Application > qBittorrent User Guide"
+  },
+  {
+    "id": 533,
+    "title": "Quick Start Guide for Lucky",
+    "category_path": "Application Guide > Docker > Container Application > Quick Start Guide for Lucky"
+  },
+  {
+    "id": 808,
+    "title": "OpenClaw Installation Guide",
+    "category_path": "Application Guide > Docker > Container Application > OpenClaw Installation Guide"
+  },
+  {
+    "id": 838,
+    "title": "How to Configure and Use OpenClaw Console",
+    "category_path": "Application Guide > Docker > Container Application > How to Configure and Use OpenClaw Console"
+  },
+  {
+    "id": 854,
+    "title": "Install OpenClaw on a UGREEN NAS and Configure the Gemini Model and Telegram Bot",
+    "category_path": "Application Guide > Docker > Container Application > Install OpenClaw on a UGREEN NAS and Configure the Gemini Model and Telegram Bot"
+  },
+  {
+    "id": 809,
+    "title": "OpenClaw User Guide",
+    "category_path": "Application Guide > Docker > Container Application > OpenClaw User Guide"
+  },
+  {
+    "id": 823,
+    "title": "How to Add and Switch Models in OpenClaw",
+    "category_path": "Application Guide > Docker > Container Application > How to Add and Switch Models in OpenClaw"
+  },
+  {
+    "id": 531,
+    "title": "Quick Start Guide for Firefox Browser",
+    "category_path": "Application Guide > Docker > Container Application > Quick Start Guide for Firefox Browser"
+  },
+  {
+    "id": 534,
+    "title": "Quick Start Guide for Siyuan Notes",
+    "category_path": "Application Guide > Docker > Container Application > Quick Start Guide for Siyuan Notes"
+  },
+  {
+    "id": 763,
+    "title": "OpenList Quick Start Guide",
+    "category_path": "Application Guide > Docker > Container Application > OpenList Quick Start Guide"
+  },
+  {
+    "id": 402,
+    "title": "Backup This UGREEN NAS",
+    "category_path": "Application Guide > Sync & Backup > Backup This UGREEN NAS"
+  },
+  {
+    "id": 928,
+    "title": "How to Back Up Data from a Local UGREEN NAS to Another NAS?",
+    "category_path": "Application Guide > Sync & Backup > How to Back Up Data from a Local UGREEN NAS to Another NAS?"
+  },
+  {
+    "id": 681,
+    "title": "How to Back Up NAS Files Between Storage Pools?",
+    "category_path": "Application Guide > Sync & Backup > How to Back Up NAS Files Between Storage Pools?"
+  },
+  {
+    "id": 926,
+    "title": "Sync & Backup User Guide",
+    "category_path": "Application Guide > Sync & Backup > Sync & Backup User Guide"
+  },
+  {
+    "id": 237,
+    "title": "Introduction to Sync & Backup",
+    "category_path": "Application Guide > Sync & Backup > Introduction to Sync & Backup"
+  },
+  {
+    "id": 501,
+    "title": "How to Sync Data Between Two UGREEN NAS Devices?",
+    "category_path": "Application Guide > Sync & Backup > How to Sync Data Between Two UGREEN NAS Devices?"
+  },
+  {
+    "id": 514,
+    "title": "How to Create a File Backup Task Between a UGREEN NAS and a Computer？",
+    "category_path": "Application Guide > Sync & Backup > How to Create a File Backup Task Between a UGREEN NAS and a Computer？"
+  },
+  {
+    "id": 399,
+    "title": "How to Create a File Sync Task Between UGREEN NAS and a Local Computer?",
+    "category_path": "Application Guide > Sync & Backup > How to Create a File Sync Task Between UGREEN NAS and a Local Computer?"
+  },
+  {
+    "id": 679,
+    "title": "Backup to External Hard Drive/USB Drive",
+    "category_path": "Application Guide > Sync & Backup > Backup to External Hard Drive/USB Drive"
+  },
+  {
+    "id": 485,
+    "title": "[Tutorial] How to Use the Rsync Service to Back Up Files from a Remote Server to a Local UGREEN NAS?",
+    "category_path": "Application Guide > Sync & Backup > [Tutorial] How to Use the Rsync Service to Back Up Files from a Remote Server to a Local UGREEN NAS?"
+  },
+  {
+    "id": 401,
+    "title": "Backup and Restoration",
+    "category_path": "Application Guide > Sync & Backup > Backup and Restoration"
+  },
+  {
+    "id": 398,
+    "title": "Sync with Another UGREEN NAS",
+    "category_path": "Application Guide > Sync & Backup > Sync with Another UGREEN NAS"
+  },
+  {
+    "id": 403,
+    "title": "Restore Backup to UGREEN NAS",
+    "category_path": "Application Guide > Sync & Backup > Restore Backup to UGREEN NAS"
+  },
+  {
+    "id": 221,
+    "title": "Administrator Settings",
+    "category_path": "Application Guide > Sync & Backup > Administrator Settings"
+  },
+  {
+    "id": 169,
+    "title": "Backup Rsync Server to UGREEN NAS",
+    "category_path": "Application Guide > Sync & Backup > Backup Rsync Server to UGREEN NAS"
+  },
+  {
+    "id": 400,
+    "title": "Enable Version Retention",
+    "category_path": "Application Guide > Sync & Backup > Enable Version Retention"
+  },
+  {
+    "id": 166,
+    "title": "Synchronization",
+    "category_path": "Application Guide > Sync & Backup > Synchronization"
+  },
+  {
+    "id": 633,
+    "title": "Solution for “Service Error” When Creating a Local Sync or Backup Task on the Computer",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Solution for “Service Error” When Creating a Local Sync or Backup Task on the Computer"
+  },
+  {
+    "id": 818,
+    "title": "Why Does \"Path does not exist\" Appear When Clicking the Sync Task Recycle",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Why Does \"Path does not exist\" Appear When Clicking the Sync Task Recycle"
+  },
+  {
+    "id": 887,
+    "title": "How to Fix the \"Service Error\" Message When Creating a Local Sync or Backup Task?",
+    "category_path": "Application Guide > Sync & Backup > FAQ > How to Fix the \"Service Error\" Message When Creating a Local Sync or Backup Task?"
+  },
+  {
+    "id": 890,
+    "title": "Insufficient Storage Space Error When Creating a Sync or Backup Task on PC",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Insufficient Storage Space Error When Creating a Sync or Backup Task on PC"
+  },
+  {
+    "id": 889,
+    "title": "Sync/Backup Task Shows \"The task configuration file is missing. Delete the task and create it again.\"",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Sync/Backup Task Shows \"The task configuration file is missing. Delete the task and create it again.\""
+  },
+  {
+    "id": 888,
+    "title": "What to Do If Sync Tasks Disconnect After Migrating Data to a New Mac",
+    "category_path": "Application Guide > Sync & Backup > FAQ > What to Do If Sync Tasks Disconnect After Migrating Data to a New Mac"
+  },
+  {
+    "id": 817,
+    "title": "Why Can't I Find Recently Deleted Files in the Sync Recycle Bin?",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Why Can't I Find Recently Deleted Files in the Sync Recycle Bin?"
+  },
+  {
+    "id": 632,
+    "title": "Why does the #SyncVersion folder appear when using the sync feature, and does it take up space?",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Why does the #SyncVersion folder appear when using the sync feature, and does it take up space?"
+  },
+  {
+    "id": 634,
+    "title": "When backing up UGREEN NAS to an Rsync server, the destination can be connected and the corresponding files can be seen, but cannot be clicked",
+    "category_path": "Application Guide > Sync & Backup > FAQ > When backing up UGREEN NAS to an Rsync server, the destination can be connected and the corresponding files can be seen, but cannot be clicked"
+  },
+  {
+    "id": 635,
+    "title": "How to handle multiple conflict files generated during file sync or backup?",
+    "category_path": "Application Guide > Sync & Backup > FAQ > How to handle multiple conflict files generated during file sync or backup?"
+  },
+  {
+    "id": 637,
+    "title": "Task Center Upload/Download Transfer Speed Abnormality Troubleshooting Guide",
+    "category_path": "Application Guide > Sync & Backup > FAQ > Task Center Upload/Download Transfer Speed Abnormality Troubleshooting Guide"
+  },
+  {
+    "id": 175,
+    "title": "DLNA",
+    "category_path": "Application Guide > DLNA > DLNA"
+  },
+  {
+    "id": 366,
+    "title": "How to Invite Friends to Upload Photos and Share Existing Albums Externally?",
+    "category_path": "Application Guide > Photos > How to Invite Friends to Upload Photos and Share Existing Albums Externally?"
+  },
+  {
+    "id": 904,
+    "title": "How to Share Libraries and Albums with Family Members?",
+    "category_path": "Application Guide > Photos > How to Share Libraries and Albums with Family Members?"
+  },
+  {
+    "id": 840,
+    "title": "How to Create and Manage Baby Albums?",
+    "category_path": "Application Guide > Photos > How to Create and Manage Baby Albums?"
+  },
+  {
+    "id": 834,
+    "title": "How to Clean Up Similar and Duplicate Photos?",
+    "category_path": "Application Guide > Photos > How to Clean Up Similar and Duplicate Photos?"
+  },
+  {
+    "id": 833,
+    "title": "How to Use Categorization in Photos?",
+    "category_path": "Application Guide > Photos > How to Use Categorization in Photos?"
+  },
+  {
+    "id": 913,
+    "title": "How to Create Baby Album Milestones?",
+    "category_path": "Application Guide > Photos > How to Create Baby Album Milestones?"
+  },
+  {
+    "id": 874,
+    "title": "How to Create a Custom Category with Model Training?",
+    "category_path": "Application Guide > Photos > How to Create a Custom Category with Model Training?"
+  },
+  {
+    "id": 847,
+    "title": "How to Quickly Search Photos by Keywords",
+    "category_path": "Application Guide > Photos > How to Quickly Search Photos by Keywords"
+  },
+  {
+    "id": 222,
+    "title": "UGREEN Photos",
+    "category_path": "Application Guide > Photos > UGREEN Photos"
+  },
+  {
+    "id": 916,
+    "title": "Photos Introduction",
+    "category_path": "Application Guide > Photos > Photos Introduction"
+  },
+  {
+    "id": 841,
+    "title": "How to Automatically Back Up Photos and Videos from Phone to NAS Photos",
+    "category_path": "Application Guide > Photos > How to Automatically Back Up Photos and Videos from Phone to NAS Photos"
+  },
+  {
+    "id": 845,
+    "title": "How to Set Privacy Protection for Photos",
+    "category_path": "Application Guide > Photos > How to Set Privacy Protection for Photos"
+  },
+  {
+    "id": 567,
+    "title": "How to Intelligently Categorize People in Photos?",
+    "category_path": "Application Guide > Photos > How to Intelligently Categorize People in Photos?"
+  },
+  {
+    "id": 857,
+    "title": "How to Share and Manage a Baby Album with Multiple Users?",
+    "category_path": "Application Guide > Photos > How to Share and Manage a Baby Album with Multiple Users?"
+  },
+  {
+    "id": 844,
+    "title": "How to Batch Edit Photo Names and Recording Time",
+    "category_path": "Application Guide > Photos > How to Batch Edit Photo Names and Recording Time"
+  },
+  {
+    "id": 842,
+    "title": "How to Share Photos and Albums with Internal and External Users",
+    "category_path": "Application Guide > Photos > How to Share Photos and Albums with Internal and External Users"
+  },
+  {
+    "id": 836,
+    "title": "How to Set a People Album Cover",
+    "category_path": "Application Guide > Photos > How to Set a People Album Cover"
+  },
+  {
+    "id": 249,
+    "title": "Tools",
+    "category_path": "Application Guide > Photos > Tools"
+  },
+  {
+    "id": 795,
+    "title": "Why Are Uploaded Photos and Videos Not in Original Quality?",
+    "category_path": "Application Guide > Photos > FAQ > Why Are Uploaded Photos and Videos Not in Original Quality?"
+  },
+  {
+    "id": 843,
+    "title": "How to add users to an album in bulk and set internal sharing permissions?",
+    "category_path": "Application Guide > Photos > FAQ > How to add users to an album in bulk and set internal sharing permissions?"
+  },
+  {
+    "id": 848,
+    "title": "Why Some Images Cannot Be Found with Keywords",
+    "category_path": "Application Guide > Photos > FAQ > Why Some Images Cannot Be Found with Keywords"
+  },
+  {
+    "id": 846,
+    "title": "Why Can't Photos Be Added to an Recognized Person",
+    "category_path": "Application Guide > Photos > FAQ > Why Can't Photos Be Added to an Recognized Person"
+  },
+  {
+    "id": 574,
+    "title": "How to Restore Accidentally Deleted Photos in the Photos App?",
+    "category_path": "Application Guide > Photos > FAQ > How to Restore Accidentally Deleted Photos in the Photos App?"
+  },
+  {
+    "id": 678,
+    "title": "How to enable the video face recognition feature in the photos app?",
+    "category_path": "Application Guide > Photos > FAQ > How to enable the video face recognition feature in the photos app?"
+  },
+  {
+    "id": 368,
+    "title": "How to Quickly Manage Friend Uploads and Shared Links in the Photos App?",
+    "category_path": "Application Guide > Photos > FAQ > How to Quickly Manage Friend Uploads and Shared Links in the Photos App?"
+  },
+  {
+    "id": 835,
+    "title": "How to Fix Missing People or Object Recognition Categories",
+    "category_path": "Application Guide > Photos > FAQ > How to Fix Missing People or Object Recognition Categories"
+  },
+  {
+    "id": 837,
+    "title": "How to Correct Recognition Errors in People Albums",
+    "category_path": "Application Guide > Photos > FAQ > How to Correct Recognition Errors in People Albums"
+  },
+  {
+    "id": 776,
+    "title": "Solution for Discolored Album Thumbnails",
+    "category_path": "Application Guide > Photos > FAQ > Solution for Discolored Album Thumbnails"
+  },
+  {
+    "id": 716,
+    "title": "Why do photos appear differently in color on UGREEN NAS compared to the mobile photo album?",
+    "category_path": "Application Guide > Photos > FAQ > Why do photos appear differently in color on UGREEN NAS compared to the mobile photo album?"
+  },
+  {
+    "id": 569,
+    "title": "Does the Photos Support Uploading Live Photos?",
+    "category_path": "Application Guide > Photos > FAQ > Does the Photos Support Uploading Live Photos?"
+  },
+  {
+    "id": 555,
+    "title": "Which image and video formats are supported by the album?",
+    "category_path": "Application Guide > Photos > FAQ > Which image and video formats are supported by the album?"
+  },
+  {
+    "id": 183,
+    "title": "Downloads User Guide",
+    "category_path": "Application Guide > Downloads > Downloads User Guide"
+  },
+  {
+    "id": 645,
+    "title": "How to Upload and Download Files Between UGREEN NAS and 115 Drive",
+    "category_path": "Application Guide > Cloud Drives > How to Upload and Download Files Between UGREEN NAS and 115 Drive"
+  },
+  {
+    "id": 478,
+    "title": "What is the Role of the Polling Period in Cloud Drives Tools?",
+    "category_path": "Application Guide > Cloud Drives > What is the Role of the Polling Period in Cloud Drives Tools?"
+  },
+  {
+    "id": 798,
+    "title": "Why Does UGREEN NAS Still Show \"Insufficient volume capacity\" When Uploading file to Drive After Expanding Cloud Storage?",
+    "category_path": "Application Guide > Cloud Drives > Why Does UGREEN NAS Still Show \"Insufficient volume capacity\" When Uploading file to Drive After Expanding Cloud Storage?"
+  },
+  {
+    "id": 479,
+    "title": "How to Mount OneDrive Using Cloud Drives?",
+    "category_path": "Application Guide > Cloud Drives > How to Mount OneDrive Using Cloud Drives?"
+  },
+  {
+    "id": 902,
+    "title": "How to Mount Dropbox Cloud Drives?",
+    "category_path": "Application Guide > Cloud Drives > How to Mount Dropbox Cloud Drives?"
+  },
+  {
+    "id": 931,
+    "title": "How to Mount 123Pan via Cloud Drives?",
+    "category_path": "Application Guide > Cloud Drives > How to Mount 123Pan via Cloud Drives?"
+  },
+  {
+    "id": 861,
+    "title": "How to Mount an Amazon S3 Bucket?",
+    "category_path": "Application Guide > Cloud Drives > How to Mount an Amazon S3 Bucket?"
+  },
+  {
+    "id": 932,
+    "title": "Cloud Drive File Encryption",
+    "category_path": "Application Guide > Cloud Drives > Cloud Drive File Encryption"
+  },
+  {
+    "id": 883,
+    "title": "How to Mount Backblaze B2 Object Storage?",
+    "category_path": "Application Guide > Cloud Drives > How to Mount Backblaze B2 Object Storage?"
+  },
+  {
+    "id": 470,
+    "title": "How to Mount Baidu Netdisk Using Cloud Drives?",
+    "category_path": "Application Guide > Cloud Drives > How to Mount Baidu Netdisk Using Cloud Drives?"
+  },
+  {
+    "id": 376,
+    "title": "Cloud Drives Guide",
+    "category_path": "Application Guide > Cloud Drives > Cloud Drives Guide"
+  },
+  {
+    "id": 705,
+    "title": "How to Upload and Download Files Between UGREEN NAS and Quark Drive?",
+    "category_path": "Application Guide > Cloud Drives > How to Upload and Download Files Between UGREEN NAS and Quark Drive?"
+  },
+  {
+    "id": 631,
+    "title": "How to Sync Data Between UGREEN NAS and Aliyun Drive",
+    "category_path": "Application Guide > Cloud Drives > How to Sync Data Between UGREEN NAS and Aliyun Drive"
+  },
+  {
+    "id": 613,
+    "title": "How to Sync Data Between UGREEN NAS and Google Drive?",
+    "category_path": "Application Guide > Cloud Drives > How to Sync Data Between UGREEN NAS and Google Drive?"
+  },
+  {
+    "id": 186,
+    "title": "TextEdit",
+    "category_path": "Application Guide > TextEdit > TextEdit"
+  },
+  {
+    "id": 881,
+    "title": "Enable Movie Data Protection",
+    "category_path": "Application Guide > Theater > Enable Movie Data Protection"
+  },
+  {
+    "id": 815,
+    "title": "How to Mount Cloud Drives to Theater and Generate a Poster Wall",
+    "category_path": "Application Guide > Theater > How to Mount Cloud Drives to Theater and Generate a Poster Wall"
+  },
+  {
+    "id": 929,
+    "title": "Theater User Guide",
+    "category_path": "Application Guide > Theater > Theater User Guide"
+  },
+  {
+    "id": 205,
+    "title": "Theater Overview",
+    "category_path": "Application Guide > Theater > Theater Overview"
+  },
+  {
+    "id": 805,
+    "title": "How to Use the Cloud Drive Direct Playback in Theater?",
+    "category_path": "Application Guide > Theater > How to Use the Cloud Drive Direct Playback in Theater?"
+  },
+  {
+    "id": 643,
+    "title": "Supported Video Formats for Theater Player",
+    "category_path": "Application Guide > Theater > Supported Video Formats for Theater Player"
+  },
+  {
+    "id": 880,
+    "title": "How to Enable Audio Passthrough and Dolby Atmos?",
+    "category_path": "Application Guide > Theater > How to Enable Audio Passthrough and Dolby Atmos?"
+  },
+  {
+    "id": 864,
+    "title": "Theater Offline Caching and Data-Free Playback",
+    "category_path": "Application Guide > Theater > Theater Offline Caching and Data-Free Playback"
+  },
+  {
+    "id": 853,
+    "title": "How to Switch Between Multiple Versions of a Video",
+    "category_path": "Application Guide > Theater > How to Switch Between Multiple Versions of a Video"
+  },
+  {
+    "id": 821,
+    "title": "How to Set Videos to Automatically Skip Intro and Outro",
+    "category_path": "Application Guide > Theater > How to Set Videos to Automatically Skip Intro and Outro"
+  },
+  {
+    "id": 346,
+    "title": "Library",
+    "category_path": "Application Guide > Theater > Library"
+  },
+  {
+    "id": 812,
+    "title": "How to Play Theater Videos Offline",
+    "category_path": "Application Guide > Theater > How to Play Theater Videos Offline"
+  },
+  {
+    "id": 208,
+    "title": "Theater Settings",
+    "category_path": "Application Guide > Theater > Theater Settings"
+  },
+  {
+    "id": 213,
+    "title": "Video player",
+    "category_path": "Application Guide > Theater > Video player"
+  },
+  {
+    "id": 207,
+    "title": "Poster Wall",
+    "category_path": "Application Guide > Theater > Poster Wall"
+  },
+  {
+    "id": 212,
+    "title": "Poster Details Page",
+    "category_path": "Application Guide > Theater > Poster Details Page"
+  },
+  {
+    "id": 934,
+    "title": "What Should I Do If a Video Cannot Be Identified in Theater?",
+    "category_path": "Application Guide > Theater > FAQ > What Should I Do If a Video Cannot Be Identified in Theater?"
+  },
+  {
+    "id": 811,
+    "title": "FAQs for Cloud Drive Direct Playback",
+    "category_path": "Application Guide > Theater > FAQ > FAQs for Cloud Drive Direct Playback"
+  },
+  {
+    "id": 257,
+    "title": "Theater Movie Naming Convention Guidelines",
+    "category_path": "Application Guide > Theater > FAQ > Theater Movie Naming Convention Guidelines"
+  },
+  {
+    "id": 822,
+    "title": "Smart Playback Settings Memory Overview",
+    "category_path": "Application Guide > Theater > FAQ > Smart Playback Settings Memory Overview"
+  },
+  {
+    "id": 407,
+    "title": "How to Add External Subtitles to Theater Player",
+    "category_path": "Application Guide > Theater > FAQ > How to Add External Subtitles to Theater Player"
+  },
+  {
+    "id": 200,
+    "title": "How to apply for TMDB (The Movie Database) API key",
+    "category_path": "Application Guide > Theater > FAQ > How to apply for TMDB (The Movie Database) API key"
+  },
+  {
+    "id": 585,
+    "title": "Video Files Fail to Recognize Cover and Background Images",
+    "category_path": "Application Guide > Theater > FAQ > Video Files Fail to Recognize Cover and Background Images"
+  },
+  {
+    "id": 422,
+    "title": "Anyone Can Learn: A Step-by-Step Guide to Building the \"Simplest\" NAS Movie Library with TMM for Movie Metadata Scraping",
+    "category_path": "Application Guide > Theater > FAQ > Anyone Can Learn: A Step-by-Step Guide to Building the \"Simplest\" NAS Movie Library with TMM for Movie Metadata Scraping"
+  },
+  {
+    "id": 201,
+    "title": "How to Configure HOST?",
+    "category_path": "Application Guide > Theater > FAQ > How to Configure HOST?"
+  },
+  {
+    "id": 557,
+    "title": "What is the Purpose of Configuring The Movie Database (TMDB) as a Data Source in the Theater?",
+    "category_path": "Application Guide > Theater > FAQ > What is the Purpose of Configuring The Movie Database (TMDB) as a Data Source in the Theater?"
+  },
+  {
+    "id": 342,
+    "title": "Frequently Asked Questions about the Theater",
+    "category_path": "Application Guide > Theater > FAQ > Frequently Asked Questions about the Theater"
+  },
+  {
+    "id": 432,
+    "title": "Build Your Own Private Cinema with Theater",
+    "category_path": "Application Guide > Theater > FAQ > Build Your Own Private Cinema with Theater"
+  },
+  {
+    "id": 460,
+    "title": "How to Use the Small File Filtering Feature in the Theater",
+    "category_path": "Application Guide > Theater > FAQ > How to Use the Small File Filtering Feature in the Theater"
+  },
+  {
+    "id": 462,
+    "title": "What is the Priority Order of NFO Scraping, TMDB Scraping, and Intelligent Scraping in the Theater?",
+    "category_path": "Application Guide > Theater > FAQ > What is the Priority Order of NFO Scraping, TMDB Scraping, and Intelligent Scraping in the Theater?"
+  },
+  {
+    "id": 505,
+    "title": "Does the Theater Library Support External Hard Drives?",
+    "category_path": "Application Guide > Theater > FAQ > Does the Theater Library Support External Hard Drives?"
+  },
+  {
+    "id": 515,
+    "title": "Manually Adjust a Series Using the Episode Management Feature",
+    "category_path": "Application Guide > Theater > FAQ > Manually Adjust a Series Using the Episode Management Feature"
+  },
+  {
+    "id": 556,
+    "title": "Understand the Data Source of the Theater: The Movie Database (TMDB)",
+    "category_path": "Application Guide > Theater > FAQ > Understand the Data Source of the Theater: The Movie Database (TMDB)"
+  },
+  {
+    "id": 568,
+    "title": "TV Show Categorization and Organization Method in the Theater",
+    "category_path": "Application Guide > Theater > FAQ > TV Show Categorization and Organization Method in the Theater"
+  },
+  {
+    "id": 571,
+    "title": "Advantages and Applicable Scenarios of Intelligent Recognition",
+    "category_path": "Application Guide > Theater > FAQ > Advantages and Applicable Scenarios of Intelligent Recognition"
+  },
+  {
+    "id": 572,
+    "title": "Why is there no \"Intelligent Recognition\" option in my library?",
+    "category_path": "Application Guide > Theater > FAQ > Why is there no \"Intelligent Recognition\" option in my library?"
+  },
+  {
+    "id": 576,
+    "title": "Step-by-step guide to setting up the KODI player and mounting NAS media shares to build a local media library",
+    "category_path": "Application Guide > Theater > FAQ > Step-by-step guide to setting up the KODI player and mounting NAS media shares to build a local media library"
+  },
+  {
+    "id": 580,
+    "title": "What Can You Do by Setting Access Permissions in the Theater App?",
+    "category_path": "Application Guide > Theater > FAQ > What Can You Do by Setting Access Permissions in the Theater App?"
+  },
+  {
+    "id": 583,
+    "title": "Local Image Recognition Rules and Poster/Background Image Settings in the Theater",
+    "category_path": "Application Guide > Theater > FAQ > Local Image Recognition Rules and Poster/Background Image Settings in the Theater"
+  },
+  {
+    "id": 602,
+    "title": "Why Is There No Change in Media Library Recognition After Configuring TMDB?",
+    "category_path": "Application Guide > Theater > FAQ > Why Is There No Change in Media Library Recognition After Configuring TMDB?"
+  },
+  {
+    "id": 603,
+    "title": "Optimize Media Management Efficiency: A Comprehensive Guide to the Theater Collections Feature",
+    "category_path": "Application Guide > Theater > FAQ > Optimize Media Management Efficiency: A Comprehensive Guide to the Theater Collections Feature"
+  },
+  {
+    "id": 650,
+    "title": "UGREEN NAS Theater Collection Feature: Unlock a Personalized Movie Management Experience",
+    "category_path": "Application Guide > Theater > FAQ > UGREEN NAS Theater Collection Feature: Unlock a Personalized Movie Management Experience"
+  },
+  {
+    "id": 665,
+    "title": "Naming Conventions for Local NFO Files in the Theater",
+    "category_path": "Application Guide > Theater > FAQ > Naming Conventions for Local NFO Files in the Theater"
+  },
+  {
+    "id": 680,
+    "title": "Explanation of Collection Removal and Cleanup Mechanism in the Theater",
+    "category_path": "Application Guide > Theater > FAQ > Explanation of Collection Removal and Cleanup Mechanism in the Theater"
+  },
+  {
+    "id": 691,
+    "title": "Why does the Theater show \"No videos\"?",
+    "category_path": "Application Guide > Theater > FAQ > Why does the Theater show \"No videos\"?"
+  },
+  {
+    "id": 692,
+    "title": "How to manage user access permissions for the Theater library?",
+    "category_path": "Application Guide > Theater > FAQ > How to manage user access permissions for the Theater library?"
+  },
+  {
+    "id": 693,
+    "title": "Why is there no \"Intelligent Recognition\" scraper option in my Theater Library settings?",
+    "category_path": "Application Guide > Theater > FAQ > Why is there no \"Intelligent Recognition\" scraper option in my Theater Library settings?"
+  },
+  {
+    "id": 694,
+    "title": "Introduction to the Mini Window Mode (Picture-in-Picture) of UGREEN NAS",
+    "category_path": "Application Guide > Theater > FAQ > Introduction to the Mini Window Mode (Picture-in-Picture) of UGREEN NAS"
+  },
+  {
+    "id": 911,
+    "title": "UGREEN NAS Hardware Passthrough",
+    "category_path": "Application Guide > Virtual Machine > UGREEN NAS Hardware Passthrough"
+  },
+  {
+    "id": 331,
+    "title": "Virtual Machine Snapshot Feature",
+    "category_path": "Application Guide > Virtual Machine > Virtual Machine Snapshot Feature"
+  },
+  {
+    "id": 332,
+    "title": "Virtual Machine Share Link Feature",
+    "category_path": "Application Guide > Virtual Machine > Virtual Machine Share Link Feature"
+  },
+  {
+    "id": 229,
+    "title": "Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > Virtual Machine"
+  },
+  {
+    "id": 909,
+    "title": "Virtual Machine User Guide",
+    "category_path": "Application Guide > Virtual Machine > Virtual Machine User Guide"
+  },
+  {
+    "id": 230,
+    "title": "Create Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > Create Virtual Machine"
+  },
+  {
+    "id": 910,
+    "title": "How to Add a Virtual Network for a Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > How to Add a Virtual Network for a Virtual Machine"
+  },
+  {
+    "id": 869,
+    "title": "Troubleshooting Network, NAS Access, and Startup Issues in VM Bridge Mode",
+    "category_path": "Application Guide > Virtual Machine > Troubleshooting Network, NAS Access, and Startup Issues in VM Bridge Mode"
+  },
+  {
+    "id": 827,
+    "title": "How to Install Ubuntu Virtual Machine on UGREEN NAS Devices",
+    "category_path": "Application Guide > Virtual Machine > How to Install Ubuntu Virtual Machine on UGREEN NAS Devices"
+  },
+  {
+    "id": 409,
+    "title": "Virtual Machine Performance Optimization Tools (Guest Tools) User Guide",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Virtual Machine Performance Optimization Tools (Guest Tools) User Guide"
+  },
+  {
+    "id": 723,
+    "title": "Does the virtual machine support mounting iSCSI?",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Does the virtual machine support mounting iSCSI?"
+  },
+  {
+    "id": 719,
+    "title": "Enable Virtual Bridging (LinuxBridge Mode) for a Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Enable Virtual Bridging (LinuxBridge Mode) for a Virtual Machine"
+  },
+  {
+    "id": 642,
+    "title": "How to enable USB device passthrough for virtual machines on UGREEN NAS",
+    "category_path": "Application Guide > Virtual Machine > FAQ > How to enable USB device passthrough for virtual machines on UGREEN NAS"
+  },
+  {
+    "id": 605,
+    "title": "Installing the QXL Graphics Driver on a Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Installing the QXL Graphics Driver on a Virtual Machine"
+  },
+  {
+    "id": 588,
+    "title": "How to Fix the Issue of OVA Failing to Start After Importing into a Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > FAQ > How to Fix the Issue of OVA Failing to Start After Importing into a Virtual Machine"
+  },
+  {
+    "id": 469,
+    "title": "[FAQ] After importing the CentOS 7 ISO image into the virtual machine and starting it up, the system enters rescue mode.",
+    "category_path": "Application Guide > Virtual Machine > FAQ > [FAQ] After importing the CentOS 7 ISO image into the virtual machine and starting it up, the system enters rescue mode."
+  },
+  {
+    "id": 438,
+    "title": "Solutions for Virtual Machine Inaccessibility to NAS",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Solutions for Virtual Machine Inaccessibility to NAS"
+  },
+  {
+    "id": 396,
+    "title": "Solution for Virtual Machine Boot Failure Caused by Network Issues",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Solution for Virtual Machine Boot Failure Caused by Network Issues"
+  },
+  {
+    "id": 395,
+    "title": "[FAQ] Troubleshoot and Resolve Virtual Machine Network Failures",
+    "category_path": "Application Guide > Virtual Machine > FAQ > [FAQ] Troubleshoot and Resolve Virtual Machine Network Failures"
+  },
+  {
+    "id": 235,
+    "title": "[FAQ] Virtual Machine Graphics Card Introduction",
+    "category_path": "Application Guide > Virtual Machine > FAQ > [FAQ] Virtual Machine Graphics Card Introduction"
+  },
+  {
+    "id": 234,
+    "title": "[FAQ] Types of Virtual Machine Booting",
+    "category_path": "Application Guide > Virtual Machine > FAQ > [FAQ] Types of Virtual Machine Booting"
+  },
+  {
+    "id": 233,
+    "title": "[FAQ] Virtual Machine Networking Overview",
+    "category_path": "Application Guide > Virtual Machine > FAQ > [FAQ] Virtual Machine Networking Overview"
+  },
+  {
+    "id": 232,
+    "title": "Installing iStore on a Virtual Machine",
+    "category_path": "Application Guide > Virtual Machine > FAQ > Installing iStore on a Virtual Machine"
+  },
+  {
+    "id": 279,
+    "title": "Music User Guide",
+    "category_path": "Application Guide > Music > Music User Guide"
+  },
+  {
+    "id": 914,
+    "title": "How to Play UGREEN NAS Music Through CarPlay",
+    "category_path": "Application Guide > Music > How to Play UGREEN NAS Music Through CarPlay"
+  },
+  {
+    "id": 433,
+    "title": "Supported Audio and Lyric Formats on NAS",
+    "category_path": "Application Guide > Music > Supported Audio and Lyric Formats on NAS"
+  },
+  {
+    "id": 463,
+    "title": "[FAQ] How to Create a Shared Library on UGREEN NAS to Share Music with Family?",
+    "category_path": "Application Guide > Music > [FAQ] How to Create a Shared Library on UGREEN NAS to Share Music with Family?"
+  },
+  {
+    "id": 648,
+    "title": "[FAQ] How to recover or delete unavailable songs from a playlist?",
+    "category_path": "Application Guide > Music > [FAQ] How to recover or delete unavailable songs from a playlist?"
+  },
+  {
+    "id": 316,
+    "title": "File Version Explorer",
+    "category_path": "Application Guide >  > File Version Explorer"
+  },
+  {
+    "id": 337,
+    "title": "Online Office",
+    "category_path": "Application Guide > Online Office > Online Office"
+  },
+  {
+    "id": 654,
+    "title": "Snapshot User Guide",
+    "category_path": "Application Guide > Snapshot > Snapshot User Guide"
+  },
+  {
+    "id": 666,
+    "title": "After restoring from a snapshot, files cannot be copied to a directory mounted via NFS. How to fix this?",
+    "category_path": "Application Guide > Snapshot > After restoring from a snapshot, files cannot be copied to a directory mounted via NFS. How to fix this?"
+  },
+  {
+    "id": 710,
+    "title": "What is an invalid snapshot?",
+    "category_path": "Application Guide > Snapshot > What is an invalid snapshot?"
+  },
+  {
+    "id": 712,
+    "title": "Snapshot Storage Occupation Mechanism",
+    "category_path": "Application Guide > Snapshot > Snapshot Storage Occupation Mechanism"
+  },
+  {
+    "id": 713,
+    "title": "Frequently Asked Questions (FAQ) About Snapshots",
+    "category_path": "Application Guide > Snapshot > Frequently Asked Questions (FAQ) About Snapshots"
+  },
+  {
+    "id": 706,
+    "title": "SAN Manager",
+    "category_path": "Application Guide > SAN Manager > SAN Manager"
+  },
+  {
+    "id": 729,
+    "title": "SAN Manager Glossary",
+    "category_path": "Application Guide > SAN Manager > FAQ > SAN Manager Glossary"
+  },
+  {
+    "id": 717,
+    "title": "How to Obtain the Client IQN in SAN Manager",
+    "category_path": "Application Guide > SAN Manager > FAQ > How to Obtain the Client IQN in SAN Manager"
+  },
+  {
+    "id": 718,
+    "title": "Why can the client still modify files after changing permissions in SAN Manager? How to ensure read-only permissions take effect?",
+    "category_path": "Application Guide > SAN Manager > FAQ > Why can the client still modify files after changing permissions in SAN Manager? How to ensure read-only permissions take effect?"
+  },
+  {
+    "id": 720,
+    "title": "Create a Group and Set Read-Only Permission in SAN Manager",
+    "category_path": "Application Guide > SAN Manager > FAQ > Create a Group and Set Read-Only Permission in SAN Manager"
+  },
+  {
+    "id": 721,
+    "title": "Explanation of Disk Hibernation Behavior (Applicable to iSCSI Services)",
+    "category_path": "Application Guide > SAN Manager > FAQ > Explanation of Disk Hibernation Behavior (Applicable to iSCSI Services)"
+  },
+  {
+    "id": 722,
+    "title": "iSCSI Cluster and Read-Only Permission Settings Explanation",
+    "category_path": "Application Guide > SAN Manager > FAQ > iSCSI Cluster and Read-Only Permission Settings Explanation"
+  },
+  {
+    "id": 724,
+    "title": "Comparison Between SAN Manager's iSCSI and Other File Service Features",
+    "category_path": "Application Guide > SAN Manager > FAQ > Comparison Between SAN Manager's iSCSI and Other File Service Features"
+  },
+  {
+    "id": 726,
+    "title": "Mounting UGREEN NAS iSCSI Virtual Disk on Windows",
+    "category_path": "Application Guide > SAN Manager > FAQ > Mounting UGREEN NAS iSCSI Virtual Disk on Windows"
+  },
+  {
+    "id": 725,
+    "title": "Mounting UGREEN NAS iSCSI Virtual Disk on macOS",
+    "category_path": "Application Guide > SAN Manager > FAQ > Mounting UGREEN NAS iSCSI Virtual Disk on macOS"
+  },
+  {
+    "id": 673,
+    "title": "Vault User Guide",
+    "category_path": "Application Guide > Vault > Vault User Guide"
+  },
+  {
+    "id": 747,
+    "title": "Will opened images or videos currently playing be affected when the Vault is locked?",
+    "category_path": "Application Guide > Vault > Will opened images or videos currently playing be affected when the Vault is locked?"
+  },
+  {
+    "id": 748,
+    "title": "What should I do if the Vault key file is lost?",
+    "category_path": "Application Guide > Vault > What should I do if the Vault key file is lost?"
+  },
+  {
+    "id": 749,
+    "title": "Can files inside the Vault be backed up?",
+    "category_path": "Application Guide > Vault > Can files inside the Vault be backed up?"
+  },
+  {
+    "id": 750,
+    "title": "Will data in the Vault become inaccessible if the hard drive is removed or disabled?",
+    "category_path": "Application Guide > Vault > Will data in the Vault become inaccessible if the hard drive is removed or disabled?"
+  },
+  {
+    "id": 751,
+    "title": "When deleting a user, the system prompts that the Vault must be reset first. What should I do?",
+    "category_path": "Application Guide > Vault > When deleting a user, the system prompts that the Vault must be reset first. What should I do?"
+  },
+  {
+    "id": 752,
+    "title": "Will resetting the Vault affect other users' data?",
+    "category_path": "Application Guide > Vault > Will resetting the Vault affect other users' data?"
+  },
+  {
+    "id": 753,
+    "title": "Will uninstalling the Vault app delete the Vault data?",
+    "category_path": "Application Guide > Vault > Will uninstalling the Vault app delete the Vault data?"
+  },
+  {
+    "id": 754,
+    "title": "Will restoring the NAS to factory settings delete Vault data?",
+    "category_path": "Application Guide > Vault > Will restoring the NAS to factory settings delete Vault data?"
+  },
+  {
+    "id": 768,
+    "title": "Comics User Guide",
+    "category_path": "Application Guide > Comics > Comics User Guide"
+  },
+  {
+    "id": 937,
+    "title": "How Does the Comics App Identify Comic Files and Chapters?",
+    "category_path": "Application Guide > Comics > How Does the Comics App Identify Comic Files and Chapters?"
+  },
+  {
+    "id": 826,
+    "title": "Why Does Page Turning Feel Laggy or Show Ghosting in Comics",
+    "category_path": "Application Guide > Comics > Why Does Page Turning Feel Laggy or Show Ghosting in Comics"
+  },
+  {
+    "id": 850,
+    "title": "Uliya AI Assistant User Guide",
+    "category_path": "Application Guide > Uliya > Uliya AI Assistant User Guide"
+  },
+  {
+    "id": 831,
+    "title": "Model Management (DXP Series)",
+    "category_path": "Application Guide > Model Manager > Model Management (DXP Series)"
+  },
+  {
+    "id": 849,
+    "title": "Voice Memos User Guide",
+    "category_path": "Application Guide > Voice Memos > Voice Memos User Guide"
+  },
+  {
+    "id": 866,
+    "title": "Surveillance Center User Guide",
+    "category_path": "Application Guide > Surveillance Center > Surveillance Center User Guide"
+  },
+  {
+    "id": 879,
+    "title": "Surveillance Center FAQs",
+    "category_path": "Application Guide > Surveillance Center > Surveillance Center FAQs"
+  },
+  {
+    "id": 903,
+    "title": "Why Can't the Camera Be Added to Surveillance Center When the NAS and Camera Are on the Same LAN?",
+    "category_path": "Application Guide > Surveillance Center > Why Can't the Camera Be Added to Surveillance Center When the NAS and Camera Are on the Same LAN?"
+  },
+  {
+    "id": 896,
+    "title": "Does the Notes Support Inserting Images",
+    "category_path": "Application Guide > Notes > Does the Notes Support Inserting Images"
+  },
+  {
+    "id": 901,
+    "title": "How to Search and Organize Notes",
+    "category_path": "Application Guide > Notes > How to Search and Organize Notes"
+  },
+  {
+    "id": 900,
+    "title": "Can Users View Each Other's Notes",
+    "category_path": "Application Guide > Notes > Can Users View Each Other's Notes"
+  },
+  {
+    "id": 899,
+    "title": "How to Share Notes with Others",
+    "category_path": "Application Guide > Notes > How to Share Notes with Others"
+  },
+  {
+    "id": 898,
+    "title": "How to Import, Export, and Back Up Notes",
+    "category_path": "Application Guide > Notes > How to Import, Export, and Back Up Notes"
+  },
+  {
+    "id": 897,
+    "title": "Can Deleted Notes Be Restored",
+    "category_path": "Application Guide > Notes > Can Deleted Notes Be Restored"
+  },
+  {
+    "id": 895,
+    "title": "Where Is Notes Data Stored",
+    "category_path": "Application Guide > Notes > Where Is Notes Data Stored"
+  },
+  {
+    "id": 894,
+    "title": "How to Use the Notes App",
+    "category_path": "Application Guide > Notes > How to Use the Notes App"
+  },
+  {
+    "id": 28,
+    "title": "How to replace the Case Fan on the UGREEN NASync DXP8800 Plus",
+    "category_path": "Video Tutorials > Installation Guide > How to replace the Case Fan on the UGREEN NASync DXP8800 Plus"
+  },
+  {
+    "id": 27,
+    "title": "How to replace the Case Fan on the UGREEN NASync DXP6800 Pro",
+    "category_path": "Video Tutorials > Installation Guide > How to replace the Case Fan on the UGREEN NASync DXP6800 Pro"
+  },
+  {
+    "id": 26,
+    "title": "How to replace the Case Fan on the UGREEN NASync DXP4800 Plus",
+    "category_path": "Video Tutorials > Installation Guide > How to replace the Case Fan on the UGREEN NASync DXP4800 Plus"
+  },
+  {
+    "id": 25,
+    "title": "How to replace the Case Fan on the UGREEN NASync DXP2800",
+    "category_path": "Video Tutorials > Installation Guide > How to replace the Case Fan on the UGREEN NASync DXP2800"
+  },
+  {
+    "id": 96,
+    "title": "Universal Search Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Universal Search Quick Start Guide"
+  },
+  {
+    "id": 89,
+    "title": "qBittorrent Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > qBittorrent Quick Start Guide"
+  },
+  {
+    "id": 68,
+    "title": "OpenList Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > OpenList Quick Start Guide"
+  },
+  {
+    "id": 66,
+    "title": "Vault Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Vault Quick Start Guide"
+  },
+  {
+    "id": 56,
+    "title": "How to Use the Snapshot on UGREEN NAS",
+    "category_path": "Video Tutorials > Features Overview > How to Use the Snapshot on UGREEN NAS"
+  },
+  {
+    "id": 43,
+    "title": "Files Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Files Quick Start Guide"
+  },
+  {
+    "id": 34,
+    "title": "DLNA Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > DLNA Quick Start Guide"
+  },
+  {
+    "id": 31,
+    "title": "Sync & Backup Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Sync & Backup Quick Start Guide"
+  },
+  {
+    "id": 29,
+    "title": "Storage Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Storage Quick Start Guide"
+  },
+  {
+    "id": 87,
+    "title": "Jellyfin Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Jellyfin Quick Start Guide"
+  },
+  {
+    "id": 58,
+    "title": "Theater Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > Theater Quick Start Guide"
+  },
+  {
+    "id": 71,
+    "title": "EasyNVR Quick Start Guide",
+    "category_path": "Video Tutorials > Features Overview > EasyNVR Quick Start Guide"
+  },
+  {
+    "id": 104,
+    "title": "Similar & Duplicate Usage Guide",
+    "category_path": "Video Tutorials > User Guide > Similar & Duplicate Usage Guide"
+  },
+  {
+    "id": 103,
+    "title": "Shared Albums Usage Guide",
+    "category_path": "Video Tutorials > User Guide > Shared Albums Usage Guide"
+  },
+  {
+    "id": 102,
+    "title": "Personal Albums Usage Guide",
+    "category_path": "Video Tutorials > User Guide > Personal Albums Usage Guide"
+  },
+  {
+    "id": 101,
+    "title": "Categorization Usage Guide",
+    "category_path": "Video Tutorials > User Guide > Categorization Usage Guide"
+  },
+  {
+    "id": 99,
+    "title": "Library Usage Guide",
+    "category_path": "Video Tutorials > User Guide > Library Usage Guide"
+  },
+  {
+    "id": 98,
+    "title": "Photos Quick Start Guide",
+    "category_path": "Video Tutorials > User Guide > Photos Quick Start Guide"
+  },
+  {
+    "id": 70,
+    "title": "How to apply for TMDB  API Key",
+    "category_path": "Video Tutorials > User Guide > How to apply for TMDB  API Key"
+  },
+  {
+    "id": 76,
+    "title": "Getting to Know the Theater Player",
+    "category_path": "Video Tutorials > User Guide > Getting to Know the Theater Player"
+  },
+  {
+    "id": 69,
+    "title": "How to Add External Subtitles in Theater",
+    "category_path": "Video Tutorials > User Guide > How to Add External Subtitles in Theater"
+  },
+  {
+    "id": 65,
+    "title": "How to Achieve Two Way Data Sync Between UGREEN NAS and Google Drive?",
+    "category_path": "Video Tutorials > User Guide > How to Achieve Two Way Data Sync Between UGREEN NAS and Google Drive?"
+  },
+  {
+    "id": 64,
+    "title": "How to Add Peripheral or Network Folder as a Library Source",
+    "category_path": "Video Tutorials > User Guide > How to Add Peripheral or Network Folder as a Library Source"
+  },
+  {
+    "id": 62,
+    "title": "How to Mount a UGREEN NAS iSCSI Virtual Disk on MacOS",
+    "category_path": "Video Tutorials > User Guide > How to Mount a UGREEN NAS iSCSI Virtual Disk on MacOS"
+  },
+  {
+    "id": 55,
+    "title": "How to Set Up Automatic Photo Backup to Your NAS",
+    "category_path": "Video Tutorials > User Guide > How to Set Up Automatic Photo Backup to Your NAS"
+  },
+  {
+    "id": 52,
+    "title": "How to Access Files on UGREEN NAS through FTP",
+    "category_path": "Video Tutorials > User Guide > How to Access Files on UGREEN NAS through FTP"
+  },
+  {
+    "id": 51,
+    "title": "How to use SMB protocol to achieve fast multi-terminal file transfer on the LAN",
+    "category_path": "Video Tutorials > User Guide > How to use SMB protocol to achieve fast multi-terminal file transfer on the LAN"
+  },
+  {
+    "id": 50,
+    "title": "How to Create an SSD Cache for Volume",
+    "category_path": "Video Tutorials > User Guide > How to Create an SSD Cache for Volume"
+  },
+  {
+    "id": 45,
+    "title": "How to Backup Files  to UGREEN NAS  Using Time Machine",
+    "category_path": "Video Tutorials > User Guide > How to Backup Files  to UGREEN NAS  Using Time Machine"
+  },
+  {
+    "id": 44,
+    "title": "How to Use Conditional Albums for Smart Photo Organization",
+    "category_path": "Video Tutorials > User Guide > How to Use Conditional Albums for Smart Photo Organization"
+  },
+  {
+    "id": 41,
+    "title": "How to Enable Shared Library on UGREEN NAS",
+    "category_path": "Video Tutorials > User Guide > How to Enable Shared Library on UGREEN NAS"
+  },
+  {
+    "id": 40,
+    "title": "How to Back Up Between Storage Pools",
+    "category_path": "Video Tutorials > User Guide > How to Back Up Between Storage Pools"
+  },
+  {
+    "id": 38,
+    "title": "How to Enable Two-Way Sync Between UGREEN NAS and Microsoft OneDrive",
+    "category_path": "Video Tutorials > User Guide > How to Enable Two-Way Sync Between UGREEN NAS and Microsoft OneDrive"
+  },
+  {
+    "id": 33,
+    "title": "How to Back Up to an External Hard Drive or USB Stick",
+    "category_path": "Video Tutorials > User Guide > How to Back Up to an External Hard Drive or USB Stick"
+  },
+  {
+    "id": 24,
+    "title": "How to Migrate Files Between Volumes in the NAS",
+    "category_path": "Video Tutorials > User Guide > How to Migrate Files Between Volumes in the NAS"
+  },
+  {
+    "id": 23,
+    "title": "How to Perform File Deduplication",
+    "category_path": "Video Tutorials > User Guide > How to Perform File Deduplication"
+  },
+  {
+    "id": 17,
+    "title": "How to manage User/User Group permissions on UGREEN NAS?",
+    "category_path": "Video Tutorials > User Guide > How to manage User/User Group permissions on UGREEN NAS?"
+  },
+  {
+    "id": 11,
+    "title": "How to Back Up and Restore Files on UGREEN NAS",
+    "category_path": "Video Tutorials > User Guide > How to Back Up and Restore Files on UGREEN NAS"
+  },
+  {
+    "id": 47,
+    "title": "How to sync files from a computer or another device",
+    "category_path": "Video Tutorials > User Guide > How to sync files from a computer or another device"
+  },
+  {
+    "id": 18,
+    "title": "How to share and manage albums with others?",
+    "category_path": "Video Tutorials > User Guide > How to share and manage albums with others?"
+  },
+  {
+    "id": 7,
+    "title": "Tutorial Series - Initialization Process",
+    "category_path": "Video Tutorials > User Guide > Tutorial Series - Initialization Process"
+  },
+  {
+    "id": 22,
+    "title": "How to set up Plex on UGREEN NAS",
+    "category_path": "Video Tutorials > Docker Usage > How to set up Plex on UGREEN NAS"
+  },
+  {
+    "id": 21,
+    "title": "How to deploy Immich on UGREEN NAS",
+    "category_path": "Video Tutorials > Docker Usage > How to deploy Immich on UGREEN NAS"
+  },
+  {
+    "id": 20,
+    "title": "How to Set Up Tailscale on UGREEN NAS for Remote Access?",
+    "category_path": "Video Tutorials > Docker Usage > How to Set Up Tailscale on UGREEN NAS for Remote Access?"
+  },
+  {
+    "id": 19,
+    "title": "How to Set Up Navidrome to Create a Private Music Library",
+    "category_path": "Video Tutorials > Docker Usage > How to Set Up Navidrome to Create a Private Music Library"
+  },
+  {
+    "id": 10,
+    "title": "How to Set Jellyfin Media Server on UGREEN NAS?",
+    "category_path": "Video Tutorials > Docker Usage > How to Set Jellyfin Media Server on UGREEN NAS?"
+  },
+  {
+    "id": 95,
+    "title": "Voice Memos Quick Start Guide",
+    "category_path": "Video Tutorials > AI NAS > Voice Memos Quick Start Guide"
+  },
+  {
+    "id": 876,
+    "title": "Why UGREEN NAS Drives Stay Awake and What Causes Them to Spin Up?",
+    "category_path": "Troubleshooting > Why UGREEN NAS Drives Stay Awake and What Causes Them to Spin Up?"
+  },
+  {
+    "id": 701,
+    "title": "Check Compatibility Information",
+    "category_path": "Troubleshooting > Product Compatibility List > Check Compatibility Information"
+  },
+  {
+    "id": 136,
+    "title": "UGREEN NAS UPS (Uninterruptible Power Supply) Compatibility List",
+    "category_path": "Troubleshooting > Product Compatibility List > UGREEN NAS UPS (Uninterruptible Power Supply) Compatibility List"
+  },
+  {
+    "id": 135,
+    "title": "HDD Compatibility List (DXP Series)",
+    "category_path": "Troubleshooting > Product Compatibility List > HDD Compatibility List (DXP Series)"
+  },
+  {
+    "id": 933,
+    "title": "How to Fix Slow LAN Transfer Speeds?",
+    "category_path": "Troubleshooting > Network Failure > How to Fix Slow LAN Transfer Speeds?"
+  },
+  {
+    "id": 924,
+    "title": "How to Troubleshoot External Access Issues or Frequent Disconnections After Configuring DDNS?",
+    "category_path": "Troubleshooting > Network Failure > How to Troubleshoot External Access Issues or Frequent Disconnections After Configuring DDNS?"
+  },
+  {
+    "id": 757,
+    "title": "Why does the actual transfer speed only reach the network port limit when using SMB mounting over Thunderbolt Direct Transfer?",
+    "category_path": "Troubleshooting > Network Failure > Why does the actual transfer speed only reach the network port limit when using SMB mounting over Thunderbolt Direct Transfer?"
+  },
+  {
+    "id": 728,
+    "title": "What to Do When \"Cannot Connect to Server\" Appears While Accessing Containers via UGREENlink",
+    "category_path": "Troubleshooting > Network Failure > What to Do When \"Cannot Connect to Server\" Appears While Accessing Containers via UGREENlink"
+  },
+  {
+    "id": 671,
+    "title": "Introduction to UGREEN NAS P2P Connection Mode (Including IPv6 Support)",
+    "category_path": "Troubleshooting > Network Failure > Introduction to UGREEN NAS P2P Connection Mode (Including IPv6 Support)"
+  },
+  {
+    "id": 658,
+    "title": "Why is inbound traffic shaping not taking effect?",
+    "category_path": "Troubleshooting > Network Failure > Why is inbound traffic shaping not taking effect?"
+  },
+  {
+    "id": 657,
+    "title": "How to Check Whether the Network of Your UGREEN NAS Has a Public IP and Set Up Port Forwarding？",
+    "category_path": "Troubleshooting > Network Failure > How to Check Whether the Network of Your UGREEN NAS Has a Public IP and Set Up Port Forwarding？"
+  },
+  {
+    "id": 607,
+    "title": "How to Set Up Thunderbolt Direct Connection Between UGREEN NAS and Computer for High-Speed File Transfer",
+    "category_path": "Troubleshooting > Network Failure > How to Set Up Thunderbolt Direct Connection Between UGREEN NAS and Computer for High-Speed File Transfer"
+  },
+  {
+    "id": 482,
+    "title": "How to Fix \"Task error / Error\" with Prompt \"File name too long / File path may be too long\" During File Transfer?",
+    "category_path": "Troubleshooting > Network Failure > How to Fix \"Task error / Error\" with Prompt \"File name too long / File path may be too long\" During File Transfer?"
+  },
+  {
+    "id": 504,
+    "title": "How to Sign In to UGREEN NAS If Your Two-Factor Authentication (2FA) Key Is Lost?",
+    "category_path": "Troubleshooting > System and Software Failure > How to Sign In to UGREEN NAS If Your Two-Factor Authentication (2FA) Key Is Lost?"
+  },
+  {
+    "id": 755,
+    "title": "What to Do If the UGREEN NAS Client Displays a White Screen or Flickers?",
+    "category_path": "Troubleshooting > System and Software Failure > What to Do If the UGREEN NAS Client Displays a White Screen or Flickers?"
+  },
+  {
+    "id": 226,
+    "title": "Unable to recognize USB peripheral mounts?",
+    "category_path": "Troubleshooting > System and Software Failure > Unable to recognize USB peripheral mounts?"
+  },
+  {
+    "id": 421,
+    "title": "After upgrading to macOS 15, the client suite cannot be opened on Mac",
+    "category_path": "Troubleshooting > System and Software Failure > After upgrading to macOS 15, the client suite cannot be opened on Mac"
+  },
+  {
+    "id": 651,
+    "title": "UGREEN NAS Feature Comparison: Sync & Backup, Snapshots, File Version Explorer, and RAID",
+    "category_path": "Troubleshooting > System and Software Failure > UGREEN NAS Feature Comparison: Sync & Backup, Snapshots, File Version Explorer, and RAID"
+  },
+  {
+    "id": 640,
+    "title": "How to Update the Firmware, Client and Apps of UGREEN NAS?",
+    "category_path": "Troubleshooting > System and Software Failure > How to Update the Firmware, Client and Apps of UGREEN NAS?"
+  },
+  {
+    "id": 655,
+    "title": "How to use an external wireless network adapter with UGREEN NAS?",
+    "category_path": "Troubleshooting > Hardware Failure > How to use an external wireless network adapter with UGREEN NAS?"
+  },
+  {
+    "id": 727,
+    "title": "How to Connect a Graphics Card to NAS and Enable GPU Acceleration?",
+    "category_path": "Troubleshooting > Hardware Failure > How to Connect a Graphics Card to NAS and Enable GPU Acceleration?"
+  },
+  {
+    "id": 689,
+    "title": "Why does the GPU usage remain at zero when playing videos via HDMI on UGREEN NAS (DH Plus series)? Does HDMI not support hardware decoding?",
+    "category_path": "Troubleshooting > Hardware Failure > Why does the GPU usage remain at zero when playing videos via HDMI on UGREEN NAS (DH Plus series)? Does HDMI not support hardware decoding?"
+  },
+  {
+    "id": 687,
+    "title": "Is the low NPU utilization during AI album recognition on UGREEN NAS (DH Plus series) a performance issue?",
+    "category_path": "Troubleshooting > Hardware Failure > Is the low NPU utilization during AI album recognition on UGREEN NAS (DH Plus series) a performance issue?"
+  },
+  {
+    "id": 688,
+    "title": "What Are the Roles of the NPU and GPU in the DH Plus Series? Which Features Currently Use Each?",
+    "category_path": "Troubleshooting > Hardware Failure > What Are the Roles of the NPU and GPU in the DH Plus Series? Which Features Currently Use Each?"
+  },
+  {
+    "id": 686,
+    "title": "Why does the system resource usage of UGREEN NAS (DH4300 Plus) remain high after video playback ends?",
+    "category_path": "Troubleshooting > Hardware Failure > Why does the system resource usage of UGREEN NAS (DH4300 Plus) remain high after video playback ends?"
+  },
+  {
+    "id": 608,
+    "title": "Thunderbolt Device Not Recognized on Windows – How to Fix It",
+    "category_path": "Troubleshooting > Hardware Failure > Thunderbolt Device Not Recognized on Windows – How to Fix It"
+  },
+  {
+    "id": 629,
+    "title": "UGREEN NAS Installation and User Guide Collection",
+    "category_path": "Troubleshooting > Hardware Failure > UGREEN NAS Installation and User Guide Collection"
+  },
+  {
+    "id": 656,
+    "title": "Does the UGREEN NAS 10-Gigabit network card support auto-negotiation?",
+    "category_path": "Troubleshooting > Hardware Failure > Does the UGREEN NAS 10-Gigabit network card support auto-negotiation?"
+  },
+  {
+    "id": 685,
+    "title": "GPU usage remains at zero during video playback? How to determine whether hardware decoding is enabled on UGREEN DH Plus series devices?",
+    "category_path": "Troubleshooting > Hardware Failure > GPU usage remains at zero during video playback? How to determine whether hardware decoding is enabled on UGREEN DH Plus series devices?"
+  },
+  {
+    "id": 690,
+    "title": "Common Issues with DH Plus Series Devices",
+    "category_path": "Troubleshooting > Hardware Failure > Common Issues with DH Plus Series Devices"
+  },
+  {
+    "id": 917,
+    "title": "UGOS Pro June 2026 System Update Notes",
+    "category_path": "Release notes > UGOS Pro June 2026 System Update Notes"
+  },
+  {
+    "id": 915,
+    "title": "UGOS Pro July 2026 System Update Notes",
+    "category_path": "Release notes > UGOS Pro July 2026 System Update Notes"
+  },
+  {
+    "id": 919,
+    "title": "UGOS Pro May 2026 System Update Notes",
+    "category_path": "Release notes > UGOS Pro May 2026 System Update Notes"
+  }
+]
