@@ -1,8 +1,16 @@
 # ⚡ Node 3: GEEKOM IT13 Max — Dedicated AI & Compute Architecture
 
-> **Authoritative Single Source of Truth (SSOT)** for Node 3 (GEEKOM IT13 Max Mini PC) integration, headless compute provisioning, fail-safe migration, and disaster recovery.  
-> **Last Verified**: 2026-09-18  
-> **Status**: 🟡 **Provisioning & Pre-Check Phase**
+> Hardware inventory, original architecture, and provisioning record for Node 3. The
+> deployed runtime source and current execution evidence are maintained in the private
+> [IT13 Max repository](https://github.com/deepshah08/it13max).  
+> **Last reviewed**: 2026-09-22  
+> **Status**: ✅ Goals 1–6 deployed; remediation complete pending independent Astra review.
+
+The paired MDS documents capture the implementation journey and current design
+rationale: [investigation](./it13max_investigation.md) ·
+[durable knowledge](./it13max_knowledge.md). Goal 5 model evaluation remains deferred
+until representative labels exist. See the source repository's execution records for
+the exact acceptance evidence and remaining user configuration.
 
 ---
 
