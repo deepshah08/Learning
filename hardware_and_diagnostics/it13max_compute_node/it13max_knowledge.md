@@ -82,6 +82,29 @@ container cleanup, and maintenance remain coordinated.
 | Treat a local backup as disaster recovery | Goal 6's bundle is local; no approved off-node destination is configured |
 | Reuse the general agent repo for deployed source | A dedicated private repo keeps IT13 setup, code, and operational evidence together; Learning remains the MDS knowledge base |
 
+## 2026-09-24 Knowledge and Model Assessment
+
+The owner-review packet contains 30 knowledge questions, including 12 multi-concept
+questions, and a separate 50-task workflow packet covering grounded answers,
+abstentions, action JSON, and coding. Owner gold labels are not present yet, so these
+packets are not a held-out set and no new model has been promoted. IT13 remains on
+Qwen2.5-3B INT4/OpenVINO CPU with BGE-small, Qdrant, and SQLite FTS5/RRF. Candidate
+screening and routing changes wait until the owner reviews and freezes the labels.
+
+A 12-concept public-safe OKF v0.2 projection was exported from this architecture record
+at a pinned Learning revision. The projection is read-only and every concept remains
+`draft` / `needs_owner_review`; it has not been indexed into production or an IT13
+Qdrant test instance. Learning remains authoritative. Its hash, freshness, link, and
+idempotent staging checks are part of the private IT13 evaluation tooling.
+
+Jev and Laya are deferred. No current workflow has a demonstrated costly classification
+failure that rules or the selected local model cannot address, no workflow has 100
+independently reviewed decisions, and no IT13 sample has been checked against Laya's
+short-input contract. Reconsider them only after a concrete workflow gap, a reproduced
+baseline miss, at least 100 independent workflow labels with a frozen holdout, and a
+separate data-handling decision for any hosted Jev call. Do not install either runtime,
+add hooks, or solicit radar labels just to create a pilot.
+
 ## Configuration and Guardrails
 
 | Property | Current contract |
@@ -129,4 +152,5 @@ container cleanup, and maintenance remain coordinated.
 - Implementation and execution evidence: [private IT13 repository](https://github.com/deepshah08/it13max)
 - Original architecture diagrams and provisioning record: [architecture blueprint](https://github.com/deepshah08/it13max/blob/main/node-it13-max-architecture-blueprint.md)
 - Candidate model decisions: [IT13 model audit](https://github.com/deepshah08/it13max/blob/main/it13-model-audit.md)
-- Jev/Laya public-data classifier pilot: [decision-layer plan](https://github.com/deepshah08/agentic-workflows/blob/main/docs/JEV_LAYA_DECISION_LAYER.md)
+- Knowledge/model evaluation packets, scorer, OKF exporter and staging importer: [IT13 evaluation tooling](https://github.com/deepshah08/it13max/tree/main/it13-stack/evaluation)
+- Jev/Laya deferral and reconsideration triggers: [decision-layer record](https://github.com/deepshah08/agentic-workflows/blob/main/docs/JEV_LAYA_DECISION_LAYER.md)
