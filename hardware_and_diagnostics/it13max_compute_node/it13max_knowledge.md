@@ -85,8 +85,8 @@ container cleanup, and maintenance remain coordinated.
 ## 2026-09-24 Knowledge and Model Assessment
 
 The owner-review packet contains 30 knowledge questions, including 12 multi-concept
-questions, and a separate 50-task workflow packet covering grounded answers,
-abstentions, action JSON, and coding. Owner gold labels are not present yet, so these
+questions, and a separate 51-task workflow packet covering grounded answers,
+abstentions, action JSON, coding, and stale evidence. Owner gold labels are not present yet, so these
 packets are not a held-out set and no new model has been promoted. IT13 remains on
 Qwen2.5-3B INT4/OpenVINO CPU with BGE-small, Qdrant, and SQLite FTS5/RRF. Candidate
 screening and routing changes wait until the owner reviews and freezes the labels.
