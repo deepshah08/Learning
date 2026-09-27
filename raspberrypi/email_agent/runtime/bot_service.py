@@ -208,8 +208,8 @@ def _resolve_user_id(chat_id: str | int) -> str:
         matched_user = get_user_by_chat_id(chat_id)
         if matched_user:
             return matched_user.id
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.debug(f"Failed to resolve user for chat_id {chat_id}: {exc}")
     if CHAT_ID and str(chat_id) == str(CHAT_ID):
         return "deep"
     return ""
