@@ -19,7 +19,7 @@ import requests
 from dotenv import load_dotenv
 
 from bot_service import query_rag
-from gemini_teacher import DEFAULT_MODEL, TeacherError, _extract_json, resolve_gemini_model, RETRY_DELAYS
+from gemini_teacher import TeacherError, _extract_json, resolve_gemini_model, RETRY_DELAYS
 
 
 BASE_DIR = Path(__file__).parent
