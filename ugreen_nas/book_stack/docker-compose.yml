@@ -41,9 +41,10 @@ services:
       - QBITTORRENT_USERNAME=admin
       # Direct Download & Mirrors
       - DIRECT_DOWNLOAD_ENABLED=true
-      - AA_BASE_URL=auto
-      - AA_MIRROR_URLS=https://annas-archive.gl,https://annas-archive.org,https://annas-archive.se
-      - LIBGEN_MIRROR_URLS=https://libgen.is,https://libgen.rs,https://libgen.li
+      - AA_BASE_URL=https://annas-archive.li
+      - AA_MIRROR_URLS=https://annas-archive.li,https://annas-archive.gl,https://annas-archive.pk,https://annas-archive.org
+      - LIBGEN_MIRROR_URLS=https://libgen.li,https://libgen.is,https://libgen.rs
+      - ZLIB_MIRROR_URLS=https://zlibrary-global.se
     volumes:
       - /volume2/docker/book_stack/shelfmark/config:/config
       - /volume1/data/books/ingest:/books

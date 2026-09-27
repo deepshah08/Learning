@@ -32,20 +32,21 @@ flowchart TD
         HDD_Lib["SATA CMR HDD (/volume1/data/books/library)\n• Permanent Organized EPUB/PDF library"]
     end
 
-    subgraph Sources["Book Sources"]
-        AA["Anna's Archive / LibGen (DDL)"]
-        IRC["IRC Highway (#ebooks)"]
-        Torrents["BitTorrent Swarm (TPB, 1337x, MAM)"]
+    subgraph Sources["Hardened Multi-Protocol Book Sources"]
+        AA["Anna's Archive (DDL: .li, .gl, .pk)"]
+        LG["LibGen & Z-Library (DDL: libgen.li, zlibrary-global.se)"]
+        IRC["IRC Highway (#ebooks via TLS 6697)"]
+        Torrents["BitTorrent Swarms (Prowlarr: 1337x, TPB, LimeTorrents, TorrentDownloads, Nyaa)"]
     end
 
     Browser -->|Search Book| SM
-    SM -->|1. Direct Download| AA
-    SM -->|2. IRC Highway| IRC
-    SM -->|3. Torrent Search| PR
-    PR -->|Push Magnet| QB
+    SM -->|1. Direct Download| AA & LG
+    SM -->|2. IRC Highway P2P| IRC
+    SM -->|3. Torrent Swarm Search| PR
+    PR -->|Push Magnet (TCP-only, 1:1 auto-pause)| QB
     QB -->|Download| Torrents
 
-    AA & IRC & QB -->|Save EPUB/PDF| HDD_Ingest
+    AA & LG & IRC & QB -->|Save EPUB/PDF| HDD_Ingest
     HDD_Ingest -->|Auto-Ingest Watcher| CWA
     CWA -->|Fetch Metadata & Covers| CWA
     CWA -->|Catalog & Deduplicate| HDD_Lib
@@ -69,9 +70,11 @@ flowchart TD
 | **Hot Storage (NVMe)** | `/volume2/docker/book_stack/calibre-web-automated/config` | `/volume2/docker/book_stack/shelfmark/config` | SQLite databases, browser cache |
 | **Cold Storage (HDD)** | `/volume1/data/books/library` | `/volume1/data/books/ingest` | 10TB IronWolf CMR |
 | **PUID / PGID** | `1000` / `10` (`Deep Shah:admin`) | `1000` / `10` (`Deep Shah:admin`) | Matches host UGOS user |
-| **Prowlarr Integration** | N/A | `http://prowlarr:9696` | Internal API key attached |
+| **Prowlarr Integration** | N/A | `http://prowlarr:9696` | Indexers: `["2", "3", "4", "5", "6"]` |
 | **qBittorrent Integration** | N/A | `http://qbittorrent:8080` | Subnet whitelisted on `media_net` |
-| **Metadata Providers** | Hardcover / OpenLibrary / Google Books | Open Library (`OPENLIBRARY_ENABLED=true`) | Zero API keys required |
+| **Direct Mirrors** | N/A | Anna's (`.li`, `.gl`, `.pk`), LibGen (`.li`), Z-Lib (`.se`) | Immune to `.org` & `.se` NXDOMAIN bans |
+| **IRC Integration** | N/A | `irc.irchighway.net:6697` (TLS, `#ebooks`, `@search`) | Peer-to-peer censorship-resistant fallback |
+| **Metadata Providers** | Hardcover / OpenLibrary / Google Books | Hardcover / Open Library (`OPENLIBRARY_ENABLED=true`) | Zero API keys required |
 
 ---
 
