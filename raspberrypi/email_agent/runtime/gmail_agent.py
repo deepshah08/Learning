@@ -622,12 +622,20 @@ def sync_user_feedback(service, db_path: Path, label_ids: dict[str, str]) -> lis
             logger.debug(f"Label query error {cat}: {e}")
             continue
 
+        msg_ids = [m["id"] for m in messages if "id" in m]
+        if not msg_ids:
+            continue
+
+        placeholders = ",".join("?" * len(msg_ids))
+        rows = cursor.execute(f"""
+            SELECT msg_id, sender, subject, priority, category, auto_archived
+            FROM processed_emails WHERE msg_id IN ({placeholders})
+        """, msg_ids).fetchall()
+        rows_by_id = {row["msg_id"]: row for row in rows}
+
         for m in messages:
             msg_id = m["id"]
-            row = cursor.execute("""
-                SELECT sender, subject, priority, category, auto_archived
-                FROM processed_emails WHERE msg_id = ?
-            """, (msg_id,)).fetchone()
+            row = rows_by_id.get(msg_id)
 
             if row and row["category"] != cat:
                 sender = row["sender"]
@@ -693,87 +701,101 @@ def sync_user_feedback(service, db_path: Path, label_ids: dict[str, str]) -> lis
     # 2. Unarchived emails (moved back to INBOX)
     try:
         res = service.users().messages().list(userId="me", q="label:INBOX label:AI-Auto-Archived", maxResults=50).execute()
-        for m in res.get("messages", []):
-            msg_id = m["id"]
-            row = cursor.execute("""
-                SELECT sender, subject, priority, category, auto_archived
-                FROM processed_emails WHERE msg_id = ?
-            """, (msg_id,)).fetchone()
-            if row and row["auto_archived"] == 1:
-                sender = row["sender"]
-                subject = row["subject"]
-                pred_prio = row["priority"]
-                pred_cat = row["category"]
-                corr_prio = "IMPORTANT" if pred_prio == "LOW" else pred_prio
+        messages = res.get("messages", [])
+        msg_ids = [m["id"] for m in messages if "id" in m]
+        if msg_ids:
+            placeholders = ",".join("?" * len(msg_ids))
+            rows = cursor.execute(f"""
+                SELECT msg_id, sender, subject, priority, category, auto_archived
+                FROM processed_emails WHERE msg_id IN ({placeholders})
+            """, msg_ids).fetchall()
+            rows_by_id = {row["msg_id"]: row for row in rows}
 
-                note = f"Unarchived: {sender[:35]} (now Kept in Inbox)"
-                learned_notes.append(note)
-                logger.info(f"💡 Detected unarchived correction for '{subject[:50]}'")
+            for m in messages:
+                msg_id = m["id"]
+                row = rows_by_id.get(msg_id)
+                if row and row["auto_archived"] == 1:
+                    sender = row["sender"]
+                    subject = row["subject"]
+                    pred_prio = row["priority"]
+                    pred_cat = row["category"]
+                    corr_prio = "IMPORTANT" if pred_prio == "LOW" else pred_prio
 
-                cursor.execute("""
-                    INSERT INTO user_corrections
-                    (msg_id, sender, subject, predicted_prio, corrected_prio,
-                     predicted_cat, corrected_cat, predicted_archive, corrected_archive)
-                    VALUES (?,?,?,?,?,?,?,?,?)
-                """, (msg_id, sender, subject, pred_prio, corr_prio,
-                      pred_cat, pred_cat, 1, 0))
+                    note = f"Unarchived: {sender[:35]} (now Kept in Inbox)"
+                    learned_notes.append(note)
+                    logger.info(f"💡 Detected unarchived correction for '{subject[:50]}'")
 
-                match = re.search(r"<(.+?)>", sender)
-                email_addr = match.group(1).lower() if match else sender.lower()
-                cursor.execute("""
-                    INSERT OR REPLACE INTO sender_rules
-                    (sender_pattern, priority, category, action_needed, action_type, auto_archive, rule_source, updated_at)
-                    VALUES (?, ?, ?, ?, 'None', 0, 'feedback_learning', datetime('now'))
-                """, (email_addr, corr_prio, pred_cat, int(corr_prio in ("URGENT", "IMPORTANT"))))
+                    cursor.execute("""
+                        INSERT INTO user_corrections
+                        (msg_id, sender, subject, predicted_prio, corrected_prio,
+                         predicted_cat, corrected_cat, predicted_archive, corrected_archive)
+                        VALUES (?,?,?,?,?,?,?,?,?)
+                    """, (msg_id, sender, subject, pred_prio, corr_prio,
+                          pred_cat, pred_cat, 1, 0))
 
-                cursor.execute("""
-                    UPDATE processed_emails
-                    SET priority = ?, auto_archived = 0, status = 'corrected'
-                    WHERE msg_id = ?
-                """, (corr_prio, msg_id))
+                    match = re.search(r"<(.+?)>", sender)
+                    email_addr = match.group(1).lower() if match else sender.lower()
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO sender_rules
+                        (sender_pattern, priority, category, action_needed, action_type, auto_archive, rule_source, updated_at)
+                        VALUES (?, ?, ?, ?, 'None', 0, 'feedback_learning', datetime('now'))
+                    """, (email_addr, corr_prio, pred_cat, int(corr_prio in ("URGENT", "IMPORTANT"))))
+
+                    cursor.execute("""
+                        UPDATE processed_emails
+                        SET priority = ?, auto_archived = 0, status = 'corrected'
+                        WHERE msg_id = ?
+                    """, (corr_prio, msg_id))
     except Exception as e:
         logger.debug(f"Unarchive query check note: {e}")
 
     # 3. Priority escalation to URGENT
     try:
         res = service.users().messages().list(userId="me", q="label:AI-Priority-Urgent", maxResults=50).execute()
-        for m in res.get("messages", []):
-            msg_id = m["id"]
-            row = cursor.execute("""
-                SELECT sender, subject, priority, category, auto_archived
-                FROM processed_emails WHERE msg_id = ?
-            """, (msg_id,)).fetchone()
-            if row and row["priority"] != "URGENT":
-                sender = row["sender"]
-                subject = row["subject"]
-                pred_prio = row["priority"]
-                pred_cat = row["category"]
-                pred_arch = bool(row["auto_archived"])
+        messages = res.get("messages", [])
+        msg_ids = [m["id"] for m in messages if "id" in m]
+        if msg_ids:
+            placeholders = ",".join("?" * len(msg_ids))
+            rows = cursor.execute(f"""
+                SELECT msg_id, sender, subject, priority, category, auto_archived
+                FROM processed_emails WHERE msg_id IN ({placeholders})
+            """, msg_ids).fetchall()
+            rows_by_id = {row["msg_id"]: row for row in rows}
 
-                note = f"Priority escalated to URGENT: {subject[:40]}"
-                learned_notes.append(note)
+            for m in messages:
+                msg_id = m["id"]
+                row = rows_by_id.get(msg_id)
+                if row and row["priority"] != "URGENT":
+                    sender = row["sender"]
+                    subject = row["subject"]
+                    pred_prio = row["priority"]
+                    pred_cat = row["category"]
+                    pred_arch = bool(row["auto_archived"])
 
-                cursor.execute("""
-                    INSERT INTO user_corrections
-                    (msg_id, sender, subject, predicted_prio, corrected_prio,
-                     predicted_cat, corrected_cat, predicted_archive, corrected_archive)
-                    VALUES (?,?,?,?,?,?,?,?,?)
-                """, (msg_id, sender, subject, pred_prio, "URGENT",
-                      pred_cat, pred_cat, int(pred_arch), 0))
+                    note = f"Priority escalated to URGENT: {subject[:40]}"
+                    learned_notes.append(note)
 
-                match = re.search(r"<(.+?)>", sender)
-                email_addr = match.group(1).lower() if match else sender.lower()
-                cursor.execute("""
-                    INSERT OR REPLACE INTO sender_rules
-                    (sender_pattern, priority, category, action_needed, action_type, auto_archive, rule_source, updated_at)
-                    VALUES (?, 'URGENT', ?, 1, 'Review', 0, 'feedback_learning', datetime('now'))
-                """, (email_addr, pred_cat))
+                    cursor.execute("""
+                        INSERT INTO user_corrections
+                        (msg_id, sender, subject, predicted_prio, corrected_prio,
+                         predicted_cat, corrected_cat, predicted_archive, corrected_archive)
+                        VALUES (?,?,?,?,?,?,?,?,?)
+                    """, (msg_id, sender, subject, pred_prio, "URGENT",
+                          pred_cat, pred_cat, int(pred_arch), 0))
 
-                cursor.execute("""
-                    UPDATE processed_emails
-                    SET priority = 'URGENT', status = 'corrected'
-                    WHERE msg_id = ?
-                """, (msg_id,))
+                    match = re.search(r"<(.+?)>", sender)
+                    email_addr = match.group(1).lower() if match else sender.lower()
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO sender_rules
+                        (sender_pattern, priority, category, action_needed, action_type, auto_archive, rule_source, updated_at)
+                        VALUES (?, 'URGENT', ?, 1, 'Review', 0, 'feedback_learning', datetime('now'))
+                    """, (email_addr, pred_cat))
+
+                    cursor.execute("""
+                        UPDATE processed_emails
+                        SET priority = 'URGENT', status = 'corrected'
+                        WHERE msg_id = ?
+                    """, (msg_id,))
     except Exception as e:
         logger.debug(f"Urgent query check note: {e}")
 
