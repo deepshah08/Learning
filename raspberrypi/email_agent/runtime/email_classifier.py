@@ -9,8 +9,7 @@ import logging
 import os
 import re
 import requests
-from dataclasses import dataclass, field
-from typing import Literal
+from dataclasses import dataclass
 
 try:
     import ollama
