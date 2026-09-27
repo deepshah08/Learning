@@ -13,6 +13,7 @@ import os
 import re
 import statistics
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import requests
@@ -114,6 +115,7 @@ Answer: {answer}
 
 def run_personas(db_path: Path, use_gemini_judge: bool = False) -> list[dict]:
     report = []
+    eval_tasks = []
     for persona, question, expects_empty in PERSONAS:
         result = query_rag(db_path, question)
         entry = {
@@ -125,14 +127,22 @@ def run_personas(db_path: Path, use_gemini_judge: bool = False) -> list[dict]:
         }
         if not expects_empty and result.get("matches", 0) == 0:
             entry["retrieval_gap"] = "No supporting emails were retrieved; verify whether the mailbox contains this scenario."
+        report.append(entry)
         if use_gemini_judge:
+            eval_tasks.append((entry, question, result.get("answer", ""), result.get("context", "")))
+
+    if eval_tasks:
+        def _eval_one(task: tuple[dict, str, str, str]) -> None:
+            entry, question, answer, context = task
             try:
-                entry["scores"] = judge_answer(
-                    question, result.get("answer", ""), result.get("context", "")
-                )
+                entry["scores"] = judge_answer(question, answer, context)
             except Exception as exc:
                 entry["judge_error"] = str(exc)
-        report.append(entry)
+
+        max_workers = min(10, len(eval_tasks))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            list(executor.map(_eval_one, eval_tasks))
+
     return report
 
 
