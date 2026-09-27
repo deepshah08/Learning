@@ -626,4 +626,5 @@ if __name__ == "__main__":
     test_priority_feedback_and_chat_intent_guardrails()
     test_bulk_mark_read_requires_single_use_confirmation_and_batches_gmail()
     test_read_only_ask_does_not_call_rag_for_bulk_mutation_request()
+    test_sync_user_feedback_priority_escalation()
     print("✅ All unit checks passed successfully!")
