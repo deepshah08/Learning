@@ -610,6 +610,31 @@ def test_read_only_ask_does_not_call_rag_for_bulk_mutation_request():
     query.assert_not_called()
     assert "did not call Qwen or change Gmail" in send_plain.call_args.args[1]
 
+def test_resolve_user_id_success_and_exception_handling(caplog=None):
+    from bot_service import _resolve_user_id
+    from types import SimpleNamespace
+
+    # Test 1: Match found via user_manager
+    mock_user = SimpleNamespace(id="user_alice")
+    with patch("user_manager.get_user_by_chat_id", return_value=mock_user):
+        assert _resolve_user_id(12345) == "user_alice"
+
+    # Test 2: Exception raised during lookup -> logs debug & falls back to CHAT_ID / empty
+    with patch("user_manager.get_user_by_chat_id", side_effect=RuntimeError("DB error")):
+        with patch("bot_service.CHAT_ID", "99999"):
+            if caplog:
+                with caplog.at_level("DEBUG"):
+                    assert _resolve_user_id(99999) == "deep"
+                    assert "Failed to resolve user for chat_id 99999: DB error" in caplog.text
+            else:
+                assert _resolve_user_id(99999) == "deep"
+
+    # Test 3: Exception raised with non-matching CHAT_ID -> empty string
+    with patch("user_manager.get_user_by_chat_id", side_effect=RuntimeError("DB error")):
+        with patch("bot_service.CHAT_ID", "99999"):
+            assert _resolve_user_id(11111) == ""
+
+
 if __name__ == "__main__":
     test_zero_quota_skips_gmail_request()
     test_real_ollama_http_deadline_and_gemini_retry_budget()
@@ -626,4 +651,5 @@ if __name__ == "__main__":
     test_priority_feedback_and_chat_intent_guardrails()
     test_bulk_mark_read_requires_single_use_confirmation_and_batches_gmail()
     test_read_only_ask_does_not_call_rag_for_bulk_mutation_request()
+    test_resolve_user_id_success_and_exception_handling()
     print("✅ All unit checks passed successfully!")
