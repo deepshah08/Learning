@@ -81,6 +81,7 @@ def upsert_email_embedding(
     sender: str,
     summary: str,
     body_snippet: str = "",
+    conn: Optional[sqlite3.Connection] = None,
 ) -> bool:
     """Compute embedding for an email and store in SQLite."""
     text_to_embed = f"Subject: {subject} | From: {sender} | Summary: {summary} | Context: {body_snippet[:300]}"
@@ -88,14 +89,21 @@ def upsert_email_embedding(
     if not vec:
         return False
 
-    conn = sqlite3.connect(db_path, timeout=10.0)
+    close_conn = False
+    if conn is None:
+        conn = sqlite3.connect(db_path, timeout=10.0)
+        close_conn = True
+
     init_vector_tables(conn)
     conn.execute("""
         INSERT OR REPLACE INTO email_embeddings (msg_id, embedding, subject, sender, summary, created_at)
         VALUES (?, ?, ?, ?, ?, datetime('now'))
     """, (msg_id, json.dumps(vec), subject, sender, summary))
     conn.commit()
-    conn.close()
+
+    if close_conn:
+        conn.close()
+
     return True
 
 
@@ -113,22 +121,27 @@ def batch_index_unembedded(db_path: Path, limit: int = 50) -> int:
         ORDER BY p.processed_at DESC
         LIMIT ?
     """, (limit,)).fetchall()
-    conn.close()
 
     if not rows:
+        conn.close()
         return 0
 
     count = 0
-    for r in rows:
-        ok = upsert_email_embedding(
-            db_path,
-            r["msg_id"],
-            r["subject"] or "",
-            r["sender"] or "",
-            r["summary"] or "",
-        )
-        if ok:
-            count += 1
+    try:
+        for r in rows:
+            ok = upsert_email_embedding(
+                db_path,
+                r["msg_id"],
+                r["subject"] or "",
+                r["sender"] or "",
+                r["summary"] or "",
+                conn=conn,
+            )
+            if ok:
+                count += 1
+    finally:
+        conn.close()
+
     return count
 
 
