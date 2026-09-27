@@ -4,7 +4,6 @@ Scrape and cache all UGREEN NAS / UGOS Pro Knowledge Center and Application Guid
 """
 
 import os
-import sys
 import json
 import re
 import time
