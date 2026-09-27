@@ -992,8 +992,8 @@ def _extract_body(payload: dict) -> tuple[str, int]:
                     plain_parts.append(decoded)
                 elif mime == "text/html":
                     html_parts.append(decoded)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning(f"Failed to decode email part payload: {e}")
         for subpart in part.get("parts", []):
             _walk(subpart)
 
