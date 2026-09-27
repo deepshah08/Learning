@@ -11,15 +11,12 @@ Contains 5 Challenge Agent Iterations:
 """
 
 import concurrent.futures
-import json
-import os
 import sqlite3
 import tempfile
 import time
 from pathlib import Path
 
 from email_classifier import (
-    classify_email,
     quick_prefilter,
     EmailClassification,
     CLASSIFY_SYSTEM,
@@ -30,17 +27,12 @@ from email_classifier import (
 )
 from gmail_agent import (
     init_db,
-    get_sender_override,
-    get_recent_corrections,
     parse_recipient_headers,
     save_email,
     get_db_connection,
 )
 from user_manager import (
     UserConfig,
-    save_users_registry,
-    load_users_registry,
-    get_active_users,
     get_user_by_chat_id,
 )
 from bot_service import query_rag
