@@ -101,18 +101,22 @@ Jev classifies `category`, `priority`, `action_needed`, and `auto_archive` in a 
 - **Low confidence** → returns `None`, pipeline falls through to Qwen
 - **API error / breaker open** → returns `None`, pipeline unaffected
 
-### 2. Model Routing
+### 2. Pluggable Model Router (`jev_model_router.py`)
 
-Sub-100ms complexity classifier routes tasks to the cheapest sufficient model tier:
+Sub-100ms complexity classifier routes tasks to the cheapest sufficient model tier. Designed with a **pluggable multi-harness architecture**:
 
-| Jev Tier | Model | Use Case |
-|---|---|---|
-| `luna_light` | flash_lite | "thanks lgtm", typo fixes |
-| `terra_medium` | flash | Everyday implementation, refactors |
-| `sol_high` | pro | Debugging, security, design decisions |
-| `astra` | pro | Cross-cutting architecture, research |
+| Jev Tier | Antigravity UI Model & Reasoning | Antigravity Subagent | Codex Equivalent | Claude Code | Use Case |
+|---|---|---|---|---|---|
+| `luna_light` | **Gemini 3.8 Flash (Low)** | `flash_lite` | Luna Light (Low) | Claude 3.5 Haiku | "thanks lgtm", typo fixes, extraction |
+| `terra_medium` | **Gemini 3.8 Flash (Medium)** | `flash` | Terra Medium | Claude 3.7 Sonnet | Everyday implementation, refactors, tests |
+| `sol_high` | **Gemini 3.8 Flash (High)** / 3.1 Pro | `pro` | Sol High | Claude 3.7 Sonnet (Thinking) | Tricky debugging, security, deep reasoning |
+| `astra` | **Gemini 3.1 Pro (High)** / *Gemini 4 Pro* | `pro` | Astra | Claude Opus 4.6 (Thinking) | Cross-cutting architecture, sustained research |
 
-Cross-validation guards: deep reasoning flag escalates luna→terra; scope≥4 escalates luna→terra.
+**Pluggable Features:**
+- Target harness selection: `classify_task_complexity(prompt, harness="antigravity" | "codex" | "claude" | "all")`
+- Dynamic harness registration via `register_harness(name, profile)`
+- Environment overrides for future-proofing models: `ANTIGRAVITY_FLASH_MODEL` (default: `Gemini 3.8 Flash`), `ANTIGRAVITY_PRO_MODEL` (default: `Gemini 3.1 Pro`), `ANTIGRAVITY_NEXTGEN_MODEL` (default: `Gemini 4 Pro`)
+- Cross-validation guards: deep reasoning flag escalates luna→terra; scope≥3.0 escalates luna→terra.
 
 ### 3. Tech Radar Tier Classification
 

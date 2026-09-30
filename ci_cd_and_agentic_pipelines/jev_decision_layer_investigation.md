@@ -130,6 +130,36 @@ Triggered by user observing Laya-MLX's multilingual config. Established Section 
 
 ---
 
+## Phase 5: Pluggable Router Architecture & Antigravity Mapping
+
+### Problem & Motivation
+
+User hit quota ceiling on heavy frontier models (Claude Opus 4.6) and switched to Gemini 3.8 Flash (High reasoning). User requested the Jev model router be **pluggable** across harnesses, specifically supporting:
+1. Google Antigravity UI: `Gemini 3.8 Flash` across its 3 levels of reasoning (`Low`, `Medium`, `High`).
+2. Google Antigravity Subagents: `flash_lite`, `flash`, `pro`.
+3. Flagship & Future Pro models: `Gemini 3.1 Pro` and future `Gemini 4 Pro`.
+4. Multi-harness portability: Codex (Luna/Terra/Sol/Astra) and Claude (Haiku/Sonnet/Opus).
+
+### Solution
+
+Re-architected `jev_model_router.py` with:
+- **`HARNESS_REGISTRY`**: Extensible profile registry for `antigravity`, `codex`, `claude`.
+- **Dynamic Registration API**: `register_harness(name, profile)` for arbitrary custom agents.
+- **Environment Overrides**: `ANTIGRAVITY_FLASH_MODEL`, `ANTIGRAVITY_PRO_MODEL`, `ANTIGRAVITY_NEXTGEN_MODEL` allowing instant zero-code upgrades when models like Gemini 4 Pro drop.
+- **Multi-target translation**: Single Jev call can return recommendations for a specific harness (`harness="antigravity"`) or all harnesses simultaneously (`harness="all"`).
+
+### Verified Test Matrix
+
+| User Request | Jev Tier | Antigravity UI Recommendation | Reasoning Effort | Subagent Target |
+|---|---|---|---|---|
+| "thanks lgtm" | `luna_light` | **Gemini 3.8 Flash (Low)** | low | `flash_lite` |
+| "Add docstring to format_date" | `luna_light` | **Gemini 3.8 Flash (Low)** | low | `flash_lite` |
+| "Refactor user profile settings" | `terra_medium` | **Gemini 3.8 Flash (Medium)** | medium | `flash` |
+| "Investigate intermittent memory leak in C++" | `sol_high` | **Gemini 3.8 Flash (High)** | high | `pro` |
+| "Design enterprise multi-agent consensus" | `astra` | **Gemini 3.1 Pro (High)** / *Gemini 4 Pro* | high | `pro` |
+
+---
+
 ## Decisions & Rationale
 
 | Decision | Rationale |
@@ -138,5 +168,7 @@ Triggered by user observing Laya-MLX's multilingual config. Established Section 
 | Confidence threshold 0.7 | Matches prior eval doc's promotion gate; avoids false accepts |
 | Circuit breaker (not retry) | Credits are finite; retrying a 402 wastes time. Fast-fail is better. |
 | 422 doesn't trip breaker | Schema errors are deterministic bugs, not transient failures |
+| Pluggable harness profiles | Isolates model naming & reasoning levels from decision logic |
+| Env vars for future models | Allows zero-code upgrade to Gemini 4 Pro / 3.1 Pro via shell vars |
 | Shadow eval before promotion | Matches the eval contract in `JEV_LAYA_DECISION_LAYER.md` |
 | API key in `~/.env.local` | Never committed to any repo; loaded via `export $(grep ...)` |
