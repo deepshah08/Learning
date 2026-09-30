@@ -40,5 +40,14 @@ This repository serves as the Single Source of Truth (SoT) for infrastructure, h
   * **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
 
 ### 9. Modern Model Tiering ($\ge 3.5$ Only)
-* All external Gemini API queries, architecture ideation, reviews, and brainstorming MUST strictly use models $\ge 3.5$ (e.g. `gemini-3.7-flash`, `antigravity-preview-05-2026`, `gemini-3.6-flash`, `gemini-3.5-flash`). Permanently ignore and reject all legacy models $< 3.5$.
+* All external Gemini API queries, architecture ideation, reviews, and brainstorming MUST strictly use models $\ge 3.5$ (e.g. `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.1-pro`, `gemini-3.5-flash`). Permanently ignore and reject all legacy models $< 3.5$.
 
+### 10. English-Only Resource Optimization
+* Default all models, tokenizers, and NLP pipelines to English-only (`en`) checkpoints. Prune multilingual bloat unless specifically handling TTS/ASR (where Hindi and Gujarati are retained for family applications).
+
+### 11. Automated Model Routing via Jev
+* Use `jev_model_router.py` for automated, sub-150ms task complexity routing to Antigravity model tiers:
+  * Fast / deterministic: `Gemini 3.8 Flash (Low)` / `flash_lite`
+  * Everyday engineering: `Gemini 3.8 Flash (Medium)` / `flash`
+  * Complex / deep debugging: `Gemini 3.8 Flash (High)` / `pro`
+  * Frontier / sustained architecture: `Gemini 3.1 Pro (High)` / `Gemini 4 Pro` / `pro`

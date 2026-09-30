@@ -58,3 +58,28 @@
   - Live CLI health-check and verification commands
   - Disaster recovery and rollback steps
 - **Zero Hallucinations:** Reference only verified local paths and active network endpoints (`192.168.1.92`, `192.168.1.80`, `192.168.1.254`).
+
+---
+
+## 🌐 6. English-Only Resource Optimization & Multilingual Gating
+
+- **Default Locale: `en` Only.** All AI models, tokenizers, NLP libraries, localization packs, and language-dependent dependencies default to **English-only** configurations. Strip, exclude, or avoid loading multilingual, polyglot, or "glotware" resources unless an explicit exception applies.
+- **Checkpoint Selection Over Model Surgery:** When a model family offers both English-specific and multilingual checkpoints (e.g., `laya` vs `laya-multilingual`, `ModernBERT-base` vs `mmBERT-base`), **always select the English-only checkpoint** as the default. Never load a 100+ language multilingual model when a purpose-built English variant exists — the English checkpoint is smaller, faster, and uses less RAM.
+- **Resource Trimming Hierarchy:** Apply the least invasive optimization that achieves the goal:
+  1. **Checkpoint selection** — choose `en`-only model variant (preferred, zero risk)
+  2. **Config-level exclusion** — set `languages: [en]`, `locale: en_US`, or equivalent config flags to skip loading unused language modules
+  3. **Dependency pruning** — exclude multilingual tokenizer vocabularies, spaCy language packs (`de_core`, `zh_core`, `ja_core`, etc.), NLTK corpora, or ICU locale data at install time (e.g., `pip install spacy[en]`, not `spacy[all]`)
+  4. **Quantized/pruned checkpoints** — prefer GGUF, ONNX, or framework-native quantized English checkpoints that have already been vocabulary-trimmed
+  5. **Manual embedding/vocab pruning** — only as a last resort, and only with full regression testing against the frozen evaluation set
+- **Never Destructively Modify Shared Weights:** Dense transformer models (BERT, Laya, Qwen) share parameters across languages in attention heads and FFN layers. Do NOT attempt to delete "language-specific neurons" or slice embedding matrices without a validated pruning script and regression gate. If the English-only checkpoint doesn't exist, use the multilingual one as-is and file a note to revisit.
+- **Storage & Compute Savings Are Real:** Multilingual tokenizers often carry 250K+ vocab entries vs ~30K for English-only. This bloats embedding tables by 8–10×, increases model file size, wastes GPU/NPU VRAM, and inflates tokenization latency. Selecting the right checkpoint is the single highest-ROI optimization.
+
+### Exception: TTS, ASR & Audio/Speech Workloads
+
+The English-only default does **NOT** apply to:
+  - **Text-to-Speech (TTS):** XTTS v2, Coqui, Piper, or any speech synthesis system. Retain **Hindi (`hi`)** and **Gujarati (`gu`)** language support alongside English for family-facing applications and personal use.
+  - **Automatic Speech Recognition (ASR):** Whisper or equivalent. Keep multilingual capability for Hindi and Gujarati transcription.
+  - **Any application explicitly built for parents or family members** where Hindi or Gujarati is the primary interface language.
+  - **Translation services** when the use case involves `en↔hi` or `en↔gu` translation.
+
+When these exceptions apply, load **only the required languages** (`en`, `hi`, `gu`) — never the full 100+ language pack. For Whisper, use the language-specific or bilingual model if available rather than the full multilingual checkpoint.

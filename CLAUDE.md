@@ -39,3 +39,12 @@ This repository serves as the Single Source of Truth (SoT) for infrastructure, h
   * **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** (Bottom hatch) | **4TB WD_BLACK SN850X NVMe SSD** (`/volume2`, internal M.2 slots inside HDD bays) | **10TB Seagate IronWolf CMR HDD** (`/volume1`, Bay 1) | **8TB Seagate Expansion SMR** (Cold USB 3.0 backup with 15-min udev spindown) | 2.5GbE LAN.
   * **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
 
+### 9. English-Only Resource Optimization
+* Default all models, tokenizers, and NLP pipelines to English-only (`en`) checkpoints. Prune multilingual bloat unless specifically handling TTS/ASR (where Hindi and Gujarati are retained for family applications).
+
+### 10. Automated Model Routing via Jev
+* Use `jev_model_router.py` for automated, sub-150ms task complexity routing:
+  * Fast / deterministic: Luna Light / Claude 3.5 Haiku / Gemini 3.8 Flash (Low)
+  * Everyday engineering: Terra Medium / Claude 3.7 Sonnet (Standard) / Gemini 3.8 Flash (Medium)
+  * Complex / deep debugging: Sol High / Claude 3.7 Sonnet (Thinking) / Gemini 3.8 Flash (High)
+  * Frontier / sustained architecture: Astra / Claude Opus 4.6 (Thinking) / Gemini 3.1 Pro (High)
