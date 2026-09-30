@@ -53,6 +53,15 @@ simulation player). The systems link at the learner handoff but release and
 scale independently. See the [investigation](ci_cd_and_agentic_pipelines/cruxdag_simuverse/cruxdag_simuverse_investigation.md)
 and [durable knowledge](ci_cd_and_agentic_pipelines/cruxdag_simuverse/cruxdag_simuverse_knowledge.md).
 
+## Current Integration Focus: Jev Decision Layer (TypeSafe AI)
+
+Non-autoregressive "System One" classifier integrated into 3 workflows as a
+cost-optimization layer (\$0.042/M input, \$0 output tokens). Adapter with
+circuit breaker live; shadow evaluation complete on 55 radar cards; email
+Tier 3.5 and model router verified on live API (`jev-1.13.0`, ~150ms latency).
+See the [knowledge doc](ci_cd_and_agentic_pipelines/jev_decision_layer_knowledge.md)
+and [investigation](ci_cd_and_agentic_pipelines/jev_decision_layer_investigation.md).
+
 ## 🛠️ Global Execution Protocol for Agents
 When initiating a session:
 1. Reference this `PROJECTS_ROADMAP.md` to identify dependencies, interfaces, and target ports.
