@@ -170,18 +170,22 @@ dhcp-host=0c:79:55:f9:0d:94,192.168.1.233,TCL-RokuTV
 | **All Apple devices** | Captive portal false positive | `captive.apple.com` allowlisted |
 | **All Android devices** | Connectivity check failure | `connectivitycheck.gstatic.com`, `connectivitycheck.android.com` allowlisted |
 
-### Allowlisted Domains (Both Pi-holes — 25 Domains Verified in Sync):
+### Allowlisted Domains (Both Pi-holes — 33 Domains Verified in Sync):
 ```text
+ads.finance.yahoo.com
 androidtvchannels-pa.googleapis.com
 androidtvwatsonfe-pa.googleapis.com
 apple-dns.net
 captive.apple.com
+click.e.progressive.com
 clients3.google.com
 clients4.google.com
 connectivitycheck.android.com
 connectivitycheck.gstatic.com
+finance.yahoo.com
 firebaselogging-pa.googleapis.com
 gateway.icloud.com
+geo.yahoo.com
 hwmsg-as6-azure-usa-o.api.leiniao.com
 mask-api.icloud.com
 mask-h2.icloud.com
@@ -190,13 +194,17 @@ nrdp.prod.ftl.netflix.com
 on-hweudc-o.api.leiniao.com
 on-hwmsg-ds-o.api.leiniao.com
 on-hwuc-conf-o.api.leiniao.com
+opus.analytics.yahoo.com
 pool.ntp.org
 preferences.cid.samba.tv
+progressive.com
+(\.|^)progressive\.com$
 samba.tv
 time.android.com
 time.google.com
 time.windows.com
 tmdeviceapina.tclking.com
+udc.yahoo.com
 ```
 
 ---
