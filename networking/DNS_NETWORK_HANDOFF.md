@@ -4,7 +4,8 @@
 > **Primary Node (DNS + Gigabit Wired DHCP)**: Raspberry Pi 5 (`192.168.1.92` | Broadcom BCM2712, 16GB LPDDR4X, 1GbE Full Duplex `eth0`, Bare-Metal FTL + Unbound)  
 > **Secondary Standby Node (DNS + Standby DHCP)**: UGREEN DXP2800 NAS (`192.168.1.80` | Intel N100, 8GB DDR5, 2.5GbE Hardwired Copper)  
 > **Tertiary Safety Net**: Cloudflare Anycast (`1.1.1.1` / `1.0.0.1`)  
-> **Gateway Router**: AT&T Fiber Gateway BGW320 (`192.168.1.254`)  
+> **Gateway Router**: AT&T Fiber Gateway BGW620-700 (`192.168.1.254`, Wi-Fi 7)  
+> **Wi-Fi 7 & IoT Coexistence Architecture**: [`WIFI7_GATEWAY_AND_IOT_COEXISTENCE_ARCHITECTURE.md`](WIFI7_GATEWAY_AND_IOT_COEXISTENCE_ARCHITECTURE.md)  
 > **Status**: 🟢 **Production Verified (Dedicated Appliance Model)**  
 > **Last Verified**: 2026-09-07  
 > **SLO Enforcement**: Strict — Any violation is a **SEV-1 or SEV-2 Incident**. Network availability is the single highest priority.
