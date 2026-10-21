@@ -117,6 +117,7 @@ When an entire network reboots simultaneously, no client has an assigned IP addr
 | **Firewall** | Reflexive ACL | **Off** | Prevents dropping incoming unsolicited DHCP response packets |
 | **Firewall** | Drop ICMP Echo LAN | **Off** | Allows internal ICMP health probes across home nodes |
 | **Firewall** | SIP ALG | **On** | Rewrites SIP headers for carrier Wi-Fi Calling |
+| **LAN / IPv6**| IPv6 LAN & DHCPv6 | **On** | Answers client Router Solicitations in <5ms, eliminating 33s macOS `AUTOMATIC-V6` hang across all household Macs |
 | **Wi-Fi** | Operation Mode | **Max Interoperability** | Disables MLO on 2.4 GHz; enforces clean 802.11g/n framing |
 | **2.4 GHz Radio** | Mode (`standard`) | **G/N** (`bgn`) | Eliminates Wi-Fi 7 AX/BE beacons crashing IoT chips |
 | **2.4 GHz Radio** | Security | **WPA2** (`wpaversion=2`)| Eliminates PMF rejection loops on smart plugs |
