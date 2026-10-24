@@ -7,8 +7,17 @@
 > **Gateway Router**: AT&T Fiber Gateway BGW620-700 (`192.168.1.254`, Wi-Fi 7)  
 > **Wi-Fi 7 & IoT Coexistence Architecture**: [`WIFI7_GATEWAY_AND_IOT_COEXISTENCE_ARCHITECTURE.md`](WIFI7_GATEWAY_AND_IOT_COEXISTENCE_ARCHITECTURE.md)  
 > **Status**: 🟢 **Production Verified (Dedicated Appliance Model)**  
-> **Last Verified**: 2026-09-07  
+> **Last Verified**: 2026-10-23 (Post-Killswitch Hybrid Architecture)  
 > **SLO Enforcement**: Strict — Any violation is a **SEV-1 or SEV-2 Incident**. Network availability is the single highest priority.
+
+---
+
+> [!IMPORTANT]
+> **Post-Session Architectural Correction (2026-10-23)**:  
+> The original design assumed Raspberry Pi 5 (`192.168.1.92`) could reliably serve authoritative DHCP for all whole-home wireless clients.  
+> **Empirical Testing Refutation**: On October 23, 2026, forensic investigation revealed that AT&T BGW620 firmware `5.40.4` enforces an internal Wi-Fi software bridge anti-spoofing filter that silently drops incoming wireless station `0.0.0.0` DHCP broadcast frames when gateway native DHCP is disabled (`Reason: IP Source Address DISCARD`). This caused waking and cold-booting Apple and Android devices on `Rimjhim` Wi-Fi to lose connectivity (`169.254.x.x` self-assigned IP, yellow `!` captive stall).  
+> **Production Fix**: The DHCP Killswitch was pulled to restore **Authoritative DHCP to the AT&T BGW620 Gateway** (`192.168.1.254`, pool `.64`–`.253`). A decoupled **Zero Blast-Radius Hybrid Architecture** was deployed: the gateway handles 100% of DHCP and native DNS for roommates/IoT, while personal developer devices manually point to Pi-hole (`192.168.1.92`, `192.168.1.80`) with IPv6 Link-Local.  
+> See the complete investigation journey in [`2026_10_23_ATT_BGW620_BRIDGE_DHCP_KILLSWITCH_INVESTIGATION.md`](2026_10_23_ATT_BGW620_BRIDGE_DHCP_KILLSWITCH_INVESTIGATION.md) and durable architecture in [`ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md`](ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md).
 
 ---
 
@@ -96,7 +105,9 @@ edns-buffer-size: 1232
 
 ## 🔗 3. Single Authoritative DHCP Architecture & Scope Hardening
 
-### Topology & Forensic Reality:
+> **Post-Session Correction (2026-10-23)**: Running off-gateway DHCP on Pi 5 was deprecated following the discovery of the BGW620 Wi-Fi bridge discard bug (`Reason: IP Source Address DISCARD`). Authoritative DHCP is now handled natively on the **AT&T BGW620 Gateway** (`192.168.1.254`, pool `.64`–`.253`). DHCP on Pi 5 is **deactivated** (`[dhcp] active = false`). For the current operational architecture, see [ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md](ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md).
+
+### Historical Baseline (Prior to Oct 23 Killswitch):
 - **Sole DHCP Server**: Raspberry Pi 5 (`192.168.1.92`) — Bare-metal `pihole-FTL` on Gigabit Ethernet (`eth0`).
   - **Dynamic Pool**: `192.168.1.64` – `192.168.1.250` (187 non-overlapping addresses).
   - **Interface Policy**: DHCP served strictly on `eth0` (`no-dhcp-interface=wlan0`).

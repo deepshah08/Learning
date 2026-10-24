@@ -19,7 +19,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **09** | **Stirling-PDF Utility** | Tools / Productivity | 🟢 Production | Port `8083` (Docker Offline OCR Suite) | 1/1 Test Passing ([Docs](raspberrypi/stirling_pdf/README.md)) |
 | **10** | **Intrusion Monitor** | Security / Defense | 🟢 Production | Scapy Frame Sniffer + UFW Tailing Daemon | 5/5 Tests Passing ([Docs](raspberrypi/intrusion_monitor/README.md)) |
 | **11** | **Dead Man's Switch** | Security / Crypto | 🟢 Production | Shamir's Secret Sharing ($M_{521}$) Vault | 2/2 Tests Passing ([Docs](raspberrypi/deadmans_switch/README.md)) |
-| **12** | **Pi-hole v6 Primary DNS & Authoritative DHCP** | Network / Privacy | 🟢 Production | Port `53`, `67/udp`, `80` (Pi 5 Gigabit Wired `eth0` + Unbound) | 2/2 Tests Passing ([Docs](raspberrypi/pihole/README.md)) |
+| **12** | **Pi-hole v6 Primary DNS (Hybrid Architecture)** | Network / Privacy | 🟢 Production | Port `53`, `80` (Pi 5 Gigabit `eth0` + Unbound) · DHCP on BGW620 | 2/2 Tests Passing ([Docs](raspberrypi/pihole/README.md) · [MDS](networking/ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md)) |
 | **13** | **n8n Workflow Automation** | Automation / Pipelines | 🟢 Production | Port `5678` (Docker Workflow Engine) | 1/1 Test Passing ([Docs](raspberrypi/n8n/README.md)) |
 | **14** | **Market Sentiment Tracker** | Finance / News RAG | 🟢 Production | RSS + VADER Analyzer + Ollama LLM | 5/5 Tests Passing ([Docs](raspberrypi/market_sentiment/README.md)) |
 | **15** | **Financial Pipeline Dashboard** | Finance / Analytics | 🟢 Production | Statement Parser + SQLite + Portfolio NAV | 2/2 Tests Passing ([Docs](raspberrypi/financial_pipeline/README.md)) |
@@ -27,7 +27,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **17** | **Plex + *Arr Automation Stack**| Media Automation | 🟢 Production | Ports `32400`, `9696`, `7878`, `8989`, `8080` (NAS) | 10/10 Tests Passing ([Docs](ugreen_nas/arr_stack/README.md)) |
 | **18** | **Headless Jules Agent Worker**| Agent Swarm / CI/CD | 🟢 Production | Background Review Daemon (`worker.py`) | 5/5 Tests Passing ([Docs](raspberrypi/agent_worker/README.md)) |
 | **19** | **Unbound Root Recursive DNS**| Network / Privacy | 🟢 Production | Port `127.0.0.1#5335` (DNSSEC Root Anchors) | Verified Operational ([Docs](raspberrypi/unbound/README.md)) |
-| **20** | **Secondary Standby Pi-hole & DHCP Server** | Network / Redundancy | 🟢 Production | Port `53`, `67/udp`, `8089` (UGREEN NAS 2.5GbE) | Verified Operational ([Docs](ugreen_nas/dhcp_server/README.md)) |
+| **20** | **Secondary Standby Pi-hole DNS** | Network / Redundancy | 🟢 Production | Port `53`, `8089` (UGREEN NAS 2.5GbE) · Standby DHCP Off | Verified Operational ([Docs](ugreen_nas/dhcp_server/README.md) · [MDS](networking/ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md)) |
 | **21** | **Vaultwarden Password Manager** | Security / Identity | 🟢 Production | Port `8085`, `3012` (UGREEN NAS) | Verified Operational ([Docs](ugreen_nas/vaultwarden/README.md)) |
 | **22** | **Homepage Unified Dashboard** | Homelab Management | 🟢 Production | Port `3000` (UGREEN NAS) | Verified Operational ([Docs](ugreen_nas/homepage/README.md)) |
 | **23** | **macOS SMB File Sharing** | Storage / Transfers | 🟢 Production | Port `445` (`smb://192.168.1.80`) | Verified Operational ([Docs](ugreen_nas/smb/README.md)) |
@@ -61,6 +61,10 @@ circuit breaker live; shadow evaluation complete on 55 radar cards; email
 Tier 3.5 and model router verified on live API (`jev-1.13.0`, ~150ms latency).
 See the [knowledge doc](ci_cd_and_agentic_pipelines/jev_decision_layer_knowledge.md)
 and [investigation](ci_cd_and_agentic_pipelines/jev_decision_layer_investigation.md).
+
+## Current Production Baseline: Decoupled Zero Blast-Radius Hybrid DNS (2026-10-23)
+
+Following the discovery of the AT&T BGW620 Wi-Fi bridge discard bug (`Reason: IP Source Address DISCARD`), authoritative DHCP was restored to the **AT&T BGW620 Gateway** (`192.168.1.254`, pool `.64`–`.253`). DHCP on Pi 5 is deactivated. A decoupled hybrid model is deployed: gateway handles 100% of DHCP/routing for all devices (zero bridge drops, instant wake-up), while personal developer endpoints configure Pi-hole DNS (`192.168.1.92`, `192.168.1.80`) with IPv6 Link-Local. Zero household blast radius during homelab maintenance. See the [investigation](networking/2026_10_23_ATT_BGW620_BRIDGE_DHCP_KILLSWITCH_INVESTIGATION.md) and [durable knowledge](networking/ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md).
 
 ## 🛠️ Global Execution Protocol for Agents
 When initiating a session:
