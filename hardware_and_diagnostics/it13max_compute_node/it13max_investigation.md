@@ -97,3 +97,52 @@ reports, and bytecode are excluded. The paired MDS files are in the Learning rep
 - Implementation and review evidence: [private IT13 source repository](https://github.com/deepshah08/it13max)
 - Model selection record: [`it13-model-audit.md`](https://github.com/deepshah08/it13max/blob/main/it13-model-audit.md)
 - Existing hardware and homelab records: [IT13 Max compute-node folder](./README.md)
+
+---
+
+## 10. 2026-10-27 Hardware & Kernel 7.0 Upgrade Investigation
+
+### 10.1 Trigger & Context
+
+During a homelab-wide maintenance cycle, two major changes were applied to Node 3:
+1. **OS Upgrade**: Upgraded from Ubuntu Server 24.04 (Kernel 6.8) to Ubuntu Server 26.04.1 LTS (Kernel `7.0.0-38-generic`).
+2. **Memory Upgrade**: Evaluated memory placement across nodes and upgraded IT13 Max from 16 GB to **32 GB DDR5 Dual-Channel** (1x 16GB Kingston OEM + 1x 16GB Aurora A3 SODIMM module).
+
+Following the reboot into Kernel 7.0, the user observed that the front power LED was rapidly flickering/pulsing instead of remaining solid blue, raising concerns of hardware failure or loose power.
+
+### 10.2 RAM Allocation Trade-Off Analysis
+
+| Host | CPU & Role | Memory Decision | Rationale |
+|---|---|---|---|
+| **GEEKOM IT13 Max** (`.155`) | Intel Core Ultra 9 185H (16C/22T), Arc iGPU + NPU | **32 GB DDR5** (Dual-Channel) | Primary compute node running Qdrant vector DB, Paperless OCR, FastAPI gateway, and local LLM/embedding inference. Memory bandwidth and capacity bottlenecked here. |
+| **OrigiMagic Aurora A3** | AMD Ryzen 7 8745HS (8C/16T), Radeon 780M | **16 GB DDR5** (Single SODIMM) | Secondary compute / worker node; 16 GB is sufficient for headless worker workloads; can accept another 16GB module later. |
+| **UGREEN DXP2800** (`.80`) | Intel N100 (4C/4T) | **8 GB DDR5** (Single SODIMM) | Storage appliance; normal workload sits at ~63% (5.0 GB used). Adding RAM does not solve single-spindle mechanical HDD seek contention. |
+
+### 10.3 Power LED Flickering Investigation
+
+| # | Hypothesis | Test & Evidence | Outcome |
+|---|---|---|---|
+| 1 | DC barrel jack loose or power supply ripple | Voltage steady, zero ACPI power drop events in `dmesg`, continuous system uptime maintained. | Refuted |
+| 2 | RAM mismatch or memory bus instability | `memtester 128M 1` passed all 19 patterns; EDAC reported `HardwareCorrupted: 0 kB`, `UE=0, CE=0`. | Refuted |
+| 3 | Linux 7.0 / Meteor Lake Modern Standby (S0ix / C10) | Rolled back to Kernel 6.8 via `grub-reboot 1` → LED immediately turned 100% solid. Rebooted back to Kernel 7.0 → LED resumed flickering during idle. | Confirmed |
+
+### 10.4 Root Cause & Mechanism
+
+In Linux Kernel 7.0, Meteor Lake power management enters deep package C10 idle and turns off display engine clocks (D3cold) when running headless. The GEEKOM Embedded Controller (EC) interprets this deep modern standby state as S0ix low-power sleep, pulsing the power LED to indicate power-saving mode.
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│               METEOR LAKE HEADLESS IDLE LED SIGNALING                  │
+├────────────────────┬───────────────────────────────────────────────────┤
+│ Kernel 6.8 State   │ Display pipeline stays active; Package C2/C3 idle │
+│                    │ -> EC keeps front LED 100% SOLID                  │
+├────────────────────┼───────────────────────────────────────────────────┤
+│ Kernel 7.0 State   │ Display pipeline drops to D3cold; Package C10 idle│
+│                    │ -> EC pulses/flickers LED (Benign S0ix Idle)      │
+└────────────────────┴───────────────────────────────────────────────────┘
+```
+
+### 10.5 Resolution & Validation
+
+- Confirmed zero hardware defects. User approved running on Ubuntu 26.04.1 LTS with Kernel 7.0.
+- All 8 Docker services (`it13-api`, `gateway`, `paperless-web`, `postgres`, `redis`, `qdrant`, `changedetection`, `fetch-proxy`) verified running and responsive.

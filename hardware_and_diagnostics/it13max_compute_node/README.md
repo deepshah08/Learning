@@ -32,7 +32,7 @@ flowchart TD
     end
 
     subgraph ComputeNode ["🚀 Tier 3: Pure Compute & Local AI"]
-        IT13["GEEKOM IT13 Max Mini PC<br/>• Intel Core Ultra 9 185H (16C / 22T)<br/>• Intel Arc 8 Xe-Cores iGPU + NPU<br/>• 16GB DDR5 RAM + 1TB NVMe SSD<br/>• IP: 192.168.1.155 (it13_max.lan)<br/>• Unthrottled AI, Docker, & Transcoding"]
+        IT13["GEEKOM IT13 Max Mini PC<br/>• Intel Core Ultra 9 185H (16C / 22T)<br/>• Intel Arc 8 Xe-Cores iGPU + NPU<br/>• 32GB DDR5 RAM (Dual-Channel) + 1TB NVMe SSD<br/>• IP: 192.168.1.155 (it13_max.lan)<br/>• Unthrottled AI, Docker, & Transcoding"]
     end
 
     Mac -->|"SSH (&lt;25ms multiplexed)"| Pi5
@@ -57,7 +57,7 @@ flowchart TD
 | **Physical MAC Address** | `f8:cf:52:eb:88:e0` | Intel Wi-Fi Adapter hardware address |
 | **Processor (CPU)** | Intel Core Ultra 9 185H | 16 Cores / 22 Threads (6P + 8E + 2LP-E, up to 5.1 GHz) |
 | **GPU / AI Acceleration** | Intel Arc iGPU (8 Xe-cores) + NPU | OpenVINO, DirectML, Intel oneAPI (`/dev/dri`) |
-| **System Memory (RAM)** | 16 GB DDR5 | High-bandwidth unified memory for local LLM inference |
+| **System Memory (RAM)** | 32 GB DDR5 (Dual-Channel 4800 MT/s) | High-bandwidth unified memory for local LLM inference |
 | **Primary Storage** | 1 TB Gen4 NVMe PCIe SSD | High-speed hot tier for Docker containers & model weights |
 | **Network Interfaces** | Wi-Fi 6E/7 + 2.5GbE RJ45 | Default Wi-Fi connection on `192.168.1.0/24` subnet |
 | **Remote Access Ports** | Port 22 (SSH), Port 3389 (RDP) | Headless orchestration pipeline |
@@ -96,7 +96,7 @@ Run `scripts/02_watcher_probe.sh` on the Mac:
 ### Gate 4: Cutover to Bare-Metal Linux
 Once Gate 2 and Gate 3 succeed:
 - Format the 1TB NVMe to `ext4` / `btrfs`.
-- Deploy Ubuntu Server 24.04 LTS with Linux kernel 6.8+.
+- Deploy Ubuntu Server 26.04.1 LTS with Linux kernel 7.0+.
 - Configure OpenSSH key-based authentication with `~/.ssh/controlmasters/%r@%h:%p`.
 
 ---

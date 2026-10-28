@@ -38,14 +38,25 @@ This repository serves as the Single Source of Truth (SoT) for infrastructure, h
 * Cross-reference all specs with `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md`:
   * **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** (Bottom hatch) | **4TB WD_BLACK SN850X NVMe SSD** (`/volume2`, internal M.2 slots inside HDD bays) | **10TB Seagate IronWolf CMR HDD** (`/volume1`, Bay 1) | **8TB Seagate Expansion SMR** (Cold USB 3.0 backup with 15-min udev spindown) | 2.5GbE LAN.
   * **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
+  * **GEEKOM IT13 Max (`192.168.1.155`):** Intel Core Ultra 9 185H (16C/22T) | **32 GB DDR5 RAM** (Dual-Channel 4800 MT/s) | 1TB Gen4 NVMe SSD | Ubuntu Server 26.04.1 LTS (Kernel 7.0.0-38) | Wi-Fi 6E/7 + 2.5GbE.
+  * **OrigiMagic Aurora A3:** AMD Ryzen 7 8745HS (8C/16T Zen 4) | **16 GB DDR5 RAM** | 1TB Gen4 NVMe SSD | Wi-Fi 6E/7 + 2.5GbE.
 
-### 9. Modern Model Tiering ($\ge 3.5$ Only)
+### 9. UGREEN NAS Staggered Upgrade & Mechanical I/O Isolation Mandate
+* **Zero Mass Upgrades of Media/Scanner Stacks:** NEVER batch-upgrade or mass-recreate containers that index or crawl bulk storage simultaneously (`plex`, `radarr`, `sonarr`, `bazarr`, `calibre-web-automated`, `shelfmark`).
+* Mass restarts trigger simultaneous full-library file crawls and metadata hashing across `/volume1`, inducing mechanical head thrashing, thermal spikes (chassis fans ramp to 100%), I/O wait saturation, and RAM/swap exhaustion that crashes or starves host-level daemons (`sshd`, UGOS Web UI port 9999).
+* **Sequential Upgrade Rule:** Upgrade media stacks one container at a time. Verify the container's post-startup scan completes or settles before touching the next service.
+* **UGOS Pro Base OS Mutation Prohibition:** `apt-get upgrade` is strictly blocked by UGOS Pro vendor policy. NEVER attempt to force base OS package upgrades on the NAS host; all system updates must be applied via the native UGOS Pro Web UI Firmware Update channel.
+
+### 10. Meteor Lake Linux 7.0 Modern Standby / Power LED Directive
+* On the GEEKOM IT13 Max (Intel Core Ultra 9 185H), Linux Kernel 7.0 / S0ix modern standby causes the front power LED to pulse/flicker during deep package C10 idle when running headless without an active display output. This is benign, expected power-saving signaling from the Embedded Controller (EC) and does NOT represent an electrical fault, power brick ripple, or RAM failure.
+
+### 11. Modern Model Tiering ($\ge 3.5$ Only)
 * All external Gemini API queries, architecture ideation, reviews, and brainstorming MUST strictly use models $\ge 3.5$ (e.g. `gemini-3.8-flash`, `gemini-3.7-flash`, `gemini-3.1-pro`, `gemini-3.5-flash`). Permanently ignore and reject all legacy models $< 3.5$.
 
-### 10. English-Only Resource Optimization
+### 12. English-Only Resource Optimization
 * Default all models, tokenizers, and NLP pipelines to English-only (`en`) checkpoints. Prune multilingual bloat unless specifically handling TTS/ASR (where Hindi and Gujarati are retained for family applications).
 
-### 11. Automated Model Routing via Jev
+### 13. Automated Model Routing via Jev
 * Use `jev_model_router.py` for automated, sub-150ms task complexity routing to Antigravity model tiers:
   * Fast / deterministic: `Gemini 3.8 Flash (Low)` / `flash_lite`
   * Everyday engineering: `Gemini 3.8 Flash (Medium)` / `flash`

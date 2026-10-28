@@ -74,7 +74,7 @@ container cleanup, and maintenance remain coordinated.
 
 | Alternative | Why it was rejected or deferred |
 |---|---|
-| Run independent heavy daemons | 16 GiB shared CPU/Arc memory and measured workload gates require one owner to prevent OCR, inference, browser, and builds from colliding |
+| Run independent heavy daemons | 32 GiB shared CPU/Arc memory (Dual-Channel DDR5 4800 MT/s) and measured workload gates require one owner to prevent OCR, inference, browser, and builds from colliding |
 | Replace Qwen/BGE or add a specialist immediately | No representative labelled evaluation corpus established a concrete weakness; keep baseline until a predeclared quality gate can be measured |
 | Use Spark-X2.5 as default | Q4 ran within the cap but adds an Ollama/llama.cpp runtime and lacks a fair held-out workflow comparison; BF16 official tag exceeded the cap |
 | Adopt Jev/Laya from published results | The synthetic benchmark is only a screening signal; Laya's MLX latency does not transfer to Intel and neither is validated on private IT13 data |
@@ -132,6 +132,14 @@ add hooks, or solicit radar labels just to create a pilot.
 | Event receiver unavailable | Retain durable events and retry; consumers must deduplicate `event_id` |
 | Maintenance cannot drain or restore validation fails | Keep explicit maintenance/recovery state; do not overwrite live state from a test bundle |
 | Small or biased evaluation corpus | Do not claim personal-use model accuracy or promote a specialist |
+
+## Host Lifecycle & Hardware Invariants (2026-10-27)
+
+| Parameter | Operational Invariant | Technical Detail |
+|---|---|---|
+| **System Memory** | 32 GB DDR5 Dual-Channel | 1x 16GB Kingston OEM (Slot 1) + 1x 16GB Aurora A3 module (Slot 2), negotiated at 4800 MT/s. Validated with `memtester 128M 1` and EDAC (`UE=0, CE=0`). Headroom accommodates concurrent vector search and local inference. |
+| **Operating System** | Ubuntu Server 26.04.1 LTS | Linux Kernel `7.0.0-38-generic`. Package updates managed via standard APT. |
+| **Power LED Behavior** | Headless S0ix Idle Breathing | In Linux 7.0, Meteor Lake enters deep package C10 idle and powers down the display engine (D3cold) when running headless. The GEEKOM Embedded Controller (EC) pulses/flickers the front power LED. This is a benign, expected power-saving indicator and does not signify hardware fault. |
 
 ## Current Completion State
 

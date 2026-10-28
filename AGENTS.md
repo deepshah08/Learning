@@ -33,6 +33,8 @@
 - **Mandatory SSOT Inventory Reference:** All hardware facts MUST be cross-referenced directly with `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md` or verified via live host commands (`free -h`, `lscpu`, `lsblk`) before making comparisons or statements.
   - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** | 10TB Seagate IronWolf CMR HDD (`/volume1`) | 4TB WD_BLACK SN850X NVMe SSD (`/volume2`) | 2.5GbE Wired Ethernet.
   - **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
+  - **GEEKOM IT13 Max (`192.168.1.155`):** Intel Core Ultra 9 185H (16C/22T) | **32 GB DDR5 RAM** (Dual-Channel 4800 MT/s) | 1TB Gen4 NVMe SSD | Ubuntu Server 26.04.1 LTS (Kernel 7.0.0-38) | Wi-Fi 6E/7 + 2.5GbE.
+  - **OrigiMagic Aurora A3:** AMD Ryzen 7 8745HS (8C/16T Zen 4) | **16 GB DDR5 RAM** | 1TB Gen4 NVMe SSD | Wi-Fi 6E/7 + 2.5GbE.
 
 ---
 
@@ -45,6 +47,14 @@
   - UGOS Pro Docker Pi-hole must use bridge mode (`192.168.1.80:53:53`), never `network_mode: host` (conflicts with UGOS host `dnsmasq` PID 1119).
 - **BitTorrent State & Conntrack Safety:** In `libtorrent`/`qBittorrent`, always enforce TCP-only transport (`Session\BittorrentProtocol=1`) to eliminate connectionless uTP UDP NAT state explosions in router tables. Enforce strict 1:1 seed ratio (`GlobalMaxRatio=1.0`) with auto-pause (`GlobalMaxRatioAction=0`).
 - **AI & Worker Sandboxing:** Any local AI, transcription (Whisper), speech synthesis (XTTS v2), or background review worker daemon must be throttled with strict limits (`Nice=15`, `CPUQuota=50%`, `MemoryMax=1G`). Never run continuous un-throttled CPU-bound loops on the Pi 5.
+- **UGREEN NAS Staggered Container Upgrade & Mechanical I/O Isolation Mandate:**
+  - The UGREEN DXP2800 NAS is constrained by an Intel N100 (4C/4T) with 8 GB DDR5 RAM and a single 10TB Seagate IronWolf mechanical HDD (`/volume1`).
+  - **Zero Mass Upgrades of Media/Scanner Stacks:** NEVER batch-upgrade or mass-recreate containers that index or crawl bulk storage simultaneously (`plex`, `radarr`, `sonarr`, `bazarr`, `calibre-web-automated`, `shelfmark`).
+  - Mass restarts trigger simultaneous full-library file crawls and metadata hashing across `/volume1`, inducing mechanical head thrashing, thermal spikes (chassis fans ramp to 100%), I/O wait saturation, and RAM/swap exhaustion that crashes or starves host-level daemons (`sshd`, UGOS Web UI port 9999).
+  - **Sequential Upgrade Rule:** Upgrade media stacks one container at a time. Verify the container's post-startup scan completes or settles before touching the next service.
+  - **UGOS Pro Base OS Mutation Prohibition:** `apt-get upgrade` is strictly blocked by UGOS Pro vendor policy. NEVER attempt to force base OS package upgrades on the NAS host; all system updates must be applied via the native UGOS Pro Web UI Firmware Update channel.
+- **Meteor Lake Linux 7.0 Modern Standby / Power LED Directive:**
+  - On the GEEKOM IT13 Max (Intel Core Ultra 9 185H), Linux Kernel 7.0 / S0ix modern standby causes the front power LED to pulse/flicker during deep package C10 idle when running headless without an active display output. This is benign, expected power-saving signaling from the Embedded Controller (EC) and does NOT represent an electrical fault, power brick ripple, or RAM failure.
 - **Monorepo Namespace Cleanliness:** In repositories where multiple subdirectories are in `pythonpath` (`pytest.ini`), avoid generic names like `config.py` in subproject roots (use project-specific prefixes like `worker_config.py` or `immich_config.py`) to prevent module cache poisoning in `sys.modules`.
 
 ---

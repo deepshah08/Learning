@@ -8,21 +8,21 @@
 
 ## 🏗️ 1. Physical Hardware Inventory
 
-| Specification | Node 1: UGREEN DXP2800 NAS | Node 2: Raspberry Pi 5 (16GB) | Node 3: GEEKOM IT13 Max |
-| :--- | :--- | :--- | :--- |
-| **Processor (CPU)** | Intel N100 (4C/4T, ≤3.4GHz) | Broadcom BCM2712 (4C @ 2.4GHz) | Intel Core Ultra 9 185H (16C/22T) |
-| **GPU / Transcoding** | Intel UHD 24EU QuickSync | VideoCore VII (Display only) | Intel Arc 8 Xe-Cores iGPU + NPU |
-| **System Memory (RAM)** | 8 GB DDR5 | 16 GB LPDDR4X | 16 GB DDR5 |
-| **Primary Storage** | 10TB Seagate IronWolf (CMR) | 128GB MicroSD (101GB Free / 10%) | 1TB Gen4 NVMe PCIe SSD |
-| **High-Speed Solid-State Tier** | 4TB WD_BLACK SN850X (NVMe) | N/A | 1TB Gen4 NVMe PCIe SSD |
-| **Attached Secondary Storage** | N/A (Decoupled to Pi 5) | 8TB Seagate Expansion (SMR) | N/A |
-| **Physical M.2 / RAM Layout** | M.2 Slots: Inside HDD Trays | Bottom Hatch: SODIMM RAM Slot | Dual M.2 PCIe / SODIMM DDR5 Slots |
-| **SMR Drive Status** | N/A (Decoupled to Pi 5) | 🟢 MOUNTED (`/mnt/media-storage`) | N/A |
-| **Network Interface** | 2.5 Gigabit Ethernet (2.5GbE) | 1GbE (`eth0` default) + Wi-Fi 5 | Wi-Fi 6E/7 + 2.5GbE LAN |
-| **Local IP Address** | `192.168.1.80` | `192.168.1.116` (`eth0`) / `.92` | `192.168.1.155` (`it13_max.lan`) |
-| **Tailscale Node Name** | Subnet Routed (`.80`) | `pi5-media-nas` (`100.68.196.14`)| `it13-max-compute` (Planned) |
-| **Operating System** | UGOS Pro (Debian 12 Kernel) | Raspberry Pi OS (Debian 13) | Ubuntu Server 24.04 / Win11 Pro |
-| **SSH Session Pipeline** | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) |
+| Specification | Node 1: UGREEN DXP2800 NAS | Node 2: Raspberry Pi 5 (16GB) | Node 3: GEEKOM IT13 Max | Node 4: OrigiMagic Aurora A3 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Processor (CPU)** | Intel N100 (4C/4T, ≤3.4GHz) | Broadcom BCM2712 (4C @ 2.4GHz) | Intel Core Ultra 9 185H (16C/22T) | AMD Ryzen 7 8745HS (8C/16T, ≤4.9GHz) |
+| **GPU / Transcoding** | Intel UHD 24EU QuickSync | VideoCore VII (Display only) | Intel Arc 8 Xe-Cores iGPU + NPU | AMD Radeon 780M (RDNA 3, 12 CUs) |
+| **System Memory (RAM)** | 8 GB DDR5 | 16 GB LPDDR4X | **32 GB DDR5 (Dual-Channel 4800 MT/s)** | 16 GB DDR5 (SODIMM) |
+| **Primary Storage** | 10TB Seagate IronWolf (CMR) | 128GB MicroSD (101GB Free / 10%) | 1TB Gen4 NVMe PCIe SSD | 1TB Gen4 NVMe PCIe SSD |
+| **High-Speed Solid-State Tier** | 4TB WD_BLACK SN850X (NVMe) | N/A | 1TB Gen4 NVMe PCIe SSD | 1TB Gen4 NVMe PCIe SSD |
+| **Attached Secondary Storage** | N/A (Decoupled to Pi 5) | 8TB Seagate Expansion (SMR) | N/A | N/A |
+| **Physical M.2 / RAM Layout** | M.2 Slots: Inside HDD Trays | Bottom Hatch: SODIMM RAM Slot | Dual M.2 PCIe / Dual SODIMM Slots | Dual M.2 PCIe / Dual SODIMM Slots |
+| **SMR Drive Status** | N/A (Decoupled to Pi 5) | 🟢 MOUNTED (`/mnt/media-storage`) | N/A | N/A |
+| **Network Interface** | 2.5 Gigabit Ethernet (2.5GbE) | 1GbE (`eth0` default) + Wi-Fi 5 | Wi-Fi 6E/7 + 2.5GbE LAN | Wi-Fi 6E/7 + 2.5GbE LAN |
+| **Local IP Address** | `192.168.1.80` | `192.168.1.116` (`eth0`) / `.92` | `192.168.1.155` (`it13_max.lan`) | DHCP (Wi-Fi / Ethernet Staging) |
+| **Tailscale Node Name** | Subnet Routed (`.80`) | `pi5-media-nas` (`100.68.196.14`)| `it13-max-compute` (Planned) | Standby Node |
+| **Operating System** | UGOS Pro (Debian 12 Kernel) | Raspberry Pi OS (Debian 13) | Ubuntu Server 26.04.1 LTS (Kernel 7.0) | Linux / Windows |
+| **SSH Session Pipeline** | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | Direct / Staging |
 
 ---
 

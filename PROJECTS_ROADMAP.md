@@ -66,6 +66,10 @@ and [investigation](ci_cd_and_agentic_pipelines/jev_decision_layer_investigation
 
 Following the discovery of the AT&T BGW620 Wi-Fi bridge discard bug (`Reason: IP Source Address DISCARD`), authoritative DHCP was restored to the **AT&T BGW620 Gateway** (`192.168.1.254`, pool `.64`–`.253`). DHCP on Pi 5 is deactivated. A decoupled hybrid model is deployed: gateway handles 100% of DHCP/routing for all devices (zero bridge drops, instant wake-up), while personal developer endpoints configure Pi-hole DNS (`192.168.1.92`, `192.168.1.80`) with IPv6 Link-Local. Zero household blast radius during homelab maintenance. See the [investigation](networking/2026_10_23_ATT_BGW620_BRIDGE_DHCP_KILLSWITCH_INVESTIGATION.md) and [durable knowledge](networking/ATT_BGW620_GATEWAY_ARCHITECTURE_AND_HYBRID_DNS_KNOWLEDGE.md).
 
+## Current Production Baseline: NAS Staggered Container Upgrade Waves & IT13 Max 32GB RAM (2026-10-27)
+
+Following the discovery of mass container restarts causing 100% mechanical disk thrashing on `/volume1` and starvation of host management daemons (`sshd`, UGOS Web UI) on the UGREEN DXP2800 NAS, a 4-wave sequential container upgrade protocol was established ([investigation](ugreen_nas/nas_container_upgrades_investigation.md) · [durable knowledge](ugreen_nas/nas_container_upgrades_knowledge.md)). In the same maintenance window, Node 3 (GEEKOM IT13 Max) was upgraded to 32GB DDR5 dual-channel memory, updated to Ubuntu Server 26.04.1 LTS (Kernel 7.0.0-38), and front LED flickering was diagnosed as benign Meteor Lake S0ix modern standby C10 package idle ([investigation](hardware_and_diagnostics/it13max_compute_node/it13max_investigation.md) · [durable knowledge](hardware_and_diagnostics/it13max_compute_node/it13max_knowledge.md)).
+
 ## 🛠️ Global Execution Protocol for Agents
 When initiating a session:
 1. Reference this `PROJECTS_ROADMAP.md` to identify dependencies, interfaces, and target ports.
