@@ -10,19 +10,19 @@
 
 | Specification | Node 1: UGREEN DXP2800 NAS | Node 2: Raspberry Pi 5 (16GB) | Node 3: GEEKOM IT13 Max | Node 4: OrigiMagic Aurora A3 |
 | :--- | :--- | :--- | :--- | :--- |
-| **Processor (CPU)** | Intel N100 (4C/4T, ≤3.4GHz) | Broadcom BCM2712 (4C @ 2.4GHz) | Intel Core Ultra 9 185H (16C/22T) | AMD Ryzen 7 8745HS (8C/16T, ≤4.9GHz) |
+| **Processor (CPU)** | Intel N100 (4C/4T, ≤3.4GHz) | Broadcom BCM2712 (4C @ 2.4GHz) | Intel Core Ultra 9 185H (16C/22T) | AMD Ryzen 7 8745HS (8C/16T, ≤4.9GHz Zen 4) |
 | **GPU / Transcoding** | Intel UHD 24EU QuickSync | VideoCore VII (Display only) | Intel Arc 8 Xe-Cores iGPU + NPU | AMD Radeon 780M (RDNA 3, 12 CUs) |
-| **System Memory (RAM)** | 8 GB DDR5 | 16 GB LPDDR4X | **32 GB DDR5 (Dual-Channel 4800 MT/s)** | 16 GB DDR5 (SODIMM) |
-| **Primary Storage** | 10TB Seagate IronWolf (CMR) | 128GB MicroSD (101GB Free / 10%) | 1TB Gen4 NVMe PCIe SSD | 1TB Gen4 NVMe PCIe SSD |
+| **System Memory (RAM)** | 8 GB DDR5 | 16 GB LPDDR4X | **32 GB DDR5 (Dual-Channel 4800 MT/s)** | **16 GB DDR5 (SODIMM 4800 MT/s, 15.1GB usable)** |
+| **Primary Storage** | 10TB Seagate IronWolf (CMR) | 128GB MicroSD (101GB Free / 10%) | 1TB Gen4 NVMe PCIe SSD (888GB Free) | 1TB Gen4 NVMe PCIe SSD (816GB Free) |
 | **High-Speed Solid-State Tier** | 4TB WD_BLACK SN850X (NVMe) | N/A | 1TB Gen4 NVMe PCIe SSD | 1TB Gen4 NVMe PCIe SSD |
 | **Attached Secondary Storage** | N/A (Decoupled to Pi 5) | 8TB Seagate Expansion (SMR) | N/A | N/A |
 | **Physical M.2 / RAM Layout** | M.2 Slots: Inside HDD Trays | Bottom Hatch: SODIMM RAM Slot | Dual M.2 PCIe / Dual SODIMM Slots | Dual M.2 PCIe / Dual SODIMM Slots |
 | **SMR Drive Status** | N/A (Decoupled to Pi 5) | 🟢 MOUNTED (`/mnt/media-storage`) | N/A | N/A |
 | **Network Interface** | 2.5 Gigabit Ethernet (2.5GbE) | 1GbE (`eth0` default) + Wi-Fi 5 | Wi-Fi 6E/7 + 2.5GbE LAN | Wi-Fi 6E/7 + 2.5GbE LAN |
-| **Local IP Address** | `192.168.1.80` | `192.168.1.116` (`eth0`) / `.92` | `192.168.1.155` (`it13_max.lan`) | DHCP (Wi-Fi / Ethernet Staging) |
-| **Tailscale Node Name** | Subnet Routed (`.80`) | `pi5-media-nas` (`100.68.196.14`)| `it13-max-compute` (Planned) | Standby Node |
-| **Operating System** | UGOS Pro (Debian 12 Kernel) | Raspberry Pi OS (Debian 13) | Ubuntu Server 26.04.1 LTS (Kernel 7.0) | Linux / Windows |
-| **SSH Session Pipeline** | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | Direct / Staging |
+| **Local IP Address** | `192.168.1.80` | `192.168.1.116` (`eth0`) / `.92` | `192.168.1.155` (`it13_max.lan`) | `192.168.1.111` (`aurora.lan`) |
+| **Tailscale Node Name** | Subnet Routed (`.80`) | `pi5-media-nas` (`100.68.196.14`)| `it13-max-compute` (Dedicated Inference) | `aurora-app-host` (Services Host) |
+| **Operating System** | UGOS Pro (Debian 12 Kernel) | Raspberry Pi OS (Debian 13) | Ubuntu Server 26.04.1 LTS (Kernel 7.0) | Ubuntu Server 26.04.1 LTS (Kernel 7.0) |
+| **SSH Session Pipeline** | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) | ControlMaster (<25ms pipe) |
 
 ---
 
@@ -101,13 +101,30 @@
 
 ### C. Systems Hosted on GEEKOM IT13 Max (`192.168.1.155`)
 
+> **Node Role**: Dedicated Heavy Large Model Inference Engine (888 GB Gen4 NVMe completely freed; compute stack migrated to Aurora A3).
+
 | Service | Port | Endpoint | Status | Verified Functionality |
 | :--- | :--- | :--- | :--- | :--- |
-| **Remote Desktop (RDP)** | `3389` | `192.168.1.155:3389` | 🟢 **Active** | Native Windows 11 Pro RDP server verified from Mac |
-| **OpenSSH Management** | `22` | `ssh deep@192.168.1.155` | 🟡 **Provisioning** | Port 22 OpenSSH server daemon (ControlMaster target) |
-| **Ollama Local LLM (Target)** | `11434` | `http://192.168.1.155:11434` | 📋 **Planned** | Intel Arc 8 Xe-core iGPU offload via OpenVINO / oneAPI |
-| **Faster-Whisper STT (Target)**| `8090` | `http://192.168.1.155:8090` | 📋 **Planned** | Dedicated real-time speech-to-text offloading Pi 5 |
-| **Immich ML Offload (Target)** | `3003` | `http://192.168.1.155:3003` | 📋 **Planned** | CLIP & facial recognition engine offloading NAS N100 |
+| **OpenSSH Management** | `22` | `ssh deepshah08@192.168.1.155` | 🟢 **Production** | Port 22 OpenSSH server daemon (ControlMaster target) |
+| **Dedicated Large Model Engine** | TBD | `http://192.168.1.155:...` | 📋 **Staged** | Dedicated unthrottled inference on Core Ultra 9 185H (16C/22T) + Arc 8 Xe-core iGPU |
+
+---
+
+### D. Systems Hosted on OrigiMagic Aurora A3 (`192.168.1.111`)
+
+> **Node Role**: Primary Homelab Compute & Services Host (AMD Ryzen 7 8745HS Zen 4 8C/16T, 16GB DDR5, 1TB Gen4 NVMe).
+
+| Service | Port | Endpoint | Status | Verified Functionality |
+| :--- | :--- | :--- | :--- | :--- |
+| **Caddy HTTPS Gateway** | `443`, `8443`, `8444` | [https://192.168.1.111/](https://192.168.1.111/) | 🟢 **Production** | Internal TLS gateway routing to API, Paperless, and Changedetection |
+| **FastAPI Knowledge API** | `8080` (Internal) | `http://127.0.0.1:8080` | 🟢 **Production** | Document indexing, HeyPocket ingress, RAG search & dispatch |
+| **Paperless-ngx Web** | `8443` | [https://192.168.1.111:8443](https://192.168.1.111:8443) | 🟢 **Production** | Granian ASGI runner, document archive, OCR, web UI |
+| **Paperless PostgreSQL** | `5432` (Internal) | `paperless-postgres:5432` | 🟢 **Production** | Pinned digest `postgres@sha256:a3b7...`, isolated network |
+| **Paperless Redis** | `6379` (Internal) | `paperless-redis:6379` | 🟢 **Production** | Pinned digest `redis@sha256:c6eab...`, AOF persistence |
+| **Changedetection.io** | `8444` | [https://192.168.1.111:8444](https://192.168.1.111:8444) | 🟢 **Production** | Web monitoring daemon behind Caddy basic authentication |
+| **Squid Fetch Proxy** | `3128` (Internal) | `fetch-proxy:3128` | 🟢 **Production** | Domain-whitelisted Squid HTTP proxy with disabled IPv6 |
+| **Qdrant Vector Database** | `6333` | `http://127.0.0.1:6333` | 🟢 **Production** | Vector embeddings storage (`homelab_bge_small_v1`) |
+| **IT13 Single-Heavy Worker**| Systemd Daemon | `it13-worker.service` | 🟢 **Production** | Bounded systemd slice (`it13-heavy.slice`, MemoryMax=8G), CPUAffinity 8-15 |
 
 ---
 
