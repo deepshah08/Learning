@@ -4,13 +4,11 @@ Orchestrates Natural Language parsing, TMDB/TVDB lookup, Radarr/Sonarr dispatch,
 and interactive Telegram inline keyboards.
 """
 import logging
-import json
 from typing import Dict, Any
 from telegram import (
     Update,
     InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    InputMediaPhoto
+    InlineKeyboardMarkup
 )
 from telegram.ext import (
     ApplicationBuilder,
