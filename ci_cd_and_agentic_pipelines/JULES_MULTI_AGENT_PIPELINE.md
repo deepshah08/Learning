@@ -1,8 +1,8 @@
-# 🤖 Jules Multi-Agent Reviewer & Autonomous Pipeline Blueprint
+# 🤖 [DEPRECATED] Jules Multi-Agent Reviewer & Autonomous Pipeline Blueprint
 
-> **Context**: Architectural specification for the autonomous multi-agent code review, iterative test-fix loop, and Jules session orchestrator.  
-> **Blueprint Version**: `v2.2.0` ([`deepshah08/antigravity-pipeline-blueprint`](https://github.com/deepshah08/antigravity-pipeline-blueprint))  
-> **Status**: 🟢 **Production Standard across Antigravity Swarm**
+> ⚠️ **DEPRECATION & RETIREMENT NOTICE**: Google Jules has been completely deprecated and decommissioned.  
+> **Current Architecture**: Replaced by **Google AI Studio Gemini API** (`gemini-3.7-flash` via `gemini-architect` MCP tool suite) and **Local Antigravity Subagents** (`v3.0.0-master.md` in `agentic-workflows`). All workflows now execute locally under Antigravity with zero external cloud sandbox dependency.  
+> **Historical Context**: Below is the archival specification of the legacy Jules-based loop.
 
 ---
 
@@ -71,8 +71,8 @@ Located in `deepshah08/antigravity-pipeline-blueprint/skills/keenable-cli/SKILL.
 
 ---
 
-## 4. Runbook: How to Invoke Jules PR Reviewer in New Sessions
+## 4. Migration Runbook: Replacing Jules with Gemini AI Studio API + Antigravity
 
-1. Load the skill via slash command: `/jules-auto-reviewer` or reference the skill markdown.
-2. The orchestrator will scan open PRs across active repos.
-3. Once validated, PRs are cleanly merged, tagged, and closed.
+1. **Architecture & Reasoning**: Use the Google AI Studio Gemini API (`gemini-3.7-flash` via `gemini-architect` MCP tool suite) to generate implementation blueprints, code reviews, and architectural validation.
+2. **Execution & Coding**: Use local Antigravity subagents (`workspace` or `branch` modes) to write code and execute local test suites (`pytest`, `npm test`).
+3. **PR Review & Gates**: Antigravity orchestrator performs gate reviews locally; CI reviews are handled by GitHub Actions (`gemini-code-review.yml`) and auto-merged upon passing checks. Zero reliance on Jules API.

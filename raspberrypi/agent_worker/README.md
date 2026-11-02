@@ -1,4 +1,4 @@
-# 🤖 Project 18: Headless Jules Agent Review Worker (Raspberry Pi 5)
+# 🤖 Project 18: Headless Agent Review Worker (Raspberry Pi 5)
 
 > **Context**: Autonomous 24/7 background agent worker running on Raspberry Pi 5 ARM64 with strict CPU/memory throttling, polling GitHub pull requests, executing automated pytest test suites, AST static syntax validation, and generating automated code review summaries.  
 > **Status**: 🟢 **Production / Tested**  
@@ -11,7 +11,7 @@
 
 ```mermaid
 flowchart TD
-    JulesSession["Google Jules / Cloud Agent PR"] --> GitHubPR["GitHub PR Created (deepshah08/...)"]
+    AgentSession["Antigravity / Gemini Agent PR"] --> GitHubPR["GitHub PR Created (deepshah08/...)"]
     GitHubPR --> Worker["agent-worker Daemon on Pi 5 (worker.py)"]
     Worker --> DiffCheck["AST Syntax & Import Inspector"]
     Worker --> Subprocess["Isolated Test Runner (pytest -v --tb=short)"]

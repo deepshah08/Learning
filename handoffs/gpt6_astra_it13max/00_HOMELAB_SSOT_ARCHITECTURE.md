@@ -80,7 +80,7 @@
 - **Primary Pi-hole v6 FTL (`53`, `80`, `443`)**: Whole-home ad-blocking & DHCP server (`Nice=-10`, `OOMScoreAdjust=-1000`).
 - **Unbound Recursive DNS (`5335`)**: Local root DNS resolver with DNSSEC anchor validation.
 - **Tailscale Subnet Router**: WireGuard mesh gateway advertising `192.168.1.0/24`.
-- **Headless Jules Agent Worker**: Autonomous 24/7 GitHub PR review daemon.
+- **Headless Agent Review Worker**: Autonomous 24/7 GitHub PR review daemon.
 - **n8n Automation Engine (`5678`)**: Low-code workflow automation orchestrator.
 - **Stirling-PDF (`8083`)**: Offline document transformation & OCR utility.
 - **TripDrop (`8088`)**: High-speed chunked file upload portal.

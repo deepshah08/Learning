@@ -86,5 +86,5 @@ All 18 active Pi 5 projects have been implemented, tested (73/73 passing automat
 | **14. Market Sentiment Tracker** | Finance / RAG | `sentiment_analyzer.py` | [market_sentiment/README.md](market_sentiment/README.md) |
 | **15. Financial Pipeline** | Analytics | `portfolio_tracker.py` | [financial_pipeline/README.md](financial_pipeline/README.md) |
 | **16. Morning Briefing Generator**| Productivity | `main.py` (Daily Digest) | [morning_briefing/README.md](morning_briefing/README.md) |
-| **18. Headless Jules Review Worker**| CI/CD / Agents | `worker.py` (Nice=15, Quota=50%) | [agent_worker/README.md](agent_worker/README.md) |
+| **18. Headless Review Worker**| CI/CD / Agents | `worker.py` (Nice=15, Quota=50%) | [agent_worker/README.md](agent_worker/README.md) |
 | **Unbound Recursive DNS** | Network / Root DNS | Port `127.0.0.1#5335` | [unbound/README.md](unbound/README.md) |

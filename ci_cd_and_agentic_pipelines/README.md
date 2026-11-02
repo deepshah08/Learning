@@ -18,7 +18,7 @@
 │ antigravity_projects      │ deploy.yml            │ 19,000+ │ TS + Vite    │
 │ market_project            │ ci.yml                │ 10      │ pytest+mocks │
 │ agentic-workflows         │ *.yml                 │ matrix  │ Py 3.10/13   │
-│ antigravity-pipeline-bp   │ blueprint v2.2.0      │ spec    │ Jules        │
+│ antigravity-pipeline-bp   │ blueprint v3.0.0      │ spec    │ Gemini / AGY │
 │ Learning                  │ knowledge base        │ docs    │ SoT          │
 └───────────────────────────┴───────────────────────┴─────────┴──────────────┘
 ```
@@ -90,7 +90,7 @@ npm ci && npm run build
 ---
 
 ## 5. References & Cross-Links
-- [Jules Multi-Agent Pipeline Documentation](JULES_MULTI_AGENT_PIPELINE.md)
+- [Multi-Agent Pipeline Documentation (Gemini API + Antigravity)](JULES_MULTI_AGENT_PIPELINE.md)
 - [Offline Knowledge Center PWA & Scraping Pipeline](OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)
 - [CruxDAG + SimuVerse Investigation](cruxdag_simuverse/cruxdag_simuverse_investigation.md)
 - [CruxDAG + SimuVerse Knowledge](cruxdag_simuverse/cruxdag_simuverse_knowledge.md)

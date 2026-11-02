@@ -6,6 +6,7 @@
 > **Status**: 🟢 **100 / 100 Projects Completed & Merged into `main`**  
 > **Last Verified**: 2026-09-06  
 > **Master CLI**: `projects/100-master-dashboard/swarm_cli.py`  
+> **Historical Note**: Conducted via legacy Jules cloud sessions prior to Jules deprecation. Future swarms use Google AI Studio Gemini API + Local Antigravity.  
 
 ---
 

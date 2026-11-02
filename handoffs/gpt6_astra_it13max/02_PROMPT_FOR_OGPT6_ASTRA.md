@@ -25,7 +25,7 @@ I am commissioning a new powerhouse bare-metal compute node in my established ho
    - **Services**: Plex (Intel QuickSync 4K transcode), *Arr Stack (Radarr, Sonarr, Prowlarr, qBittorrent, Bazarr), Vaultwarden, Homepage, Secondary Pi-hole.
 2. **Node 2: Raspberry Pi 5 (`192.168.1.92`)**:
    - Broadcom BCM2712 (4C @ 2.4GHz) | 16 GB LPDDR4X RAM | Wi-Fi 5 + 1GbE.
-   - **Services**: Primary Pi-hole v6 FTL (ad-blocking + authoritative DHCP Option 6) + Unbound (port 5335 DNSSEC root recursive), Tailscale subnet router (`192.168.1.0/24`), n8n automation, headless Jules agent worker, and 100 containerized homelab microservices. Attached to an 8TB Seagate SMR cold archive (`/mnt/media-storage`, 15-min spindown).
+   - **Services**: Primary Pi-hole v6 FTL (ad-blocking + authoritative DHCP Option 6) + Unbound (port 5335 DNSSEC root recursive), Tailscale subnet router (`192.168.1.0/24`), n8n automation, headless review worker, and 100 containerized homelab microservices. Attached to an 8TB Seagate SMR cold archive (`/mnt/media-storage`, 15-min spindown).
 3. **Pixel 1 Background Syncer & Virtual Digital Twin**:
    - Physical Pixel 1 running Syncthing for lifetime unlimited original-quality Google Photos uploads.
    - Virtual Redroid Pixel 1 twin on NAS NVMe (`port 5555`) for cloud sync validation.
