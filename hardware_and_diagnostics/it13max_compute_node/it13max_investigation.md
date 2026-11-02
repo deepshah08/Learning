@@ -91,12 +91,83 @@ reports, and bytecode are excluded. The paired MDS files are in the Learning rep
 4. A deployed working tree is not a persistent source of truth: code, setup, plans,
    evidence, and docs need named remotes and commits.
 
-## 9. Companion Docs
+## 10. 2026 Dedicated Coding Host Transformation & Model Fleet Evaluation
 
-- Durable system knowledge: [it13max_knowledge.md](./it13max_knowledge.md)
-- Implementation and review evidence: [private IT13 source repository](https://github.com/deepshah08/it13max)
-- Model selection record: [`it13-model-audit.md`](https://github.com/deepshah08/it13max/blob/main/it13-model-audit.md)
-- Existing hardware and homelab records: [IT13 Max compute-node folder](./README.md)
+> **Context**: In late 2026, the legacy document administration and capture stack (Paperless-ngx, Changedetection, Caddy, Qdrant) was migrated completely to the **OrigiMagic Aurora A3** (`192.168.1.111`), liberating the **GEEKOM IT13 Max** to become a dedicated 24/7 autonomous coding engine.
+
+### 10.1 The Fleet Benchmark Battery (28 GB RAM Inference Envelope)
+
+We benchmarked candidate coding models across 2024, 2025, and 2026 architectures using `llama-bench` and live inference on the Intel Core Ultra 9 185H (16C/22T, dual-channel DDR5-4800 MT/s RAM, 30.8 GiB usable):
+
+| Model | Arch & Year | Size | Active Params / Token | Prompt Speed (`pp512`) | Generation Speed (`tg128`) | RAM Footprint (8k Ctx) | Swap Paging |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **`Qwen 3.6-35B-A3B`** | **2026 MoE** | **16.56 GiB** | **~3.0B** | **82.60 t/s** | **12.20 t/s** | **~19.8 GiB** | **0 bytes** |
+| **`DeepSeek-Coder-V2-Lite`** | 2024 MoE | 9.65 GiB | 2.4B | 97.90 t/s | 22.63 t/s | ~12.0 GiB | 0 bytes |
+| **`Spark-X2.6-4B`** | 2025 Hybrid | 2.44 GiB | 4.1B | 77.22 t/s | 12.79 t/s | ~2.8 GiB | 0 bytes |
+| **`Qwen 2.5-Coder-7B`** | 2025 Dense | 4.36 GiB | 7.6B | 42.09 t/s | 7.94 t/s | ~4.7 GiB | 0 bytes |
+| **`Qwen 2.5-Coder-32B`** | 2025 Dense | 18.49 GiB | 32.5B | 9.68 t/s | 6.20 t/s | ~23.5 GiB | 0 bytes |
+| **`Qwen 3.8 Flash Coder`** | 2026 Dense/MoE | 26.44 GiB | ~14B+ | 30.50 t/s | 6.00 t/s | ~27.5 GiB | 0 bytes (at limit) |
+
+**Key Findings:**
+1. **The MoE Efficiency Leap:** `Qwen 3.6-35B-A3B` provides 35.5B parameters of world knowledge and coding capability while activating only ~3.0B parameters per token. This breaks the CPU memory wall, delivering **12.2 tokens/sec** vs **6.2 tokens/sec** on the older 32B dense model.
+2. **2024 Architecture Deprecation:** `DeepSeek-Coder-V2-Lite` achieved high speed (22.6 t/s) but repeatedly failed modern microservice synthesis (Gate 1) by hallucinating unprovided SQL schemas and deprecated Redis dependencies, whereas `Qwen 3.6` natively planned architecture in `<think>` and generated 100% valid AST code.
+
+---
+
+### 10.2 Deployment Engine Evaluation: `llama.cpp` vs. `Strata`
+
+* **The Strata Hypothesis:** Community claims cited a "2× to 5× speedup" using `Strata` for large MoE models by caching active experts.
+* **The Refutation:** Strata's acceleration applies strictly to **consumer NVIDIA GPUs with discrete GDDR6 VRAM over PCIe**, keeping hot experts in VRAM and cold experts in host RAM. On the GEEKOM IT13 Max, the Intel Core Ultra 9 185H uses **Unified Memory Architecture (UMA)** where CPU and iGPU share the same physical DDR5 bus. There is no PCIe boundary to cache across, rendering Strata's memory layering useless. `llama.cpp` AVX2/VNNI assembly remains the fastest, lowest-friction, and most reliable engine.
+
+---
+
+### 10.3 Silicon Offloading: CPU vs. Arc iGPU on UMA
+
+* **The Hypothesis:** Offloading layers to the Intel Arc Xe-LPG iGPU would distribute compute and boost speed.
+* **The Refutation:** Pinned CPU threads (`-t 18`) already saturate >90% of available DDR5 memory bus bandwidth (~55 GB/s). Engaging the integrated GPU creates memory bus controller arbitration contention between CPU cores and Xe-cores, while adding driver dispatch latency and increasing SoC package thermal power. Pinned CPU AVX2/VNNI (`-t 18`) is the fastest, lowest-latency path.
+
+---
+
+### 10.4 Speculative Decoding on CPU Memory Wall
+
+* **The Test:** Paired `Qwen 2.5-Coder-32B` (target) with `Qwen 2.5-Coder-1.5B` (draft).
+* **The Finding:** Speed only increased by **+5.8%** (2.57 t/s $\to$ 2.72 t/s). Speculative decoding on CPU requires drafting threads to share the same dual-channel DDR5 bus bandwidth as the target model. MoE architectural sparsity breaks the memory wall; speculative decoding on CPU does not.
+
+---
+
+### 10.5 Quantization Mechanics & The 4-Gate Showdown (`IQ3_M` vs. `Q4_K_M`)
+
+We tested both quantizations of `Qwen 3.6-35B-A3B` against our production 4-Gate Microservice Suite (FastAPI lifespan, SQLite WAL, background consumer worker, non-root Docker container, concurrency load, and `SIGTERM` graceful drain) with a **32,768-token (32k) context window**:
+
+| Metric / Gate | `IQ3_M` (Baseline) | `Q4_K_M` (Challenger) | Ground-Truth Finding |
+| :--- | :---: | :---: | :--- |
+| **Model Weight Size** | **16.56 GiB** | **20.61 GiB** | `IQ3_M` is **4.05 GiB lighter** |
+| **Host Resident RAM (32k Ctx)** | **17.5 GiB** (12.0 GiB buffer) | **22.0 GiB** (7.8 GiB buffer) | `IQ3_M` preserves **+4.2 GiB more headroom** |
+| **Active Swap Thrashing** | **0 bytes** (`si: 0, so: 0`) | **0 bytes** (`si: 0, so: 0`) | **Tie:** Both achieve zero swap churn |
+| **Prompt Ingestion Speed** | **79.90 t/s** (12.52 ms/tok) | **80.60 t/s** (12.41 ms/tok) | **Tie:** Prompt processing speed is identical |
+| **Server Generation Eval Speed**| **11.84 tokens/sec** | **11.40 tokens/sec** | `IQ3_M` is **~4% faster** on the CPU |
+| **Client Streaming Decode Speed**| **11.11 tokens/sec** | **9.54 tokens/sec** | `IQ3_M` is **~16% faster** in sustained streaming |
+| **Gate 1: Multi-File AST & Syntax**| ✅ **PASSED** (100% valid) | ✅ **PASSED** (100% valid) | **Tie:** Both generate valid, parseable ASTs |
+| **Gate 2: Docker Build & Non-Root**| ✅ **PASSED** (5.1s build) | ✅ **PASSED** (5.2s build) | **Tie:** Both enforce `appuser:10001` standards |
+| **Gate 3: Concurrency & SQLite WAL**| ❌ Failed (Interface omission) | ⚠️ Partial (3/30 locks, worker stall) | **Nuanced Trade-off** (See below) |
+| **Gate 4: Graceful Drain (SIGTERM)**| *Skipped* (G3 early exit) | ✅ **PASSED** (Exit code 0 in 1.22s) | **`Q4_K_M`:** Clean in-flight signal trap |
+
+**Quantization Decisions:**
+1. **Pareto Optimal Efficiency:** `IQ3_M` (~3.3 bits/weight) leverages an importance matrix (`imatrix`) that preserves router gate vectors and attention projections at 5–6 bits while compressing redundant MoE expert weights to 3 bits.
+2. **Quality vs. Speed Reality:** The additional bit precision in `Q4_K_M` did not eliminate logic bugs, but reduced sustained streaming throughput from **11.11 t/s to 9.54 t/s**.
+3. **Headroom Safety:** `IQ3_M` leaves **12.0 GiB of free RAM**, providing a bulletproof OS floor and enabling future context expansion to 48k tokens. `IQ3_M` was permanently ratified as SSOT and `Q4_K_M` was purged from NVMe.
+
+---
+
+### 10.6 NVMe Controller Health & TBW Wear Audit
+
+Direct SMART telemetry (`nvme smart-log /dev/nvme0n1`) on the internal 1TB Gen4 SSD (`WPBSN4M8-1TGP`):
+* **Temperature:** 40 °C (Optimal, zero thermal throttling).
+* **Available Spare:** 100% (Threshold: 1%).
+* **Percentage Used:** 0% (Virtually brand-new NAND).
+* **Lifetime Data Written:** 1.22 TB (Out of 600 TBW warranty rating $\implies \mathbf{99.8\%}$ lifespan remaining).
+* **Zero NVMe Wear Architecture:** Pinned RAM floor prevents memory swap thrashing (`si: 0, so: 0`). The autonomous agent runs all ephemeral compilation, test databases, and Docker builds in **RAM tmpfs (`/dev/shm`)**, protecting physical NAND flash from write churn.
+
 
 ---
 

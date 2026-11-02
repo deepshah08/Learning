@@ -13,7 +13,7 @@
 | **Processor (CPU)** | Intel N100 (4C/4T, ≤3.4GHz) | Broadcom BCM2712 (4C @ 2.4GHz) | Intel Core Ultra 9 185H (16C/22T) | AMD Ryzen 7 8745HS (8C/16T, ≤4.9GHz Zen 4) |
 | **GPU / Transcoding** | Intel UHD 24EU QuickSync | VideoCore VII (Display only) | Intel Arc 8 Xe-Cores iGPU + NPU | AMD Radeon 780M (RDNA 3, 12 CUs) |
 | **System Memory (RAM)** | 8 GB DDR5 | 16 GB LPDDR4X | **32 GB DDR5 (Dual-Channel 4800 MT/s)** | **16 GB DDR5 (SODIMM 4800 MT/s, 15.1GB usable)** |
-| **Primary Storage** | 10TB Seagate IronWolf (CMR) | 128GB MicroSD (101GB Free / 10%) | 1TB Gen4 NVMe PCIe SSD (888GB Free) | 1TB Gen4 NVMe PCIe SSD (816GB Free) |
+| **Primary Storage** | 10TB Seagate IronWolf (CMR) | 128GB MicroSD (101GB Free / 10%) | 1TB Gen4 NVMe PCIe SSD (861GB Free, 0% Wear, 40°C) | 1TB Gen4 NVMe PCIe SSD (816GB Free) |
 | **High-Speed Solid-State Tier** | 4TB WD_BLACK SN850X (NVMe) | N/A | 1TB Gen4 NVMe PCIe SSD | 1TB Gen4 NVMe PCIe SSD |
 | **Attached Secondary Storage** | N/A (Decoupled to Pi 5) | 8TB Seagate Expansion (SMR) | N/A | N/A |
 | **Physical M.2 / RAM Layout** | M.2 Slots: Inside HDD Trays | Bottom Hatch: SODIMM RAM Slot | Dual M.2 PCIe / Dual SODIMM Slots | Dual M.2 PCIe / Dual SODIMM Slots |
@@ -52,8 +52,9 @@
 
 ### Drive 4: 1TB PCIe 4.0 NVMe SSD (Internal)
 * **Location**: GEEKOM IT13 Max internal M.2 NVMe slot (`/dev/nvme0n1`)
-* **Filesystem**: NTFS (Factory Win11) -> Target: ext4 / btrfs (Ubuntu Server)
-* **Role**: High-speed dedicated AI model weight storage (Ollama, OpenVINO, Faster-Whisper), Docker root runtime, and local execution caches.
+* **Filesystem**: `ext4` on LVM (`/dev/mapper/ubuntu--vg-ubuntu--lv`, Ubuntu Server 26.04.1)
+* **Role**: High-speed dedicated AI model weight storage (`/home/deepshah08/models`), local Git projects (`workspace/projects`), and Docker runtime.
+* **SMART Health & Endurance**: Model `WPBSN4M8-1TGP`, 40°C, 100% available spare, 0% wear, 1.22 TB lifetime written / 600 TBW warranty rating (99.8% lifespan remaining, 0 active swap thrashing).
 
 ---
 
@@ -101,12 +102,13 @@
 
 ### C. Systems Hosted on GEEKOM IT13 Max (`192.168.1.155`)
 
-> **Node Role**: Dedicated Heavy Large Model Inference Engine (888 GB Gen4 NVMe completely freed; compute stack migrated to Aurora A3).
+> **Node Role**: Dedicated 24/7 Coding LLM Inference Engine & Autonomous Agent Runner (861 GB Gen4 NVMe free, 0% wear, compute stack migrated to Aurora A3).
 
 | Service | Port | Endpoint | Status | Verified Functionality |
 | :--- | :--- | :--- | :--- | :--- |
-| **OpenSSH Management** | `22` | `ssh deepshah08@192.168.1.155` | 🟢 **Production** | Port 22 OpenSSH server daemon (ControlMaster target) |
-| **Dedicated Large Model Engine** | TBD | `http://192.168.1.155:...` | 📋 **Staged** | Dedicated unthrottled inference on Core Ultra 9 185H (16C/22T) + Arc 8 Xe-core iGPU |
+| **OpenSSH Management** | `22` | `ssh deepshah08@192.168.1.155` | 🟢 **Production** | Port 22 OpenSSH server daemon (ControlMaster persistent target) |
+| **LLM Inference Engine** | `8000` | `http://192.168.1.155:8000` | 🟢 **Production** | `llm-engine.service` running `Qwen3.6-35B-A3B-IQ3_M.gguf` with **32,768 (32k) context**, Flash Attention 2 (`-fa on`), pinned CPU cores 0-17 (`-t 18`), bounded reasoning (`--reasoning-budget 250`), 17.5 GiB resident RAM, 12.0 GiB buffer, 0 swap paging |
+| **Autonomous Agent Daemon** | Daemon | `/home/deepshah08/workspace/tasks/pending` | 🟢 **Production** | `unattended-agent.service` running native Rust daemon `unattended-agent-rs` (2.0 MiB RAM), kernel `inotify` queue, ephemeral `/dev/shm` tmpfs builds, zero NVMe churn |
 
 ---
 

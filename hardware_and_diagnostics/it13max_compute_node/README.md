@@ -1,17 +1,15 @@
-# ⚡ Node 3: GEEKOM IT13 Max — Dedicated AI & Compute Architecture
+# ⚡ Node 3: GEEKOM IT13 Max — Dedicated 24/7 Coding LLM Engine
 
-> Hardware inventory, original architecture, and provisioning record for Node 3. The
-> deployed runtime source and current execution evidence are maintained in the private
-> [IT13 Max repository](https://github.com/deepshah08/it13max).
+> Dedicated 24/7 Large-Model Coding Inference Engine and Autonomous Agent Daemon.
+> Upgraded to **Qwen 3.6-35B-A3B-IQ3_M** with **32,768 (32k) context window**.
+> The legacy capture stack (Paperless, Qdrant, Caddy) was fully migrated to the **OrigiMagic Aurora A3** (`192.168.1.111`).
 >
-> **Last reviewed**: 2026-09-22
-> **Status**: ✅ Goals 1–6 deployed; remediation complete pending independent Astra review.
+> **Last reviewed**: 2026-11-01
+> **Status**: 🟢 **Production** (32k Context Active | 0 Swap Paging | 12.0 GiB Headroom | 0% NVMe Wear)
 
 The paired MDS documents capture the implementation journey and current design
 rationale: [investigation](./it13max_investigation.md) ·
-[durable knowledge](./it13max_knowledge.md). Goal 5 model evaluation remains deferred
-until representative labels exist. See the source repository's execution records for
-the exact acceptance evidence and remaining user configuration.
+[durable knowledge](./it13max_knowledge.md).
 
 ---
 
@@ -20,7 +18,7 @@ the exact acceptance evidence and remaining user configuration.
 ```mermaid
 flowchart TD
     subgraph Controller ["💻 Developer Controller"]
-        Mac["MacBook Air (Apple Silicon)<br/>• Antigravity & Cursor<br/>• OpenSSH ControlMaster<br/>• 192.168.1.164"]
+        Mac["MacBook Air (Apple Silicon)<br/>• Antigravity & Cursor<br/>• OpenSSH ControlMaster (&lt;25ms)<br/>• 192.168.1.164"]
     end
 
     subgraph CoreNetwork ["🛡️ Tier 1: Network & DNS Authority"]
@@ -31,19 +29,22 @@ flowchart TD
         NAS["UGREEN DXP2800 NAS<br/>• Intel N100 (4 E-Cores)<br/>• 10TB IronWolf CMR (0 RPM Hibernation)<br/>• 4TB NVMe Hot Storage<br/>• Secondary Failover DNS (:8089)<br/>• IP: 192.168.1.80"]
     end
 
-    subgraph ComputeNode ["🚀 Tier 3: Pure Compute & Local AI"]
-        IT13["GEEKOM IT13 Max Mini PC<br/>• Intel Core Ultra 9 185H (16C / 22T)<br/>• Intel Arc 8 Xe-Cores iGPU + NPU<br/>• 32GB DDR5 RAM (Dual-Channel) + 1TB NVMe SSD<br/>• IP: 192.168.1.155 (it13_max.lan)<br/>• Unthrottled AI, Docker, & Transcoding"]
+    subgraph ComputeNode ["🚀 Tier 3: Dedicated 24/7 Coding LLM Engine"]
+        IT13["GEEKOM IT13 Max Mini PC<br/>• Intel Core Ultra 9 185H (16C / 22T)<br/>• 32GB DDR5 RAM (Dual-Channel 4800 MT/s)<br/>• 1TB Gen4 NVMe (861 GB Free | 0% Wear)<br/>• Qwen 3.6-35B-A3B-IQ3_M (32k Context)<br/>• IP: 192.168.1.155 (it13max)<br/>• llm-engine.service (:8000)<br/>• unattended-agent-rs (2.0 MiB RAM)"]
+    end
+
+    subgraph WorkloadNode ["⚙️ Tier 4: Background Workload & OCR Vault"]
+        Aurora["OrigiMagic Aurora A3<br/>• AMD Ryzen 7 8745HS (8C/16T Zen 4)<br/>• 16GB DDR5 RAM + 1TB NVMe<br/>• Paperless-ngx + Qdrant + Changedetection<br/>• IP: 192.168.1.111 (aurora)"]
     end
 
     Mac -->|"SSH (&lt;25ms multiplexed)"| Pi5
     Mac -->|"SSH (&lt;25ms multiplexed)"| NAS
-    Mac -->|"SSH / RDP (:3389)"| IT13
+    Mac -->|"HTTP :8000 / SSH"| IT13
+    Mac -->|"HTTPS (:443, :8443) / SSH"| Aurora
 
     Pi5 -->|"Authoritative DHCP / DNS"| IT13
     Pi5 -->|"Authoritative DHCP / DNS"| NAS
-
-    IT13 -.->|"Immich ML Offload (CLIP / Faces)"| NAS
-    IT13 -.->|"Whisper & TTS Offload (Decoupling)"| Pi5
+    Pi5 -->|"Authoritative DHCP / DNS"| Aurora
 ```
 
 ---

@@ -133,7 +133,100 @@ add hooks, or solicit radar labels just to create a pilot.
 | Maintenance cannot drain or restore validation fails | Keep explicit maintenance/recovery state; do not overwrite live state from a test bundle |
 | Small or biased evaluation corpus | Do not claim personal-use model accuracy or promote a specialist |
 
-## Host Lifecycle & Hardware Invariants (2026-10-27)
+## 2026 Dedicated 24/7 Coding Engine Architecture (32k Context)
+
+> **Architectural Transition**: The legacy capture and administration stack (Paperless-ngx, Changedetection, Caddy, Qdrant) was migrated completely to the **OrigiMagic Aurora A3** (`192.168.1.111`). The **GEEKOM IT13 Max** is now 100% dedicated to large-model coding inference and autonomous agent execution.
+
+```mermaid
+flowchart TD
+    subgraph Controller ["💻 Developer Controller"]
+        Dev["Developer CLI / Antigravity<br/>• OpenSSH ControlMaster (&lt;25ms)"]
+    end
+
+    subgraph IT13Max ["🚀 GEEKOM IT13 Max (192.168.1.155)"]
+        subgraph SystemD ["SystemD Daemons"]
+            LLMEngine["llm-engine.service (:8000)<br/>• Qwen 3.6-35B-A3B-IQ3_M (16.56 GiB)<br/>• 32,768 Context Window (-c 32768 -np 1)<br/>• Flash Attention 2 (-fa on)<br/>• Pinned Cores 0-17 (-t 18)<br/>• Bounded Reasoning (--reasoning-budget 250)"]
+            AgentDaemon["unattended-agent.service<br/>• Native Rust Daemon (2.0 MiB RAM)<br/>• Inotify Queue Watcher"]
+        end
+
+        subgraph MemoryPool ["32 GB DDR5 Memory Pool"]
+            Weights["Static Weights: 16.56 GiB (IQ3_M)"]
+            KVCache["32k Dynamic KV Cache: ~5.20 GiB (MLA FP16)"]
+            FreeRAM["OS & Headroom Buffer: ~12.0 GiB (0 Swap Paging)"]
+        end
+
+        subgraph ExecutionSandbox ["Ephemeral Execution Sandbox"]
+            RAMDisk["/dev/shm/agent_workspace/<br/>• In-Memory Test Runner (tmpfs)<br/>• Zero NVMe NAND Flash Churn"]
+        end
+
+        subgraph StorageLayer ["1TB Gen4 NVMe (WPBSN4M8-1TGP)"]
+            VerifiedProjects["/home/deepshah08/workspace/projects/<br/>• Final Git Commits Only<br/>• 861 GB Free | 0% Wear | 40°C"]
+        end
+    end
+
+    Dev -->|"HTTP POST /v1/chat/completions"| LLMEngine
+    Dev -->|"Drop task JSON"| AgentDaemon
+    AgentDaemon -->|"Query Local Model"| LLMEngine
+    AgentDaemon -->|"Build & Test (pytest/cargo)"| RAMDisk
+    RAMDisk -->|"Git Commit on 100% Pass"| VerifiedProjects
+    Weights -.-> MemoryPool
+    KVCache -.-> MemoryPool
+    FreeRAM -.-> MemoryPool
+```
+
+### Component Specification:
+
+| Service | Binary / Unit Path | Core Configuration | Resource Allocation |
+| :--- | :--- | :--- | :--- |
+| **LLM Inference Server** | `llama-server` (b12024)<br/>`/etc/systemd/system/llm-engine.service` | `taskset -c 0-17 llama-server -m models/Qwen3.6-35B-A3B-IQ3_M.gguf -c 32768 -np 1 -fa on -t 18 -b 2048 -ub 512 --host 0.0.0.0 --port 8000 --load-mode mlock --reasoning-budget 250` | **17.5 GiB Resident RAM**<br/>Leaves 12.0 GiB buffer<br/>`si: 0, so: 0` (0 bytes swap) |
+| **Autonomous Agent Daemon** | `unattended-agent-rs`<br/>`/etc/systemd/system/unattended-agent.service` | Native Rust event loop listening to `/home/deepshah08/workspace/tasks/pending/` via kernel `inotify` | **2.0 MiB Resident RAM**<br/>Runs in `/dev/shm` tmpfs |
+
+### Invariant Memory Budget (32k Context Window):
+
+$$\begin{aligned}
+\text{Static Model Weights (IQ3\_M)} & : 16.56\text{ GiB} \\
+\text{Dynamic 32k MLA KV Cache (FP16)} & : \approx 5.20\text{ GiB} \\
+\text{Runtime Activation Scratch Buffers} & : \approx 0.80\text{ GiB} \\
+\hline
+\mathbf{\text{Total Peak LLM Footprint}} & : \mathbf{\approx 22.56\text{ GiB}} \\
+\mathbf{\text{Reserved OS / Kernel Buffer}} & : \mathbf{\approx 8.24\text{ GiB to 12.0 GiB}} \\
+\hline
+\mathbf{\text{Host Total RAM}} & : \mathbf{30.80\text{ GiB (Strictly 0 bytes active swap)}}
+\end{aligned}$$
+
+---
+
+### Operational Runbook & Verification Commands
+
+```bash
+# 1. Health check the LLM Engine (32k context)
+ssh it13max "timeout 5s curl -s http://127.0.0.1:8000/health"
+# Expected: {"status":"ok"}
+
+# 2. Check Host Memory & Swap Paging
+ssh it13max "free -h && vmstat 1 2"
+# Invariant: Available > 8.0 GiB, si = 0, so = 0
+
+# 3. Check Autonomous Agent Daemon Status
+ssh it13max "systemctl status unattended-agent.service --no-pager"
+
+# 4. Check NVMe SSD SMART Health & Temperature
+ssh it13max "sudo nvme smart-log /dev/nvme0n1"
+# Invariant: Available spare = 100%, percentage_used = 0%, temperature <= 50°C
+
+# 5. Dispatch an Autonomous Coding Task to the Rust Daemon
+ssh it13max "cat << 'EOF' > /home/deepshah08/workspace/tasks/pending/task_example.json
+{
+  \"task_id\": \"task_lru_cache_v1\",
+  \"prompt\": \"Implement a thread-safe LRU Cache with TTL expiration in Python.\",
+  \"target_dir\": \"/home/deepshah08/workspace/projects/lru_cache_v1\"
+}
+EOF"
+```
+
+---
+
+## Host Lifecycle & Hardware Invariants (2026-11-01)
 
 | Parameter | Operational Invariant | Technical Detail |
 |---|---|---|
