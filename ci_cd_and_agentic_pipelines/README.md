@@ -90,7 +90,7 @@ npm ci && npm run build
 ---
 
 ## 5. References & Cross-Links
-- [Multi-Agent Pipeline Documentation (Gemini API + Antigravity)](JULES_MULTI_AGENT_PIPELINE.md)
+- [Gemini Multi-Agent Pipeline Documentation (v3.0.0)](GEMINI_MULTI_AGENT_PIPELINE.md)
 - [Offline Knowledge Center PWA & Scraping Pipeline](OFFLINE_KNOWLEDGE_PWA_PIPELINE.md)
 - [CruxDAG + SimuVerse Investigation](cruxdag_simuverse/cruxdag_simuverse_investigation.md)
 - [CruxDAG + SimuVerse Knowledge](cruxdag_simuverse/cruxdag_simuverse_knowledge.md)
