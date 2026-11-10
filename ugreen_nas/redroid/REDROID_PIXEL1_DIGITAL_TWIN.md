@@ -98,3 +98,26 @@ ro.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user
 1. **Zero Host Mutation:** No kernel swapping, custom base package removals, or OS-level reconfigurations were performed on either host node.
 2. **Dedicated Staging Account (Account B):** Primary Account A never directly connects or authenticates to the virtual container. All cloud transfers execute via Google's native Partner Sharing API.
 3. **Master Archive Integrity:** The authoritative Single Source of Truth for all high-resolution media remains on the **10TB CMR IronWolf Btrfs pool** on the NAS (`/volume1/personal_folder/Photos`).
+
+---
+
+## ⚙️ Automated Ingestion & Daily Batch Worker Architecture
+
+### 1. Inotify Media Scanner (`redroid-photo-scanner.service`)
+- **Path**: `/volume2/docker/redroid/scripts/inotify-media-scanner.sh`
+- **Mechanism**: Watches `/volume2/docker/redroid/inbox` for new writes/moves. Debounces for 3 seconds, sets permissions to `media_rw:media_rw` (`1023:1023`), moves files into `/volume2/docker/redroid/data/media/0/DCIM/Camera`, and broadcasts explicit `android.intent.action.MEDIA_SCANNER_SCAN_FILE` intents for every file to bypass Android 11 scoped storage scan limitations.
+
+### 2. Daily Batch Ingest Worker (`redroid-daily-uploader.service` & `.timer`)
+- **Worker Script**: `/volume2/docker/redroid/scripts/daily-batch-uploader.sh`
+- **Manifest**: Tracks processed files in `/volume2/docker/redroid/scripts/uploaded_manifest.txt` to guarantee zero duplicate processing.
+- **Budget**: Stages batches up to ~1 GiB per run across `/volume1/@home/Deep Shah/{Photos,MobileBackup,Yellowstone,Grad Photoshoot,GOPro}` into the NVMe inbox tier.
+- **Schedule**: Automatically fires at **03:30 AM** daily via systemd timer (`redroid-daily-uploader.timer`).
+- **Manual Trigger**: `echo '<nas_password>' | sudo -S systemctl start redroid-daily-uploader.service`.
+
+### 3. Production Verification & Quota Telemetry (Verified 2026-11-10)
+- **Ingestion Test**: 125 RAW/DSLR and GoPro files totaling **>2.2 GB** staged and ingested.
+- **Google Photos Telemetry**:
+  - Upload Status: `Backup complete`
+  - Upload Quality: `Original quality` (grandfathered Pixel 1 waiver confirmed)
+  - Quota Impact: **0 bytes charged** (Storage remained constant at `552.31 MB of 5 TB`).
+  - Partner Sharing: Invitation dispatched to `deepshah7977@gmail.com` with `All photos` and `All time` active.
