@@ -33,7 +33,7 @@
 - **Zero Hallucinated Specs:** NEVER guess, assume, or generalize physical hardware specifications (RAM, CPU, storage tiers, networking) from generic retail models or LLM weights.
 - **Mandatory SSOT Inventory Reference:** All hardware facts MUST be cross-referenced directly with `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md` or verified via live host commands (`free -h`, `lscpu`, `lsblk`) before making comparisons or statements.
   - **UGREEN DXP2800 NAS (`192.168.1.80`):** Intel N100 | **8 GB DDR5 RAM** | 10TB Seagate IronWolf CMR HDD (`/volume1`) | 4TB WD_BLACK SN850X NVMe SSD (`/volume2`) | 2.5GbE Wired Ethernet.
-  - **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | Wi-Fi 5 (`wlan0`).
+  - **Raspberry Pi 5 (`192.168.1.92`):** Broadcom BCM2712 | **16 GB LPDDR4X RAM** | 128GB MicroSD | **8TB Seagate Expansion SMR** (Cold USB 3.0 backup on `/mnt/media-storage` with 15-min udev spindown) | 1GbE (`eth0`) + Wi-Fi 5 (`wlan0`).
   - **GEEKOM IT13 Max (`192.168.1.155`):** Intel Core Ultra 9 185H (16C/22T) | **32 GB DDR5 RAM** (Dual-Channel 4800 MT/s) | 1TB Gen4 NVMe SSD | Ubuntu Server 26.04.1 LTS (Kernel 7.0.0-38) | Wi-Fi 6E/7 + 2.5GbE.
   - **OrigiMagic Aurora A3:** AMD Ryzen 7 8745HS (8C/16T Zen 4) | **16 GB DDR5 RAM** | 1TB Gen4 NVMe SSD | Wi-Fi 6E/7 + 2.5GbE.
 
