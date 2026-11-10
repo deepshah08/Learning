@@ -14,3 +14,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Credential protection
+*HOST_PASSWORDS*
+*host_passwords*
+*.env
+*.key
