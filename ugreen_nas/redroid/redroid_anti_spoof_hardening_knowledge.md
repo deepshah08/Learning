@@ -181,6 +181,8 @@ The hardened ReDroid Digital Twin provides a 100% headless, containerized emulat
    - Cloned IMEI: `353086081745920`.
 4. **Traffic Pacing (Human Behavior Mimicry)**:
    - Automated ingestion scripts enforce a 1.00 GiB/day default ceiling, preventing statistical anomaly triggers in Google Cloud abuse scoring.
+5. **Google Play Store Auto-Update Freeze**:
+   - `auto_update_enabled=false` and `auto_update_mode=2` are pinned in `/data/data/com.android.vending/shared_prefs/finsky.xml`, preventing background APK updates from modifying Google Photos or introducing breaking compatibility checks.
 
 ---
 
