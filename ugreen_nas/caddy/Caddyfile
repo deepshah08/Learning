@@ -1,0 +1,62 @@
+# Caddy Reverse Proxy — UGREEN DXP2800 (192.168.1.80)
+# All domains resolve via Pi-hole local DNS → 192.168.1.80 → Caddy (port 80) → service
+# To add a new service: duplicate a block below and adjust the port.
+
+{
+    admin off          # Disable Caddy API (not needed for homelab)
+    log {
+        level ERROR    # Only log errors to keep NVMe writes minimal
+    }
+}
+
+# ─── Dashboard ────────────────────────────────────────────────────────────────
+
+http://home.nas {
+    reverse_proxy localhost:3000
+}
+
+# ─── Media Requests ───────────────────────────────────────────────────────────
+
+http://movies.nas {
+    reverse_proxy localhost:5055
+}
+
+# ─── *Arr Stack ───────────────────────────────────────────────────────────────
+
+http://radarr.nas {
+    reverse_proxy localhost:7878
+}
+
+http://sonarr.nas {
+    reverse_proxy localhost:8989
+}
+
+http://prowlarr.nas {
+    reverse_proxy localhost:9696
+}
+
+http://bazarr.nas {
+    reverse_proxy localhost:6767
+}
+
+# ─── Downloads ────────────────────────────────────────────────────────────────
+
+http://torrents.nas {
+    reverse_proxy localhost:8080
+}
+
+# ─── Monitoring ───────────────────────────────────────────────────────────────
+
+http://tautulli.nas {
+    reverse_proxy localhost:8181
+}
+
+http://pihole.nas {
+    reverse_proxy localhost:8089
+}
+
+# ─── Plex (host-networked) ────────────────────────────────────────────────────
+
+http://plex.nas {
+    reverse_proxy localhost:32400
+}

@@ -1,0 +1,20 @@
+version: "3.8"
+
+# Caddy Reverse Proxy — homelab.nas friendly URL gateway
+# Docs: Learning/ugreen_nas/caddy/README.md
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    network_mode: host          # Shares host network → reaches all services on localhost:PORT
+    volumes:
+      - /volume2/docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /volume2/docker/caddy/data:/data
+      - /volume2/docker/caddy/config:/config
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

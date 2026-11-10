@@ -3,10 +3,10 @@
 > **Context**: Unified homelab control center and service status dashboard for Deep and Pranali.  
 > **Host**: UGREEN DXP2800 (`192.168.1.80`)  
 > **Status**: 🟢 **Operational & Production Verified (HTTP 200 OK / All Widgets Green)**  
-> **Dashboard URL**: [http://192.168.1.80:3000](http://192.168.1.80:3000)  
+> **Dashboard URL**: [http://home.nas:3000](http://home.nas:3000) (or `http://192.168.1.80:3000`)  
 > **Theme**: Pure AMOLED / OLED Solid Black (`#000000`)  
 > **Layout**: Vertical Columns (`style: column`)  
-> **Last Verified**: 2026-08-28 17:46 PDT
+> **Last Verified**: 2026-11-09 18:52 PST
 
 ---
 
@@ -46,7 +46,7 @@ services:
       - PUID=1000
       - PGID=10
       - TZ=America/Los_Angeles
-      - HOMEPAGE_ALLOWED_HOSTS=192.168.1.80:3000,192.168.1.80,localhost:3000,localhost,127.0.0.1:3000,127.0.0.1,pi5-media-nas,deepdxp2800,*.local
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.1.80:3000,192.168.1.80,localhost:3000,localhost,127.0.0.1:3000,127.0.0.1,pi5-media-nas,deepdxp2800,*.local,*.nas,home.nas:3000,home.nas
     ports:
       - "3000:3000"
     volumes:

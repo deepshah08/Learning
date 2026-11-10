@@ -7,17 +7,19 @@
 
 ---
 
-## 🗺️ Master Service Catalog & API Endpoints
+## 🗺️ Master Service Catalog & Endpoints
 
-| Service | Port | Internal Docker URL | Auth / API Key | Storage Path |
-|---|---|---|---|---|
-| **Plex Media Server** | `32400` | `http://192.168.1.80:32400` | `26cEskkHTxWVGTJA8paY` | `/data/media` |
-| **Seerr** | `5055` | `http://seerr:5055` | `MTc4NzI5MzM4OD...` | SQLite on NVMe (v3.4.1) |
-| **Radarr (Movies)** | `7878` | `http://radarr:7878` | `30ad1ab196a04184b11289e39a695f20` | `/data/media/movies` |
-| **Sonarr (TV Shows)** | `8989` | `http://sonarr:8989` | `7385f68a846a416d9964d08d1eccda12` | `/data/media/tv` |
-| **Prowlarr (Indexers)** | `9696` | `http://prowlarr:9696` | `eb674050f3e24beaa54b515dbb7a01ac` | `deepshah08` / `Deepshah123$` |
-| **qBittorrent** | `8080` | `http://qbittorrent:8080` | `admin` / `Deepshah123$` | `/data/torrents` |
-| **Tautulli** | `8181` | `http://tautulli:8181` | `f2645a632bde4efb822a9a9c43c562da` | Config on NVMe |
+| Service | Port | Friendly Local URL | Internal Docker URL | Auth / API Key | Storage Path |
+|---|---|---|---|---|---|
+| **Plex Media Server** | `32400` | `http://plex.nas:32400` | `http://192.168.1.80:32400` | `26cEskkHTxWVGTJA8paY` | `/data/media` |
+| **Seerr (Overseerr)** | `5055` | `http://movies.nas:5055` | `http://seerr:5055` | `MTc4NzI5MzM4OD...` | SQLite on NVMe (v3.4.1) |
+| **Radarr (Movies)** | `7878` | `http://radarr.nas:7878` | `http://radarr:7878` | `30ad1ab196a04184b11289e39a695f20` | `/data/media/movies` |
+| **Sonarr (TV Shows)** | `8989` | `http://sonarr.nas:8989` | `http://sonarr:8989` | `7385f68a846a416d9964d08d1eccda12` | `/data/media/tv` |
+| **Prowlarr (Indexers)** | `9696` | `http://prowlarr.nas:9696` | `http://prowlarr:9696` | `deepshah08` / `Deepshah123$` | Config on NVMe |
+| **qBittorrent** | `8080` | `http://torrents.nas:8080` | `http://qbittorrent:8080` | `admin` / `Deepshah123$` | `/data/torrents` |
+| **Tautulli** | `8181` | `http://tautulli.nas:8181` | `http://tautulli:8181` | `f2645a632bde4efb822a9a9c43c562da` | Config on NVMe |
+| **Homepage** | `3000` | `http://home.nas:3000` | `http://homepage:3000` | N/A | Config on NVMe |
+| **Pi-hole (Secondary)** | `8089` | `http://pihole.nas:8089` | `http://pihole:8089` | `Deepshah123$` | Config on NVMe |
 
 ---
 
