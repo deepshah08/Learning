@@ -249,13 +249,20 @@ python3 /volume2/docker/redroid/scripts/rate_limiter.py override disable
 ### 7.2 `verify_backup.py` CLI Commands
 
 ```bash
-# 1. Query backup status for an individual file (JSON output)
+# 1. Query consensus backup status for an individual file (JSON output)
+# Checks backup_item_status, remote_media, MediaTombstone, and media tables
 python3 /volume2/docker/redroid/scripts/verify_backup.py check "Haldi.mp4"
 
-# 2. Block until file reaches SYNCED state (Exit code 0) or times out
+# 2. Block until file reaches true consensus SYNCED state (Exit code 0) or times out
 python3 /volume2/docker/redroid/scripts/verify_backup.py wait "Haldi.mp4" --timeout 600
 
-# 3. Print cloud sync summary across entire library
+# 3. Self-healing reset for a stuck or tombstoned file (purges tombstones & re-queues)
+python3 /volume2/docker/redroid/scripts/verify_backup.py reset "Dhuri & Fenil Full Movie-001.mp4"
+
+# 4. Comprehensive multi-table audit of entire library (detects ghost syncs & tombstones)
+python3 /volume2/docker/redroid/scripts/verify_backup.py audit
+
+# 5. Print cloud sync summary across entire library
 python3 /volume2/docker/redroid/scripts/verify_backup.py summary
 ```
 
@@ -267,6 +274,8 @@ python3 /volume2/docker/redroid/scripts/verify_backup.py summary
 | :--- | :--- | :--- | :--- | :--- |
 | **Ashmem 32-bit Crash** | `SIGABRT` crashes Photos app immediately. | Zero sync progress; container restarts if fatal. | Signed integer overflow in `libcutils.so::ashmem_get_size_region()`. | Apply 2-byte patch (`jmp; nop`) to `libcutils.so` binary. |
 | **Inotify Race Condition** | Scanner moves 0-byte or partially written file. | Duplicate truncated assets in cloud (e.g. 2-min clips). | Direct writing into active `inbox` directory during write stream. | Enforce two-phase staging: write to `inbox_staging/`, then `mv` to `inbox/`. |
+| **Ghost Sync (Stale Cache)** | Local files skipped during re-sync without being uploaded. | `verify_backup.py` falsely reports `SYNCED` (`state = 1`). | Remote deletions from web UI purge cloud media, but Android app leaves local `backup_item_status` untouched. | Multi-Table Consensus in `verify_backup.py` (checks `MediaTombstone`, `remote_media.trash_timestamp`). |
+| **`MediaTombstone` Barrier** | Android MediaStore scanner refuses to index file into `local_media`. | File shows `NOT_FOUND` or `STATE_None` indefinitely. | Cloud-initiated deletion writes tombstone into `MediaTombstone` table, suppressing future ingestion. | Run `verify_backup.py reset <filename>` to purge tombstones and re-trigger MediaStore scan. |
 | **SQLite WAL Lockout** | Cloud upload proceeds unaffected in Android. | `verify_backup.py` hangs or throws `OperationalError: database locked`. | Background WAL checkpoint locks database file exclusively. | Exponential backoff retry in `verify_backup.py` (up to 5 attempts). |
 | **SMR Drive Thrashing** | Extraction write speed drops to $< 2\text{ MB/s}$. | Batch worker hits 600s verification timeout. | Shingled magnetic track rewriting during simultaneous tar unpacks. | Redirect extraction paths to `/dev/shm` RAM disk on Pi 5. |
 | **Mechanical HDD Spinup** | Unnecessary mechanical disk wear and acoustic noise. | Unintended latency on NAS filesystem queries. | Recursive `find` executed across `/volume1` bulk storage pool. | Query static NVMe catalog (`source_catalog.txt`); never crawl `/volume1`. |
@@ -288,3 +297,13 @@ python3 /volume2/docker/redroid/scripts/verify_backup.py summary
 - **Atomic Two-Phase Staging**: All assets staged via `inbox_staging/` and debounced for 3s. Zero truncated duplicates created.
 - **Storage Tier Isolation**: Bulk files read from static NVMe catalog (`source_catalog.txt`); mechanical HDD remained in continuous 0 RPM sleep.
 - **Cloud Verification**: 100% of 2,797 photos and 33 ceremony videos verified `SYNCED` in `gphotos0.db` with valid cloud media keys.
+
+### Incident 9.2: Post-Deletion Ghost Sync & MediaTombstone Suppression
+
+#### Before Hardening:
+- **Flaw**: After the operator deleted prior batch uploads on the web interface (`photos.google.com`), `verify_backup.py` inspected only `backup_item_status.state = 1`. Because Android retained stale records for deleted media keys, `verify_backup.py` falsely reported `SYNCED` (`is_synced: true`). Ingestion scripts skipped 7 critical video files (`Haldi`, `Reels`, `Trailers`) without uploading.
+- **Suppression**: Attempting to force-reindex `Dhuri & Fenil Full Movie-001.mp4` by purging local rows failed because Google Photos wrote a tombstone into `MediaTombstone` upon remote deletion, instructing the MediaStore scanner to reject the file.
+
+#### After Hardening:
+- **Multi-Table Consensus Verifier**: Re-engineered `verify_backup.py` to cross-reference `backup_item_status`, `local_media`, `remote_media`, `MediaTombstone`, and `media`. An asset is verified `SYNCED` if and only if its media key is live, has no tombstones, and is not trashed in the cloud.
+- **Self-Healing Reset Tooling**: Added `verify_backup.py reset <filename>` to automatically purge `MediaTombstone`, reset `local_media` backup markers, touch the camera file, and trigger Job 1052. All 14 wedding video assets verified 100% synced with fresh cloud media keys.
