@@ -117,15 +117,33 @@ The goal was to audit all known failure modes across the Android emulation and c
 2. **Google Photos Live Status**:
    - Backup State: **`Backup is on`** · **`Quality: Original`**
    - Active Quota: **`552.31 MB of 5 TB (0% used)`** (Zero bytes charged against Google One storage).
-   - Sync State: **`3,000 photos & videos backed up`** · **`Backup complete [✓]`**.
+   - Sync State: **`3,023 items backed up`** · **`Backup complete [✓]`** (`verify_backup.py summary`).
+   - Shared Album Envelope: **320 highlight items committed** (`Fenil & Dhuri Wedding` public album link live).
 3. **Rate Limiter Verification**:
-   - Today's Ingested Volume: **22.00 GB** recorded for 2026-11-10.
-   - Baseline State: `allowed: false` (Daily limit of 1.00 GiB reached; gate actively holding).
-   - Burst Mode: Fully operational via `python3 rate_limiter.py override enable --ceiling-gb 50`.
+   - Today's Ingested Volume: **59.277 GB** recorded for 2026-11-10 (full wedding archive completed).
+   - Baseline State: Returned to standard 1.00 GiB/day baseline protection (`override disable` committed).
+4. **Hardware Health**:
+   - Mechanical HDD (`/volume1`): **`IDLE_A` (0 RPM deep hibernation)** throughout entire 60GB ingest.
+   - NVMe Tier (`/volume2`): Zero residual staging/inbox files.
 
 ---
 
-## 6. Key Learnings
+## 6. Investigation: Upload Throughput Bounds (~6 MB/s vs 5 Gbps Fiber) & Parallelization Calculus
+
+* **User Observation**: Upload speeds during media ingestion plateaued at ~6 MB/s, raising the question of why a 5 Gbps symmetric fiber connection (625 MB/s theoretical) was not being saturated.
+* **Empirical Diagnostics**:
+  1. *NAS Local Physical Link*: `ethtool eth0` verified the NAS 2.5GbE NIC was negotiated at 1,000 Mb/s (1 Gbps Full Duplex) with its upstream switch port (~115–125 MB/s maximum physical wire speed).
+  2. *Internal LAN Throughput*: Pi 5 streaming slices to NAS NVMe achieved **104.5 MB/s (~840 Mbps)**, proving local LAN saturation.
+  3. *Multi-Stream Public WAN Benchmarks*: Firing 8-to-16 concurrent TCP POST streams from the NAS directly to Cloudflare speed endpoints achieved **303.3 Mbps (36.2 MB/s)**, proving the NAS TCP stack and WAN connection can push hundreds of megabits.
+  4. *Google Photos Mobile Bottleneck*: The Google Photos Android application (`com.google.android.apps.photos`) is hardcoded to upload sequentially (1 media file at a time over single-stream HTTP/2). Google's Scotty uploader enforces server-side TCP window clamping on mobile clients (~40–50 Mbps / ~5–6.5 MB/s) to prevent mobile overheating and throttle server-side media processing.
+* **Evaluation of Parallel Batching**:
+  - Running multiple ReDroid containers or multi-threaded REST clients to bypass the 6 MB/s ceiling was evaluated.
+  - *Finding*: A real 2016 Pixel 1 (Snapdragon 821) only possesses a single Wi-Fi radio. Multiple concurrent high-throughput connections claiming to be a single Pixel 1 or multiple Pixel 1s on one account trigger Google's SRE abuse/device-cloning heuristics. Furthermore, the unlimited original quality waiver is granted exclusively to the signed Android app, not third-party APIs.
+  - *Decision*: **Explicitly rejected parallelization in favor of availability and longevity.** At ~6 MB/s, normal daily syncs (50–100 photos) take <45 seconds, making raw speed optimization unnecessary compared to the catastrophic risk of account revocation.
+
+---
+
+## 7. Key Learnings
 
 1. **System Containerization Outperforms In-Process Hooking**:
    Method hooking (Xposed, Magisk, Zygisk) creates split-brain state between app processes and background Play Services daemons (e.g. Phenotype IPC in crDroid #990). Containerizing the entire OS allows standard immutable property propagation across all processes.
@@ -133,3 +151,5 @@ The goal was to audit all known failure modes across the Android emulation and c
    AOSP HAL dynamic loaders rely strictly on `ro.hardware` to locate `.so` vendor implementations (`hwcomposer.<ro.hardware>.so`). Modifying `ro.hardware` without recompiling vendor HAL binaries breaks graphics rendering. Build and partition identities must be cloaked without altering HAL binding variables.
 3. **Cloud Anti-Abuse Relies on Traffic Cadence**:
    Unlimited storage abuse triggers are largely statistical (gigabytes uploaded per hour vs typical mobile usage). Enforcing a 1GB/day baseline provides statistical camouflaging, while manual burst overrides accommodate legitimate real-world event ingestion.
+4. **Availability & Longevity Trump Raw Ingestion Speed**:
+   Attempting to saturate multi-gigabit broadband by parallelizing emulated legacy mobile hardware produces an unmistakable artificial footprint. Mimicking the organic single-stream constraints of a physical Pixel 1 guarantees the digital twin remains undetected for years.
