@@ -32,7 +32,7 @@ A persistent, cross-session Single Source of Truth (SoT) tracking active, comple
 | **22** | **Homepage Unified Dashboard** | Homelab Management | 🟢 Production | Port `3000` (UGREEN NAS) | Verified Operational ([Docs](ugreen_nas/homepage/README.md)) |
 | **23** | **macOS SMB File Sharing** | Storage / Transfers | 🟢 Production | Port `445` (`smb://192.168.1.80`) | Verified Operational ([Docs](ugreen_nas/smb/README.md)) |
 | **24** | **AI Telegram Media Bot** | Media Automation / AI | 🟢 Operational | Telegram Bot Interface + Arr Stack Bridge | Unit Tests Passing ([Docs](ugreen_nas/telegram_bot/README.md)) |
-| **25** | **Virtual Pixel 1 Digital Twin** | Photos / Cloud Storage | 🟢 Production | Port `5555` (`redroid-pixel1` on NVMe `/volume2`) | Verified Operational & Fully Hardened ([Docs](ugreen_nas/redroid/README.md) · [Hardening Audit](ugreen_nas/redroid/redroid_anti_spoof_hardening_knowledge.md)) |
+| **25** | **Virtual Pixel 1 Digital Twin & Cloud Pipeline** | Photos / Cloud Storage | 🟢 Production | Port `5555` (`redroid-pixel1` on NVMe `/volume2`) | 100% Synced (2,797 Photos + 33 Videos) · 64-Bit Inode Patched · Multi-Account Mutex ([Docs](ugreen_nas/redroid/README.md) · [Anti-Spoof MDS](ugreen_nas/redroid/redroid_anti_spoof_hardening_knowledge.md) · [Pipeline MDS](ugreen_nas/redroid/redroid_large_file_and_multi_account_pipeline_knowledge.md)) |
 | **26** | **Asymmetric Tiered Storage & Power Lifecycle** | Storage / Infrastructure | 🟢 Production | Hot NVMe Tier (`/volume2`) + Cold CMR HDD (`/volume1`) | Operational & Benchmarked ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
 | **27** | **Zero-Copy Photo Direct Mount Pipeline** | Storage / Optimization Queue | 📝 Staged / Queue | Read-Only Bind Mount (`/volume1` $ightarrow$ Redroid) + Inotify Scan | Architecture Documented ([Docs](ugreen_nas/storage/PHOTO_TIERED_STORAGE_DESIGN.md)) |
 | **28** | **Ecosystem CI/CD & Anti-Flakiness Automation** | CI/CD / Testing | 🟢 Production | Multi-Repo Matrix (Pi 5, PWA, Market, Workflows) | 44/44 Pi 5 + 10/10 Market Tests Passing ([Docs](ci_cd_and_agentic_pipelines/README.md)) |
@@ -84,6 +84,25 @@ When initiating a session:
 4. Verify system states before altering container bindings or disk mounts.
 5. **Continuous Performance & Complexity Alignment**: Reference [SYSTEMS_BENCHMARKING_AND_OPTIMIZATIONS.md](SYSTEMS_BENCHMARKING_AND_OPTIMIZATIONS.md) before implementing algorithmic or data-pipeline changes to preserve verified complexity gains ($O(N^2) \to O(N)$) and storage-tier write boundaries.
 6. Synchronize changes to `deepshah08/Learning` repository.
+
+---
+
+## 📱 Project #25: ReDroid Pixel 1 Cloud Backup & Multi-Account Pipeline
+
+### Overview
+A headless, containerized Google Pixel 1 (`sailfish`) digital twin running on the UGREEN NAS NVMe tier (`/volume2/docker/redroid`), providing lifetime unlimited **Original Quality Google Photos backups at 0 bytes cloud quota impact**. The pipeline is hardened against Play Integrity and GMS Phenotype anti-spoof checks, features a surgical 64-bit micro-patch for large video files ($\gg 2\text{ GiB}$), eliminates inotify ingestion races via two-phase atomic staging, and supports serialized multi-account household ingestion.
+
+### Current Status & Verified Achievements (November 2026)
+- **100% Cloud Migration of Fenil & Dhuri Wedding**: Successfully ingested, scanned, and uploaded all **2,797 Nikon DSLR photos** and **33 ceremony videos** with `state = 1` (`SYNCED`) in `gphotos0.db` at Original Quality with zero quota consumption.
+- **Surgical 64-Bit Inode Micro-Patch (`libcutils.so`)**: Bypassed the Android 10 signed 32-bit ashmem ceiling ($2.0\text{ GiB}$) by modifying 2 bytes in `/system/lib64/libcutils.so` (`je` $\to$ `jmp; nop`). Uncut uploads verified for 2.17 GiB wedding movie and 4.34 GiB continuous recording test at 0 quota.
+- **Multi-Agent Hardening Audit (14 Fixes Applied)**: Multi-agent audit (`pipeline_reviewer` + `pipeline_tester`) eliminated race conditions via atomic two-phase staging (`inbox_staging/` $\to$ `inbox/`), zero-copy `mv` on Btrfs NVMe, exponential retry backoff in `verify_backup.py`, directory UID `1023:1023` permissions, and Pi 5 `/dev/shm` RAM disk extraction to prevent SMR disk wear.
+- **Cloud Reconciliation**: Audited and reconciled 28 deleted web items from `backup_item_status`, ensuring exact alignment across Mac local storage, Pi 5 SMR archive, and Google Cloud database.
+- **Multi-Account Mutex Architecture (Pranali)**: Designed serialized household multi-account ingestion on Pixel 1 User 0 profile using POSIX mutex locking (`account.lock`) and independent rate limit tracking (`rate_limit_pranali.json`).
+
+### Roadmap & Next Execution Slices
+1. **Automated Multi-Account Switcher (`account_switcher.py`)**: Script automated ADB/SQLite switching between Deep and Pranali accounts with mutex locking (`account.lock`).
+2. **Direct Read-Only Bind Mount Pipeline (Project 27)**: Implement zero-copy direct read-only bind mounts from NAS `/volume1` bulk storage into ReDroid with static catalog queues.
+3. **Automated SLO & Incident Alerts**: Wire `verify_backup.py` and `rate_limiter.py` into n8n webhooks for real-time Telegram notifications upon daily burst completion or permanent failure detection.
 
 ---
 

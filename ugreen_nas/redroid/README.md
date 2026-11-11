@@ -14,8 +14,10 @@ This domain houses the operational, architectural, and investigation documentati
 | Document | Role | Description |
 | :--- | :--- | :--- |
 | [**`REDROID_PIXEL1_DIGITAL_TWIN.md`**](./REDROID_PIXEL1_DIGITAL_TWIN.md) | **System Runbook** | Operational runbook, initial deployment topology, baseline resource footprint, and systemd ingestion services. |
-| [**`redroid_anti_spoof_hardening_investigation.md`**](./redroid_anti_spoof_hardening_investigation.md) | **Investigation (Journey)** | Comprehensive investigation into crDroid issues #990/#977, Play Integrity partition checks, SurfaceFlinger HAL debugging, and rate limiter design. |
-| [**`redroid_anti_spoof_hardening_knowledge.md`**](./redroid_anti_spoof_hardening_knowledge.md) | **Knowledge (Durable Truth)** | Complete partition property parity architecture, bootloader/telephony cloaking, multi-year longevity invariants, and `rate_limiter.py` CLI specification. |
+| [**`redroid_anti_spoof_hardening_investigation.md`**](./redroid_anti_spoof_hardening_investigation.md) | **Investigation (Anti-Spoof)** | Comprehensive investigation into crDroid issues #990/#977, Play Integrity partition checks, SurfaceFlinger HAL debugging, and rate limiter design. |
+| [**`redroid_anti_spoof_hardening_knowledge.md`**](./redroid_anti_spoof_hardening_knowledge.md) | **Knowledge (Anti-Spoof)** | Complete partition property parity architecture, bootloader/telephony cloaking, multi-year longevity invariants, and `rate_limiter.py` CLI specification. |
+| [**`redroid_large_file_and_multi_account_pipeline_investigation.md`**](./redroid_large_file_and_multi_account_pipeline_investigation.md) | **Investigation (Large-File & Audit)** | Investigation into 32-bit ashmem inode ceiling (`SIGABRT`), 64-bit micro-patch, multi-agent hardening audit (14 fixes), cloud reconciliation (28 deleted items), and multi-account feasibility. |
+| [**`redroid_large_file_and_multi_account_pipeline_knowledge.md`**](./redroid_large_file_and_multi_account_pipeline_knowledge.md) | **Knowledge (Large-File & Mutex)** | Durable architecture for two-phase atomic staging, lossless keyframe cutting, headless SQLite WAL verification (`verify_backup.py`), and serialized multi-account switching (`account.lock`). |
 
 ---
 
@@ -61,9 +63,12 @@ ssh -o ControlMaster=auto -o ControlPersist=1h nas "docker ps --filter name=redr
 # 2. Verify complete partition property cloaking (expect 0 lines returned)
 ssh -o ControlMaster=auto -o ControlPersist=1h nas "docker exec redroid-pixel1 getprop" | grep -E "test-keys|userdebug|redroid"
 
-# 3. Check daily upload rate limiter status and budget
+# 3. Check daily upload rate limiter status and budget (Zero NVMe fsync writes)
 ssh -o ControlMaster=auto -o ControlPersist=1h nas "python3 /volume2/docker/redroid/scripts/rate_limiter.py status"
 
-# 4. View Google Photos cloud backup state
-ssh -o ControlMaster=auto -o ControlPersist=1h nas "docker exec redroid-pixel1 dumpsys activity top | grep -E 'com.google.android.apps.photos'"
+# 4. View Google Photos cloud backup verification summary
+ssh -o ControlMaster=auto -o ControlPersist=1h nas "python3 /volume2/docker/redroid/scripts/verify_backup.py summary"
+
+# 5. Tail inotify media scanner daemon logs
+ssh -o ControlMaster=auto -o ControlPersist=1h nas "tail -n 20 /volume2/docker/redroid/scripts/media-scanner.log"
 ```
