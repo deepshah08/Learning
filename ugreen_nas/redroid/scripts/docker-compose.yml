@@ -1,0 +1,124 @@
+services:
+  redroid-pixel1:
+    image: redroid:11.0.0-pixel1-twin
+    container_name: redroid-pixel1
+    restart: unless-stopped
+    privileged: true
+    mac_address: "40:4e:36:7f:fb:d9"
+    ports:
+      - "5555:5555"
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/binder:/dev/binder
+      - /dev/hwbinder:/dev/hwbinder
+      - /dev/vndbinder:/dev/vndbinder
+    volumes:
+      - /volume2/docker/redroid/data:/data
+    command:
+      # Memory allocation & Host GPU Acceleration (Intel N100)
+      - androidboot.use_memfd=1
+      - androidboot.redroid_gpu_mode=host
+      - androidboot.redroid_gpu_node=/dev/dri/renderD128
+      - androidboot.redroid_width=1080
+      - androidboot.redroid_height=1920
+      - androidboot.redroid_dpi=420
+      - androidboot.redroid_fps=30
+      
+      # ARM Translation Architecture (libndk)
+      - ro.product.cpu.abilist=x86_64,arm64-v8a,x86,armeabi-v7a,armeabi
+      - ro.product.cpu.abilist64=x86_64,arm64-v8a
+      - ro.product.cpu.abilist32=x86,armeabi-v7a,armeabi
+      - ro.dalvik.vm.isa.arm=x86
+      - ro.dalvik.vm.isa.arm64=x86_64
+      - ro.enable.native.bridge.exec=1
+      - ro.vendor.enable.native.bridge.exec=1
+      - ro.vendor.enable.native.bridge.exec64=1
+      - ro.dalvik.vm.native.bridge=libndk_translation.so
+      - ro.ndk_translation.version=0.2.3
+      
+      # Physical Pixel 1 (Sailfish) Exact Cloned Identifiers
+      - ro.product.brand=google
+      - ro.product.manufacturer=Google
+      - ro.product.model=Pixel
+      - ro.product.name=sailfish
+      - ro.product.device=sailfish
+      - ro.product.board=sailfish
+      - ro.board.platform=msm8996
+      - ro.serialno=FA6AN0302845
+      - ro.boot.serialno=FA6AN0302845
+      - androidboot.serialno=FA6AN0302845
+      
+      # Build & OS Identity
+      - ro.build.id=QP1A.191005.007.A3
+      - ro.build.display.id=QP1A.191005.007.A3
+      - ro.build.flavor=sailfish-user
+      - ro.build.tags=release-keys
+      - ro.build.type=user
+      - ro.build.description=sailfish-user 10 QP1A.191005.007.A3 5972272 release-keys
+      - ro.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      - ro.bootimage.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      
+      # Bootloader Emulation
+      - ro.boot.baseband=msm
+      - ro.boot.bootloader=8996-012001-1908071822
+      - ro.boot.flash.locked=1
+      - ro.boot.hardware.revision=PVT
+      
+      # Partition Parity: System Partition
+      - ro.product.system.brand=google
+      - ro.product.system.manufacturer=Google
+      - ro.product.system.model=Pixel
+      - ro.product.system.name=sailfish
+      - ro.product.system.device=sailfish
+      - ro.system.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      - ro.system.build.tags=release-keys
+      - ro.system.build.type=user
+      - ro.system.build.id=QP1A.191005.007.A3
+      
+      # Partition Parity: Vendor Partition
+      - ro.product.vendor.brand=google
+      - ro.product.vendor.manufacturer=Google
+      - ro.product.vendor.model=Pixel
+      - ro.product.vendor.name=sailfish
+      - ro.product.vendor.device=sailfish
+      - ro.vendor.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      - ro.vendor.build.tags=release-keys
+      - ro.vendor.build.type=user
+      - ro.vendor.build.id=QP1A.191005.007.A3
+      
+      # Partition Parity: Product Partition
+      - ro.product.product.brand=google
+      - ro.product.product.manufacturer=Google
+      - ro.product.product.model=Pixel
+      - ro.product.product.name=sailfish
+      - ro.product.product.device=sailfish
+      - ro.product.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      - ro.product.build.tags=release-keys
+      - ro.product.build.type=user
+      - ro.product.build.id=QP1A.191005.007.A3
+      
+      # Partition Parity: System_Ext & ODM Partitions
+      - ro.product.system_ext.brand=google
+      - ro.product.system_ext.manufacturer=Google
+      - ro.product.system_ext.model=Pixel
+      - ro.product.system_ext.name=sailfish
+      - ro.product.system_ext.device=sailfish
+      - ro.system_ext.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      - ro.system_ext.build.tags=release-keys
+      - ro.system_ext.build.type=user
+      
+      - ro.product.odm.brand=google
+      - ro.product.odm.manufacturer=Google
+      - ro.product.odm.model=Pixel
+      - ro.product.odm.name=sailfish
+      - ro.product.odm.device=sailfish
+      - ro.odm.build.fingerprint=google/sailfish/sailfish:10/QP1A.191005.007.A3/5972272:user/release-keys
+      - ro.odm.build.tags=release-keys
+      - ro.odm.build.type=user
+      
+      # Telephony & Radio Stack Cloaking
+      - gsm.version.baseband=8996-130361-1905270421
+      - gsm.version.ril-impl=Qualcomm RIL 1.0
+      - gsm.sim.state=ABSENT
+      - gsm.operator.iso-country=us
+      - persist.radio.imei=353086081745920
