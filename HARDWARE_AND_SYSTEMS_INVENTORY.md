@@ -135,30 +135,38 @@
 
 ## ⚖️ 4. Decoupled Architecture & Independent Scaling
 
+> **Authoritative Memory & Swap Audit**: See [storage/NVME_SWAP_AND_MEMORY_TIERING_AUDIT.md](storage/NVME_SWAP_AND_MEMORY_TIERING_AUDIT.md) for live telemetry and wear projections across all 4 nodes.
+
 ```text
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        3-TIER INDEPENDENT ASYMMETRIC SCALING MODEL                     │
-├────────────────────────────┬─────────────────────────────┬─────────────────────────────┤
-│ Node 1: UGREEN NAS (.80)   │ Node 2: Raspberry Pi 5 (.92)│ Node 3: GEEKOM IT13 Max(.155│
-├────────────────────────────┼─────────────────────────────┼─────────────────────────────┤
-│ • Pure Storage Tiering:    │ • Network & DNS Authority:  │ • Dedicated Compute & AI:   │
-│   - NVMe (/volume2): Docker│   - Pi-hole v6 Primary FTL  │   - Core Ultra 9 185H (16C) │
-│   - CMR SATA (/volume1):   │   - Unbound Root Recursive  │   - Arc 8 Xe-Cores iGPU     │
-│     Mass Media (0 RPM)     │   - Authoritative DHCP Opt 6│   - 16GB DDR5 + 1TB NVMe    │
-│ • Zero USB polling wakeups │ • Strict SLO Protection:    │ • Zero Throttle AI:         │
-│ • QuickSync Transcoding    │   - Nice=15 / CPUQuota=50%  │   - Ollama / OpenVINO       │
-│ • 2.5GbE Dedicated LAN     │   - Decoupled from heavy AI │   - Faster-Whisper real-time│
-│ • High-Availability DNS #2 │ • Attached 8TB SMR Archive  │   - Immich ML offloader     │
-└────────────────────────────┴─────────────────────────────┴─────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    4-TIER INDEPENDENT ASYMMETRIC SCALING MODEL                                   │
+├────────────────────────────┬─────────────────────────────┬─────────────────────────────┬─────────────────────────┤
+│ Node 1: UGREEN NAS (.80)   │ Node 2: Raspberry Pi 5 (.92)│ Node 3: GEEKOM IT13 Max(.155│ Node 4: Aurora A3 (.111)│
+├────────────────────────────┼─────────────────────────────┼─────────────────────────────┼─────────────────────────┤
+│ • Pure Storage Tiering:    │ • Network & DNS Authority:  │ • Dedicated Compute & AI:   │ • Services & Media Host:│
+│   - NVMe (/volume2): Docker│   - Pi-hole v6 Primary FTL  │   - Core Ultra 9 185H (16C) │   - Ryzen 7 8745HS (16T)│
+│   - CMR SATA (/volume1):   │   - Unbound Root Recursive  │   - Arc 8 Xe-Cores iGPU     │   - 16GB DDR5 + 1TB NVMe│
+│     Mass Media (0 RPM)     │   - Authoritative DHCP Opt 6│   - 32GB DDR5 (18.6GB mlock)│   - Radeon 780M GPU     │
+│ • Zero USB polling wakeups │ • Strict SLO Protection:    │ • Zero Throttle AI:         │ • ReDroid Digital Twin  │
+│ • QuickSync Transcoding    │   - Nice=15 / CPUQuota=50%  │   - Qwen3.6-35B-A3B locked  │ • Ephemeral /dev/shm    │
+│ • 2.5GbE Dedicated LAN     │   - Decoupled from heavy AI │   - Unattended agent daemon │   RAM-disk staging      │
+│ • High-Availability DNS #2 │ • Attached 8TB SMR Archive  │ • vm.swappiness = 10        │ • vm.swappiness = 10    │
+│ • 100% zram (0 NVMe swap)  │ • 100% zram (0 SMR/SD swap) │ • 2.5GbE Dedicated LAN      │ • Wi-Fi 6E (52-75 MB/s) │
+└────────────────────────────┴─────────────────────────────┴─────────────────────────────┴─────────────────────────┘
 ```
 
 ### Key Scaling Principles:
-1. **SLO & Network Blast-Radius Shielding**: Whole-home DNS/DHCP on the Raspberry Pi 5 is completely insulated from CPU starvation. Heavy inference (Whisper, LLMs) is decoupled onto the IT13 Max.
+1. **SLO & Network Blast-Radius Shielding**: Whole-home DNS/DHCP on the Raspberry Pi 5 is completely insulated from CPU starvation. Heavy inference (LLMs, agents) is decoupled onto the IT13 Max.
 2. **Actuator & Spindown Isolation**: The UGREEN NAS is completely freed from external USB disk controllers. The 10TB Seagate IronWolf CMR drive stays in 0 RPM deep hibernation undisturbed.
 3. **Compute Specialization**:
    - **Pi 5 (16GB RAM)**: Network gatekeeper, recursive DNS, lightweight background orchestration, and cold SMR archiving.
    - **NAS (Intel N100 + QuickSync)**: Low-latency NVMe transactions, 4K QuickSync hardware media streaming, and native file sharing.
    - **IT13 Max (Intel Core Ultra 9 185H + Arc)**: Unthrottled local AI inference, OpenVINO acceleration, continuous container workloads, and automated builds.
+   - **Aurora A3 (AMD Ryzen 7 8745HS + 780M)**: Media virtualization, multi-threaded cross-host ingest pipelines, and production web services.
+4. **Zero NVMe Swap Wear & Memory Tiering**:
+   - Storage appliances (NAS, Pi 5) run strictly in-RAM compressed swap (`zram`), producing **0 bytes of swap wear** on SSDs or flash media.
+   - Compute nodes (IT13 Max, Aurora A3) enforce **`vm.swappiness = 10`**, strictly preserving NVMe endurance ($<0.33\%$ lifetime wear across all nodes).
+   - Ingress media staging uses POSIX tmpfs RAM disks (`/dev/shm`), ensuring zero write amplification on host NVMe drives.
 
 ---
 
