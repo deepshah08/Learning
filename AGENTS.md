@@ -7,6 +7,7 @@
 ## 🛡️ 1. Pragmatic Anti-Confirmation Bias & Ground-Truth Protocol
 
 - **Velocity First, Rigor Where It Matters:** Differences in perspective and technical trade-offs are natural and expected. Do not halt momentum or over-engineer tests for standard decisions. Keep development moving forward smoothly.
+- **Evidence-Based Trade-Off & Cost-Benefit Gating:** Every architectural and pipeline proposal must follow Section 7's real-world constraint analysis—evaluating end-to-end bottlenecks (Amdahl's Law), payload math, and system stability over theoretical interface maximums.
 - **Explicit Objection Trigger:** When the user explicitly objects, states contrary real-world observations, or corrects an assumption, **STOP defending the prior hypothesis**. Do not cherry-pick search results or synthesize references to confirm a belief. Re-evaluate with an open mind and design a fast, minimal verification only if needed.
 - **Zero Premature Capability Denial & Pre-Assertion Search Gate:** NEVER claim an inability to access, execute commands on, or authenticate with homelab infrastructure or local credentials (e.g., claiming "I cannot execute commands on your hardware" or "I don't have access") without first conducting an active search of workspace references (`HOST_PASSWORDS.md`, `Learning/HARDWARE_AND_SYSTEMS_INVENTORY.md`, `~/.ssh/config`). When the user asserts a capability or points to evidence with confidence, agents are STRICTLY GATED from denying capability until an explicit filesystem search (`find`, `grep`, `mdfind`) disproves it.
 - **Low Confidence / High-Impact Check:** When dealing with ambiguous third-party cloud quotas, destructive disk operations, or unverified API side-effects where confidence is low, proactively state the uncertainty and verify before committing to irreversible actions.
@@ -94,3 +95,22 @@ The English-only default does **NOT** apply to:
   - **Translation services** when the use case involves `en↔hi` or `en↔gu` translation.
 
 When these exceptions apply, load **only the required languages** (`en`, `hi`, `gu`) — never the full 100+ language pack. For Whisper, use the language-specific or bilingual model if available rather than the full multilingual checkpoint.
+
+---
+
+## ⚖️ 7. Evidence-Based System Trade-Off & Cost-Benefit Analysis (Real-World Constraint Gating)
+
+- **Mandatory Pre-Design Trade-Off Evaluation:** Before proposing, implementing, or refactoring homelab architectures, multi-host pipelines, network topologies, or hardware attachments, agents MUST conduct an explicit, evidence-backed cost-benefit and constraint analysis. Never optimize subsystems in isolation.
+- **Holistic End-to-End Bottleneck Identification (Amdahl's Law):**
+  - Always evaluate the *entire* lifecycle and time consumption across all pipeline stages (extraction $\to$ staging $\to$ processing $\to$ upload $\to$ commit).
+  - If a downstream or upstream stage is inherently bounded by an immutable external constraint (e.g., Google Photos cloud ingress server-side throttled at 50–100 Mbps = ~8–10 minutes for 5 GB), shaving 20 seconds off an already fast 42-second LAN transfer (<8% of total runtime) represents negligible real-world ROI and premature optimization.
+  - Never introduce architectural complexity (e.g., host-to-host USB-C bridging, custom point-to-point subnets, extra dongles) to optimize a step that already accounts for a trivial fraction of total execution time.
+- **Concrete Workload Math Over Theoretical Interface Ceilings:**
+  - Always compute the math using real-world workload numbers: $\text{Duration} = \frac{\text{Payload Size}}{\text{Effective Throughput}}$.
+  - Evaluate against realistic intervals: a 42-second transfer that runs unattended once per day in the background while users sleep is already optimal. 1 Gbps Cat6 in-wall wiring is more than adequate for typical daily payloads (e.g. 5 GB = ~42 seconds). Do not chase 2.5G/5G/10G links unless the concrete volume or latency demands it.
+- **True Bottleneck Prioritization (System Stability > Micro-Latency):**
+  - Clearly distinguish between a "perceived" bottleneck (LAN bandwidth or theoretical link speed) and the "lethal" bottleneck (host RAM exhaustion, I/O wait lockup, kernel watchdog panic).
+  - High-consequence failure modes (e.g. NAS running out of its 2.2 GB free RAM and triggering Intel TCO hardware watchdog hard resets) must ALWAYS take architectural priority over micro-optimizing network throughput.
+- **Asymmetric Hardware & Storage Tier Alignment:**
+  - **SMR Storage Physics:** Restrict SMR drives (8TB Seagate Expansion on Pi 5) strictly to cold, periodic, heavily compressed sequential archives (`.tar.zst`). Enforce 0 RPM deep hibernation (15-min spindown) during idle. Never route active working sets, live databases, or random small-file crawls to SMR.
+  - **Compute Offloading to Headroom Nodes:** Always offload heavy memory and CPU tasks (Android emulators / ReDroid, MediaStore indexing, video slicing, deduplication hashing) away from resource-constrained appliances (UGREEN NAS with 2.2 GB free) onto compute-rich nodes (Aurora A3 with 13 GB free RAM & 16 Zen 4 threads, or Pi 5 with 14 GB free RAM & `/dev/shm` RAM disk).
