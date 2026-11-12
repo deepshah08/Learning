@@ -36,7 +36,7 @@
 ### Drive 2: 4TB WD_BLACK SN850X NVMe PCIe 4.0 SSD (`WDS400T2X0E`)
 * **Location**: Internal M.2 Slot 1 (`/volume2` - 3.7 TiB Free)
 * **Endurance Rating**: **2,400 TBW** (33.2 GB written = 0.0013% used; ~6,575-year lifespan)
-* **Role**: High-speed 24/7 Hot Application Tier (`/volume2/@docker` + `/volume2/docker`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), Redroid Pixel 1 twin, and snapshot archives.
+* **Role**: High-speed 24/7 Hot Application Tier (`/volume2/@docker` + `/volume2/docker`). Hosts Docker engine, SQLite databases (Pi-hole, *Arr, Vaultwarden, Plex metadata), NVMe media inbox drop-point for ReDroid (`/volume2/docker/redroid/inbox`), and snapshot archives (ReDroid container stack migrated to Aurora A3).
 
 ### Drive 3: 8TB Seagate Expansion SMR (`STKR8000400` / `ST8000DM004`)
 * **Location**: Connected to Raspberry Pi 5 USB 3.0 port (`/dev/sda2`)
@@ -127,6 +127,9 @@
 | **Squid Fetch Proxy** | `3128` (Internal) | `fetch-proxy:3128` | 🟢 **Production** | Domain-whitelisted Squid HTTP proxy with disabled IPv6 |
 | **Qdrant Vector Database** | `6333` | `http://127.0.0.1:6333` | 🟢 **Production** | Vector embeddings storage (`homelab_bge_small_v1`) |
 | **IT13 Single-Heavy Worker**| Systemd Daemon | `it13-worker.service` | 🟢 **Production** | Bounded systemd slice (`it13-heavy.slice`, MemoryMax=8G), CPUAffinity 8-15 |
+| **Virtual Pixel 1 (Sailfish)** | `5555` (ADB) | `127.0.0.1:5555` | 🟢 **Production** | Containerized Google Photos Digital Twin (`redroid-pixel1`), 64-bit patched `libcutils.so`, AMD Radeon 780M GPU (`renderD128`), `/dev/binderfs` |
+| **ReDroid Inotify Scanner** | Systemd Daemon | `redroid-photo-scanner.service` | 🟢 **Production** | Inotify watcher daemon ingesting `/opt/redroid/inbox` into Android DCIM gallery |
+| **ReDroid Daily Batch Worker** | Systemd Timer | `redroid-daily-uploader.timer` | 🟢 **Production** | Daily automated cross-host pipeline (`03:30 UTC`): Disk (NAS) $\to$ RAM (NAS) $\to$ RAM (Aurora `/dev/shm`) $\to$ Multi-threaded verification $\to$ Google Photos Cloud $\to$ SQLite WAL consensus |
 
 ---
 

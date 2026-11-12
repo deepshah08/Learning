@@ -1,15 +1,18 @@
-# 📱 Virtual Pixel 1 (Sailfish) — Redroid Digital Twin on UGREEN NAS
+# 📱 Virtual Pixel 1 (Sailfish) — Redroid Digital Twin (Archived / Migrated to Aurora A3)
 
-> **Status**: 🟢 **Production / Operational**  
-> **Host Target**: UGREEN DXP2800 NAS (`192.168.1.80`)  
-> **Deployment Architecture**: Containerized OCI (Docker Engine 29.4)  
-> **Last Verified**: 2026-08-25 23:45 PDT  
+> **Status**: 🔄 **MIGRATED TO AURORA A3** (`192.168.1.111`)  
+> **Original Host**: UGREEN DXP2800 NAS (`192.168.1.80`)  
+> **Current Authoritative Runbook**: [Learning/aurora_a3/redroid/REDROID_PIXEL1_DIGITAL_TWIN.md](../../aurora_a3/redroid/REDROID_PIXEL1_DIGITAL_TWIN.md)  
+> **Migration Date**: 2026-11-12  
+> **NAS State**: ReDroid container decommissioned to reclaim 1.5+ GiB RAM. NAS operates strictly as low-latency NVMe ingestion inbox drop-point (`/volume2/docker/redroid/inbox`).
 
 ---
 
-## 🎯 Architectural Purpose
+## 🎯 Architectural Purpose & Migration Context
 
-To replicate the physical Google Pixel 1 (`sailfish`) hardware environment headlessly within an isolated Linux container on the UGREEN NAS. This unlocks lifetime unlimited Google Photos backups in Original Quality (0 bytes storage quota charged) while allowing the aging, battery-degraded physical Pixel 1 hardware to be retired permanently.
+To replicate the physical Google Pixel 1 (`sailfish`) hardware environment headlessly within an isolated Linux container. This unlocks lifetime unlimited Google Photos backups in Original Quality (0 bytes storage quota charged) while allowing the aging, battery-degraded physical Pixel 1 hardware to be retired permanently.
+
+On 2026-11-12, the entire ReDroid container, patched 64-bit `libcutils.so` runtime, and 2,819 synced items were migrated to the **OrigiMagic Aurora A3 (`192.168.1.111`)** to eliminate memory pressure and hardware watchdog resets on the NAS. See the Aurora runbook for live operations.
 
 ---
 
