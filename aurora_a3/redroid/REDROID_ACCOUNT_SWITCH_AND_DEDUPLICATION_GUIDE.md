@@ -33,9 +33,15 @@ adb connect 192.168.1.111:5555
 ### Step 2: Launch `scrcpy` Remote Screen
 Run from your Mac:
 ```bash
-scrcpy -s 192.168.1.111:5555
+scrcpy -s 192.168.1.111:5555 --no-audio
 ```
-A window will open displaying the Pixel 1 display running live on Aurora A3 with full mouse and keyboard interaction.
+*Or use the one-command shortcut installed in your PATH:*
+```bash
+redroid-screen
+```
+
+> [!NOTE]
+> **Why `--no-audio` is Required**: Modern `scrcpy` (v2.0+) attempts to stream both audio and video using the `opus` codec. Because ReDroid is a headless virtualization container with no physical soundcard or audio HAL, Android's `audio/opus` encoder throws a fatal `IllegalArgumentException: Failed to initialize audio/opus`. Passing `--no-audio` disables audio capture and launches the visual display window immediately.
 
 ### Step 3: Add Your Main Google Account in Android
 1. In the `scrcpy` window, swipe down from the top twice or click the **Settings** gear icon.
