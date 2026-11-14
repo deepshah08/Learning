@@ -23,22 +23,21 @@ Having established an anti-spoof hardened, crash-free 64-bit pipeline for event/
 
 The ReDroid container on Aurora A3 has port `5555` exposed to your trusted local home network (`192.168.1.0/24`).
 
-### Step 1: Connect ADB from Your Mac
+### Step 1: Launch `redroid-screen` from Your Mac
 Open Terminal on your Mac and run:
-```bash
-adb connect 192.168.1.111:5555
-```
-*(Expected output: `connected to 192.168.1.111:5555`)*
-
-### Step 2: Launch `scrcpy` Remote Screen
-Run from your Mac:
-```bash
-scrcpy -s 192.168.1.111:5555 --no-audio
-```
-*Or use the one-command shortcut installed in your PATH:*
 ```bash
 redroid-screen
 ```
+
+*Or manually:*
+```bash
+adb connect 192.168.1.111:5555
+scrcpy -s 192.168.1.111:5555 --no-audio
+```
+
+> [!TIP]
+> **Troubleshooting `ERROR: Could not find any ADB device`**:
+> On macOS, when the laptop sleeps or switches Wi-Fi networks overnight, the local background ADB daemon (`adb fork-server` on `tcp:5037`) can enter a stale state and drop its TCP socket, reporting `No route to host`. The `redroid-screen` launcher automatically detects this, executes `adb kill-server`, and reconnects cleanly. If running manually, simply run `adb kill-server && adb connect 192.168.1.111:5555`.
 
 > [!NOTE]
 > **Why `--no-audio` is Required**: Modern `scrcpy` (v2.0+) attempts to stream both audio and video using the `opus` codec. Because ReDroid is a headless virtualization container with no physical soundcard or audio HAL, Android's `audio/opus` encoder throws a fatal `IllegalArgumentException: Failed to initialize audio/opus`. Passing `--no-audio` disables audio capture and launches the visual display window immediately.
