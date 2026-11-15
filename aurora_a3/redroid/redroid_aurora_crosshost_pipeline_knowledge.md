@@ -66,9 +66,31 @@ To prevent host SSD bloat, files staged in `/opt/redroid/data/media/0/DCIM/Camer
 - **Local Event Logging**: Every lifecycle event (candidate collection, tar transfer, integrity failure, consensus progress, and eviction) is recorded in `pipeline_events` and `batch_history` within `/opt/redroid/config/media_sync_inventory.db`.
 - **NAS SOT Snapshot**: At the end of each batch run, Aurora checkpoints the SQLite WAL (`PRAGMA wal_checkpoint(TRUNCATE)`) and streams a consistent snapshot to the NAS at `/volume1/docker/redroid_backup/media_sync_inventory.db`, ensuring permanent disaster recovery resilience.
 
+### 7. Android MediaStore In-Container Chunked Broadcast
+- **AOSP ModernMediaScanner Root Fallback Trap**: Calling `content call --method scan_volume --uri content://media --arg external_primary` on Android 10/11 defaults unmapped volume arguments to internal storage (`/`), initiating a recursive filesystem traversal into `/sys/kernel/slab/` and `/sys/kernel/debug/` that blocks `ModernMediaScanner`'s worker thread.
+- **Chunked In-Container Broadcast Solution**: Files deployed into `/storage/emulated/0/DCIM/Camera/` are broadcast in chunks of 100 via a single in-container shell loop:
+  ```bash
+  for f in "$@"; do [ -f "$f" ] && am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d "file://$f" >/dev/null 2>&1; done
+  ```
+  This eliminates multi-process Python `subprocess` overhead while ensuring MediaStore and Google Photos index newly staged media in $<2$ seconds.
+
 ---
 
-## 3. Command Reference & Runbook
+## 3. Production Benchmark & Telemetry (5.0 GB Batch Baseline)
+
+| Telemetry Metric | Aurora A3 (`192.168.1.111`) | UGREEN DXP2800 NAS (`192.168.1.80`) |
+| :--- | :--- | :--- |
+| **CPU Load Average** | `0.93` (8C/16T Ryzen 7 8745HS, <6% CPU) | `0.15` (4C/4T Intel N100, 98% idle) |
+| **RAM Utilization** | 3.1 GiB used / 11 GiB available | 3.4 GiB used / 4.2 GiB available |
+| **Swap Activity** | 2.7 MiB (zero swap wear on SSD) | 1.1 GiB (static, no churn) |
+| **Storage Usage** | 806 GB available (10% used) | 7.5 TB available on `/volume1` (19%) |
+| **NVMe Flash Writes** | Zero NVMe staging (POSIX RAM `/dev/shm`) | Zero writes to `/volume2` (inbox deleted) |
+| **Batch Completion** | 550 files / 5,118.77 MB (5.00 GB) | 100% SOT SQLite snapshot mirrored (20 MB) |
+| **Google Cloud Status**| 550 / 550 verified (`state=1`, `quota=0`) | Quota charged: **0 bytes** |
+
+---
+
+## 4. Command Reference & Runbook
 
 ### Service Management (Aurora):
 ```bash

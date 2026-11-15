@@ -112,3 +112,13 @@ The user reported an unexpected shutdown notification from the UGREEN NAS mobile
   - Total data uploaded: **5,095.04 MB** (~4.976 GB / 5,342,540,604 bytes).
   - Quota charged: **`0 bytes`** across all 311 items.
   - Corrupted files: 0.
+
+- **Morning Production Batch & ModernMediaScanner Hardening (Nov 15, 2026)**:
+  - **Pixel Motion Photo (`.MP.jpg`) Integrity Patch**: Identified that Google Pixel Motion Photos append an MP4 micro-video track to the tail of the JPEG, causing conventional EOI trailer checks (`0xFF 0xD9`) to fail. Patched `verify_media_integrity()` to search the tail buffer for `b"ftyp"` embedded micro-containers, preventing false rejections.
+  - **AOSP ModernMediaScanner Fallback Trap**: Discovered that calling `content call --method scan_volume --uri content://media --arg external_primary` on Android 10/11 defaults unmapped volume arguments to internal storage (`/`), initiating a recursive filesystem traversal into `/sys/kernel/slab/` and `/sys/kernel/debug/` that blocks `ModernMediaScanner`'s worker thread.
+  - **Chunked In-Container Broadcast Fix**: Replaced `scan_volume` with a chunked (100 files/exec) in-container shell loop broadcasting `android.intent.action.MEDIA_SCANNER_SCAN_FILE`, reducing indexing latency to $<2$ seconds.
+  - **Batch 1 (`batch_1794768931_de9e58`)**: Streamed 557 candidates (5,120 MB) over LAN in 94.82s (54 MB/s); deployed and verified 438 items (4,492.77 MB) with 0 quota charged.
+  - **Batch 2 (`batch_1794770142_fc61b3`)**: Ingested remaining 112 Motion Photo items (626.00 MB); verified consensus and evicted all 112 items.
+  - **Total Data Uploaded Today**: **5,368,147,420 bytes (~5.00 GB)** across 550 verified items.
+  - **Quota Charged**: **`0 bytes`** (100% covered under Pixel 1 original quality unlimited tier).
+  - **Twice-Daily Automated Schedule**: Configured `redroid-daily-uploader.timer` to fire morning (08:00 AM PST / 16:00 UTC) and night (08:00 PM PST / 04:00 UTC next day), strictly adhering to the 10.0 GB/day limit.
