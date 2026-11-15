@@ -75,10 +75,10 @@ To prevent host SSD bloat, files staged in `/opt/redroid/data/media/0/DCIM/Camer
 # View live batch uploader logs:
 tail -f /opt/redroid/scripts/batch-uploader.log
 
-# Check status of daily batch timer (03:30 UTC):
+# Check status of twice-daily batch timer (08:00 AM & 08:00 PM PST):
 systemctl status redroid-daily-uploader.timer
 
-# Check rate limiter quota and balance:
+# Check rate limiter quota and balance (10 GB/day baseline):
 python3 /opt/redroid/scripts/rate_limiter.py status
 
 # Run inventory deduplication stats:
