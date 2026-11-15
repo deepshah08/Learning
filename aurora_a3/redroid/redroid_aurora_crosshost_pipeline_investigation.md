@@ -70,3 +70,45 @@ The user reported an unexpected shutdown notification from the UGREEN NAS mobile
 - Stopped and disabled `redroid-photo-scanner.service` and `redroid-daily-uploader.*` on NAS.
 - Removed container `redroid-pixel1` on NAS.
 - NAS available RAM increased to **4.5 GiB** (used RAM dropped to 3.0 GiB, load average 0.22).
+
+
+---
+
+## 4. Phase 2 Evolution: Account Migration, Hardened Batch Architecture & Zero-Wear Ingestion (Nov 14–15, 2026)
+
+### Incident & Transition Drivers:
+1. **Account Migration Request**: User requested transitioning the backup target from `sl4ught3rcl4y@gmail.com` (Account 0) to personal account `humananimal.ds@gmail.com` (Account 1, Deep Shah).
+2. **Cross-Account Contamination Prevention**: Preventing local camera roll purging from deleting or trashing Fenil's wedding photos on `sl4ught3r`'s cloud library.
+3. **Hardware Safety Audit**: Identifying and eliminating NAS NVMe (`/volume2`) wear caused by candidate inbox staging.
+4. **SSH Handshake Latency & Bottleneck Review**: Uncovering ~1,000 separate SSH connection handshakes per 5 GB batch and replacing with persistent OpenSSH multiplexing.
+5. **Local SSD Bloat Prevention**: Eliminating permanent accumulation of uploaded files in Aurora's DCIM via post-consensus batch eviction.
+
+### Implementation & Verification Milestones:
+- **Zero-Contamination Account Switch**:
+  - Purged 2,797 wedding photos from local `/opt/redroid/data/media/0/DCIM/Camera` before activating Account 1.
+  - Verified remote cloud library on `sl4ught3r` remained 100% intact (0 tombstones, 0 remote trash). Confirmed 60 GB cold master archive (`wedding_archive_DF.tar`) on Raspberry Pi 5 SMR pool (`/mnt/media-storage`).
+  - Activated `humananimal.ds@gmail.com` in `photos.backup.backup_prefs.xml` (`backup_prefs_account_id=1`).
+  - Verified visual Google Photos state: `☁ Complete` with green checkmark badge, unlimited Pixel 1 storage waiver banner confirmed active.
+- **NAS NVMe Zero-Wear Enforcement**:
+  - Completely purged legacy `/volume2/docker/redroid/inbox` on NAS NVMe.
+  - Converted the pipeline to stream strictly read-only from the 10TB Seagate IronWolf CMR mechanical HDD (`/volume1`), achieving infinite read endurance with zero NAS SSD wear.
+  - Removed dangerous `remove_nas_file()` function; NAS host connection is 100% read-only.
+- **OpenSSH ControlMaster Multiplexing**:
+  - Configured persistent master sockets in `~/.ssh/controlmasters/` on Aurora (`ControlMaster auto`, `ControlPersist 1h`).
+  - Reduced command execution latency from ~500ms down to `<15ms` per call.
+- **Batch Streaming & Parallel Upload Pipeline**:
+  - Replaced per-file sequential lockstep with continuous single-session `tar` stream: `ssh nas "tar -C / -cf - --verbatim-files-from -T -"` piped to `tar -xf - -C /dev/shm/redroid_staging --transform=s,.*/,,`.
+  - Streamed 5.0 GB batches in ~45 seconds across LAN (~110 MB/s).
+  - Deep validation: verified magic bytes/trailers (JPEG `FF D8 ... FF D9`, PNG `89PNG`) and `ffprobe` for video containers, catching corrupted motion photo trailers and AppleDouble metadata files.
+  - Deployed batch into ReDroid DCIM, enabling Google Photos' internal multi-threaded HTTP client to upload in parallel.
+- **Selective Post-Consensus Eviction**:
+  - Verified batch consensus in `gphotos1.db` (`state == 1` and `quota_charged_bytes == 0`).
+  - Selectively evicted verified files from Aurora SSD, freeing ~5.0 GB daily and keeping DCIM lean.
+- **Structured Observability & SOT Sync**:
+  - Implemented `pipeline_events` and `batch_history` tables in `/opt/redroid/config/media_sync_inventory.db`.
+  - Integrated WAL checkpointing (`PRAGMA wal_checkpoint(TRUNCATE)`) and automated DB snapshot streaming to NAS `/volume1/docker/redroid_backup/media_sync_inventory.db`.
+- **First Production Batch Results (Nov 14, 2026)**:
+  - Total files uploaded and verified: **311 files**.
+  - Total data uploaded: **5,095.04 MB** (~4.976 GB / 5,342,540,604 bytes).
+  - Quota charged: **`0 bytes`** across all 311 items.
+  - Corrupted files: 0.
