@@ -122,3 +122,47 @@ The user reported an unexpected shutdown notification from the UGREEN NAS mobile
   - **Total Data Uploaded Today**: **5,368,147,420 bytes (~5.00 GB)** across 550 verified items.
   - **Quota Charged**: **`0 bytes`** (100% covered under Pixel 1 original quality unlimited tier).
   - **Twice-Daily Automated Schedule**: Configured `redroid-daily-uploader.timer` to fire morning (08:00 AM PST / 16:00 UTC) and night (08:00 PM PST / 04:00 UTC next day), strictly adhering to the 10.0 GB/day limit.
+
+---
+
+## 5. Phase 3: Autonomous EXIF & Metadata Synthesis Engine & Glitch Remediation (Nov 15, 2026)
+
+### Incident & Problem Analysis:
+1. **The Metadata Glitch**:
+   - Following the morning ingestion runs, the user noticed that 172 photos in Google Photos appeared under "Nov 13" and "Nov 14" instead of their true historical dates.
+   - Files affected included Snapchat downloads (`Snapchat-838539229.jpg`), WhatsApp media, and chat dump exports (`photo_14@09-07-2023_21-11-38.jpg`).
+2. **Root Cause Identification**:
+   - Binary inspection of NAS source files with `PIL.Image.getexif()` confirmed zero embedded EXIF tags.
+   - When Google Photos encounters an image without `DateTimeOriginal`, it falls back strictly to the Android filesystem `mtime` (which matched the exact moment the file was extracted to disk during staging).
+3. **Architecture Evaluation: In-Flight vs. 900 GB Bulk Pre-processing**:
+   - The user proposed pre-processing and staging ~900 GB of media on Aurora's NVMe drive to fix EXIF headers in bulk.
+   - **Empirical Benchmark**: Measured `piexif.insert()` execution time on Aurora: **`0.086 ms` per file** (<0.05 seconds of CPU time and <15 MB RAM for an entire 500-file batch).
+   - **Trade-off Gate**: Aurora's root filesystem had 806 GB available. Staging 900 GB would exhaust disk capacity (>95%), trigger Docker volume crashes, incur unnecessary NVMe flash wear, and yield zero upload acceleration due to Google's 10 GB/day rate limit.
+   - **Decision**: Implemented zero-wear in-flight EXIF synthesis in POSIX RAM (`/dev/shm`) during standard batch streaming.
+
+### Implementation & Hardening:
+- **Autonomous EXIF Synthesis**:
+  - Provisioned `/opt/redroid/venv` with `Pillow` and `piexif`.
+  - Added `infer_media_timestamp(fn, nas_path)` and `inject_or_synthesize_metadata(file_path, fn, nas_path)` to `/opt/redroid/scripts/pipeline_processor.py`.
+  - Infers capture dates from chat export filenames (`DD-MM-YYYY_HH-MM-SS`), ISO timestamps (`YYYY-MM-DD HH.MM.SS`), parent directory paths (`/YYYY/MM/`), or NAS filesystem timestamps.
+  - Losslessly injects `piexif.ExifIFD.DateTimeOriginal`, `piexif.ExifIFD.DateTimeDigitized`, and `piexif.ImageIFD.DateTime`, syncing file `mtime` via `os.utime()`.
+- **In-Container MediaStore Shell Quoting**:
+  - Replaced Python string tokenization in `trigger_cloud_backup` with `find /storage/emulated/0/DCIM/Camera/ -maxdepth 1 -type f ! -name '.*' -exec am broadcast ... \;` to eliminate word-splitting bugs on filenames with spaces and parentheses.
+- **Service & Timer Alignment**:
+  - Updated `/opt/redroid/scripts/daily-batch-uploader.sh` to execute via `/opt/redroid/venv/bin/python3`.
+  - Verified `redroid-daily-uploader.timer` active for twice-daily runs (08:00 AM & 08:00 PM PST).
+
+### 171-File Remediation & Verification:
+- **Safe Reset & Deduplication**:
+  - The user trashed the 171 malformed photos in Google Photos (preserving 1 genuine Pixel 9 photo).
+  - Reset all 171 candidate rows in `local_inventory` to `PENDING` and purged their keys from `cloud_inventory` and `uploaded_manifest.txt`.
+- **Live Re-Ingestion**:
+  - Streamed, synthesized EXIF metadata, and deployed all 171 items to ReDroid DCIM.
+  - **100% Consensus Achieved**: All 171 items verified in `gphotos1.db` (`state = 1`, `quota_charged_bytes = 0`).
+  - **Verified True Cloud Dates**:
+    - `photo_2024-06-18 19.44.04.jpeg` $\to$ **`2024-06-18 19:44:04`** (Quota: 0 bytes)
+    - `photo_14@09-07-2023_21-11-38.jpg` $\to$ **`2023-07-09 21:11:38`** (Quota: 0 bytes)
+    - `photo_10@09-07-2023_18-24-16.jpg` $\to$ **`2023-07-09 18:24:16`** (Quota: 0 bytes)
+    - `Snapchat-838539229.jpg` $\to$ **`2023-07-09 12:00:00`** (Quota: 0 bytes)
+    - `Snapchat-455855546.jpg` $\to$ **`2023-07-30 09:16:45`** (Quota: 0 bytes)
+  - All 171 staging files cleanly evicted from DCIM (0 remaining files). SOT database WAL checkpointed and mirrored to NAS.
