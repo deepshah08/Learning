@@ -166,3 +166,10 @@ The user reported an unexpected shutdown notification from the UGREEN NAS mobile
     - `Snapchat-838539229.jpg` $\to$ **`2023-07-09 12:00:00`** (Quota: 0 bytes)
     - `Snapchat-455855546.jpg` $\to$ **`2023-07-30 09:16:45`** (Quota: 0 bytes)
   - All 171 staging files cleanly evicted from DCIM (0 remaining files). SOT database WAL checkpointed and mirrored to NAS.
+
+### Phase 3 Small Test Batch Verification & Hardening:
+- **Live 20 MB Candidate Ingestion Test**:
+  - Tested 11 candidate items spanning WhatsApp, Pixel Motion Photos, screenshots, and Snapchat memory overlays.
+  - **Toybox `find` Traversal Trap Uncovered**: Identified that Toybox `find -exec am broadcast ... -d 'file://{}'` did not substitute `{}` within string tokens, broadcasting literal `file://{}` and trapping MediaScanner in a recursive `/sys/kernel/slab/` walk. Replaced with an explicit shell loop (`for f in .../*; do am broadcast ...; done`), which indexed all 8 staged files instantaneously.
+  - **Mismatched Container Integrity Fix**: Identified that Reddit and WhatsApp save valid WebP/PNG images under `.jpg`/`.jpeg` extensions (`RDT_*.jpg`, `WA_*.jpeg`). Updated `verify_media_integrity()` to verify images via Pillow's container parser (`Image.open().verify()`), eliminating false corruption rejections for valid social media files.
+  - **Consensus & Clean Eviction**: Verified all 8 test files reached cloud consensus (`state = 1`, `quota = 0`) and cleanly evicted them from DCIM (0 lingering files).
