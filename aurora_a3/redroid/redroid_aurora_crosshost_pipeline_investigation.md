@@ -173,3 +173,31 @@ The user reported an unexpected shutdown notification from the UGREEN NAS mobile
   - **Toybox `find` Traversal Trap Uncovered**: Identified that Toybox `find -exec am broadcast ... -d 'file://{}'` did not substitute `{}` within string tokens, broadcasting literal `file://{}` and trapping MediaScanner in a recursive `/sys/kernel/slab/` walk. Replaced with an explicit shell loop (`for f in .../*; do am broadcast ...; done`), which indexed all 8 staged files instantaneously.
   - **Mismatched Container Integrity Fix**: Identified that Reddit and WhatsApp save valid WebP/PNG images under `.jpg`/`.jpeg` extensions (`RDT_*.jpg`, `WA_*.jpeg`). Updated `verify_media_integrity()` to verify images via Pillow's container parser (`Image.open().verify()`), eliminating false corruption rejections for valid social media files.
   - **Consensus & Clean Eviction**: Verified all 8 test files reached cloud consensus (`state = 1`, `quota = 0`) and cleanly evicted them from DCIM (0 lingering files).
+
+---
+
+## 6. Phase 4: Oversized Video Staging Incident & Dynamic NVMe Fallback (Nov 16, 2026)
+
+### Incident & Problem Analysis (8:00 PM PST Batch):
+1. **The Symptom**:
+   - The scheduled 8:00 PM PST batch (`batch_1794888000_76542a`) selected a single candidate: `PXL_20260115_100800369.mp4` (7.52 GB / 7,519.64 MB, a 24-minute Pixel 9 video).
+   - During extraction into `/dev/shm`, the systemd service aborted with:
+     `Integrity check FAILED: Corrupt video container: moov atom not found. Deployed 0 validated files.`
+2. **Root Cause Analysis**:
+   - Aurora has 14 GiB physical RAM. Linux assigns 50% of RAM to `/dev/shm` (7.3 GB capacity).
+   - Extracting a 7.52 GB video into a 7.3 GB tmpfs mount filled the RAM disk to 100%, causing `tar` to fail with `No space left on device` and truncating the file at 5.8 GB.
+   - Because MP4 stores the index (`moov` atom) at the end of the file, the truncated file lacked its container header.
+   - **Safety Mechanism Proved Sound**: The integrity verification engine caught the corrupted container, prevented deployment to DCIM, uploaded 0 corrupted files, and charged 0 bytes quota.
+3. **NAS Source Validation**:
+   - Inspected the source video directly on NAS via `ffprobe`: confirmed **100% healthy, valid, and uncorrupted** (`duration=1453.21s` / 24.2 minutes).
+   - Scanned all 9 NAS source directories: this is the **single and only file $> 4.5\text{ GB}$** in the entire 222 GB media universe.
+
+### Architectural Hardening & Resolution:
+- **Dynamic NVMe Staging Fallback**:
+  - Updated `stream_batch_to_staging()` in `pipeline_processor.py`.
+  - For normal batches ($\le 5.0\text{ GB}$), media extracts into `/dev/shm` (zero NVMe wear).
+  - If a batch or monolithic video exceeds 5.0 GB, extraction dynamically redirects to `/opt/redroid/staging` on Aurora's 806 GB NVMe SSD volume, eliminating tmpfs capacity limits.
+- **Batch History Abort State Update**:
+  - Patched `pipeline_processor.py` to record `status = 'ABORTED'` with explicit error summaries when zero files survive integrity checks, preventing stale `IN_PROGRESS` entries.
+- **Disk Recovery**:
+  - Cleared truncated staging file from `/dev/shm`, restoring tmpfs to 0% used / 7.3 GB free.

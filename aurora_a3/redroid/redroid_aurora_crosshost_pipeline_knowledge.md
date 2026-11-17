@@ -48,8 +48,10 @@ To eliminate repeated SSH connection overhead (TCP 3-way handshakes, TLS/KEX cip
 ### 2. Zero NAS NVMe Wear & Mechanical CMR Streaming
 The legacy `/volume2/docker/redroid/inbox` on the NAS NVMe has been **completely eliminated**. NAS media is read strictly read-only from the 10TB Seagate IronWolf CMR mechanical drive (`/volume1`), which possesses infinite read endurance without flash cell degradation. The NAS host connection is 100% read-only; zero files are deleted or modified on the NAS.
 
-### 3. Continuous Single-Session Batch Streaming
-Candidate media is assembled into daily batches constrained mathematically to $\le 5.00\text{ GiB}$. The entire batch streams in a single continuous `tar` pipe over persistent SSH directly into Aurora's POSIX RAM disk (`/dev/shm`), achieving wire-speed LAN throughput (~110–115 MB/s) in ~45 seconds.
+### 3. Continuous Single-Session Batch Streaming & Dynamic NVMe Fallback
+Candidate media is assembled into daily batches constrained mathematically to $\le 5.00\text{ GiB}$. For standard batches ($\le 5.0\text{ GB}$), media streams in a single continuous `tar` pipe over persistent SSH directly into Aurora's POSIX RAM disk (`/dev/shm`), achieving wire-speed LAN throughput (~110–115 MB/s) in ~45 seconds with zero SSD flash wear.
+
+If an individual large video file (e.g. monolithic 4K recording $> 5.0\text{ GB}$) exceeds safe RAM disk capacity ($7.3\text{ GB}$ tmpfs ceiling), the pipeline dynamically diverts staging to `/opt/redroid/staging` on Aurora's high-capacity NVMe drive (806 GB free). This prevents RAM disk out-of-space truncation errors (such as missing MP4 `moov` atoms) while preserving zero-wear RAM staging for 99.9% of standard batches.
 
 ### 4. Multi-Table SQLite WAL Consensus
 The verification engine cross-references internal Google Photos SQLite tables in read-only WAL mode to prevent false positives:
